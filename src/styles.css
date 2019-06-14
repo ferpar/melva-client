@@ -25,3 +25,17 @@ img {
 .warning {
   color: tomato;
 }
+
+.appointments-grid{
+  display: grid;
+  grid-gap: 1rem;
+  grid-template-columns: 1fr 1fr 1fr;
+  padding: 2rem;
+}
+
+.appointment-item{
+  background-color: white;
+  color: blue;
+  border: 1px solid blue;
+  border-radius: 5px;
+}
