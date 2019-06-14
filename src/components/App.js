@@ -38,11 +38,26 @@ class App extends React.Component {
     .then(this.setState({...this.state, loggedIn:false}, () => this.props.history.push('/')));
   }
 
+  componentDidMount() {
+    axios.get('http://192.168.1.51:3010/api/auth/loggedin', {
+        headers: {
+            'Content-Type': 'application/json; charset=utf-8',
+            'Accept': 'application/json',
+        },
+      withCredentials: true // <= that's what changed
+    })
+    .then(result => {
+      console.log(result)
+      this.handleLogin(result.data, false) 
+    });
+  }
+
   render() {
     console.log(this.state)
     console.log(this.props)
     const { navstate = {} } = this.props.location;
     const { error } = navstate;
+    const {name, surname, username} = this.state.user;
     return (
       <div className="main">
 
@@ -53,7 +68,10 @@ class App extends React.Component {
         <Link to='/'>Home</Link>
         <button onClick={this.handleLogout}>Log out</button>
       </div>
-
+        {
+          this.state.loggedIn &&
+          <div>Logged in as {name || username}</div>
+        }
         { error && <div>ERROR: {error}</div> }
         <Switch>
           <Route exact path='/' render={() => <Home handleLogin={this.handleLogin}/>} />
