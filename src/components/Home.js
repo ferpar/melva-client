@@ -19,8 +19,10 @@ const Home = (props) => {
         },
       withCredentials: true // <= that's what changed
     })
-    .then( result => console.log(result))
-    .then( props.history.push('/appointments'))
+    .then( result => { 
+        console.log(result);
+        props.handleLogin(result.data, true, "/appointments");
+    })
     .catch( err => console.error('there was an error posting your info', err));
   }
 

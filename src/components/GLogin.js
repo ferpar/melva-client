@@ -1,71 +1,67 @@
-import React, {useState} from 'react'
-import { withRouter } from 'react-router-dom'
-import axios from 'axios'
+import React, { useState } from "react";
+import { withRouter } from "react-router-dom";
+import axios from "axios";
 
-const GLogin = (props) => {  
+const GLogin = props => {
+  const [state, setState] = useState({ name: "", surname: "", phone: "" });
 
-  const [state, setState] = useState({name: "", surname: "", phone: ""});
+  const handleChange = ({ name, value }) => {
+    setState({ ...state, [name]: value });
+  };
 
-  const handleChange = ({name, value}) => {
-    setState({...state, [name]: value})
-  }
-
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault();
-    axios.post('http://192.168.1.51:3010/api/auth/login-guest', state, {
+    axios
+      .post("http://192.168.1.51:3010/api/auth/login-guest", state, {
         headers: {
-            'Content-Type': 'application/json; charset=utf-8',
-            'Accept': 'application/json',
+          "Content-Type": "application/json; charset=utf-8",
+          Accept: "application/json"
         },
-      withCredentials: true // <= that's what changed
-    })
-    .then( result => { 
+        withCredentials: true // <= that's what changed
+      })
+      .then(result => {
         console.log(result);
-        props.handleLogin(result.data);
-    })
-    .then( props.history.push('/appointments'))
-    .catch( err => console.error('there was an error posting your info', err));
-  }
+        props.handleLogin(result.data, true, "/appointments");
+      })
+      //    .then( props.history.push('/appointments'))
+      .catch(err => console.error("there was an error posting your info", err));
+  };
 
   return (
     <div className="home-container">
       <h1 className="main titile">Log in as a guest</h1>
 
-      <form 
-        className="signup-guest"
-        onSubmit={(e) => handleSubmit(e)}
-      >
-
+      <form className="signup-guest" onSubmit={e => handleSubmit(e)}>
         <label htmlFor="name">nombre</label>
-        <input 
-          name= "name" 
-          type= "text"
-          onChange= {(e) => handleChange(e.target)}
-          value= {state.name}
+        <input
+          name="name"
+          type="text"
+          onChange={e => handleChange(e.target)}
+          value={state.name}
         />
-        <br/>
+        <br />
 
         <label htmlFor="surname">apellido</label>
-        <input 
-          name="surname" 
+        <input
+          name="surname"
           type="text"
-          onChange= {(e) => handleChange(e.target)}
-          value ={state.surname}
+          onChange={e => handleChange(e.target)}
+          value={state.surname}
         />
-        <br/>
+        <br />
 
         <label htmlFor="phone">teléfono</label>
-        <input 
-          name="phone" 
+        <input
+          name="phone"
           type="text"
-          onChange={(e) => handleChange(e.target)}
+          onChange={e => handleChange(e.target)}
           value={state.phone}
         />
-        <br/>
+        <br />
 
         <button type="submit">Entrar</button>
       </form>
     </div>
-  )
-}
-export default withRouter(GLogin)
+  );
+};
+export default withRouter(GLogin);

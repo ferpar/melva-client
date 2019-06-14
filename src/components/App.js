@@ -14,7 +14,7 @@ class App extends React.Component {
     user: {}
   };
 
-  handleLogin = (userObj) => {
+  handleLogin = (userObj, redirect = false, redirectURL) => {
     const {navstate = {} } = this.props.location;
     const { prevLocation } = navstate;
 
@@ -22,7 +22,8 @@ class App extends React.Component {
     ...this.state, loggedIn: true, user: userObj
     },
     () => {
-      this.props.history.push(prevLocation || "/");
+      redirect && 
+      this.props.history.push( redirectURL || prevLocation || "/");
     });
   };
 
@@ -34,7 +35,7 @@ class App extends React.Component {
         },
       withCredentials: true // <= that's what changed
     })
-    .then(this.setState({...this.state, loggedIn:false}));
+    .then(this.setState({...this.state, loggedIn:false}, () => this.props.history.push('/')));
   }
 
   render() {
@@ -55,9 +56,9 @@ class App extends React.Component {
 
         { error && <div>ERROR: {error}</div> }
         <Switch>
-          <Route exact path='/' render={Home} />
+          <Route exact path='/' render={() => <Home handleLogin={this.handleLogin}/>} />
           <ProtectedRoute path='/appointments' loggedIn={this.state.loggedIn}  component={Appointments} />
-          <Route path='/login-guest' component={() => <GLogin handleLogin={this.handleLogin}/>} />
+          <Route path='/login-guest' render={() => <GLogin handleLogin={this.handleLogin}/>} />
           <Route path='/login' render={() => <Login handleLogin={this.handleLogin}/>} />
         </Switch>
       </div>

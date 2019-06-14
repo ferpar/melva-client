@@ -21,9 +21,9 @@ const Login = (props) => {
     })
     .then( result => { 
       console.log(result);
-      props.handleLogin(result.data);
+      props.handleLogin(result.data, true, "/appointments");
     })
-    .then( props.history.push('/appointments'))
+//    .then( props.history.push('/appointments'))
     .catch( err => console.error('there was an error posting your info', err));
   }
 
