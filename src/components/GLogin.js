@@ -12,7 +12,7 @@ const GLogin = props => {
   const handleSubmit = e => {
     e.preventDefault();
     axios
-      .post("http://192.168.1.51:3010/api/auth/login-guest", state, {
+      .post("http://localhost:3010/api/auth/login-guest", state, {
         headers: {
           "Content-Type": "application/json; charset=utf-8",
           Accept: "application/json"
