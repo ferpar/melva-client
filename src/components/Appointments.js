@@ -93,12 +93,12 @@ class Appointment extends React.Component {
             appointments
               .map(appointment => ({
                 date: new Date(appointment.time),
-                availability: appointment.customer === null,
+                available: appointment.customer === null,
                 id: appointment._id
               }))
-              .map(({ date, availability, id }, index) => (
+              .map(({ date, available, id }, index) => (
                 <button
-                  className="appointment-item"
+                  className={available ? "appointment-item available" : "appointment-item"}
                   idx={id}
                   key={index}
                   onClick={() => this.bookDate(id)}

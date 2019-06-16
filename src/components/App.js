@@ -8,8 +8,10 @@ import GLogin from "./GLogin";
 import ProtectedRoute from "./ProtectedRoute";
 
 class App extends React.Component {
+   
   state = {
     loggedIn: false,
+    isLoading: true,
     user: {}
   };
 
@@ -21,6 +23,7 @@ class App extends React.Component {
       {
         ...this.state,
         loggedIn: true,
+        isLoading: false,
         user: userObj
       },
       () => {
@@ -28,6 +31,23 @@ class App extends React.Component {
       }
     );
   };
+
+  getLoggedIn = () => {
+    axios
+      .get("http://localhost:3010/api/auth/loggedin", {
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+          Accept: "application/json"
+        },
+        withCredentials: true // <= that's what changed
+      })
+      .then(result => {
+        console.log('didMount');
+        console.log(result);
+        this.handleLogin(result.data, false);
+      })
+      .catch(() => this.setState({isLoading:false}))
+  }
 
   handleLogout = () => {
     axios
@@ -45,29 +65,21 @@ class App extends React.Component {
       );
   };
 
+
   componentDidMount() {
-    axios
-      .get("http://localhost:3010/api/auth/loggedin", {
-        headers: {
-          "Content-Type": "application/json; charset=utf-8",
-          Accept: "application/json"
-        },
-        withCredentials: true // <= that's what changed
-      })
-      .then(result => {
-        console.log(result);
-        this.handleLogin(result.data, false);
-      });
+    this.getLoggedIn();
   }
 
   render() {
+    console.log('render');
     console.log(this.state);
     console.log(this.props);
     const { navstate = {} } = this.props.location;
     const { error } = navstate;
     const { name, surname, username } = this.state.user;
-    const { loggedIn, user } = this.state;
+    const { loggedIn, user, isLoading } = this.state;
     return (
+      !isLoading ?
       <div className="main">
         <div className="links">
           <Link to="/login">Login</Link>
@@ -100,6 +112,8 @@ class App extends React.Component {
           />
         </Switch>
       </div>
+      :
+      <div>Loading...</div>
     );
   }
 }
