@@ -29,6 +29,36 @@ class Appointment extends React.Component {
       .catch(err => console.log("there was an error fetching the data " + err));
   };
 
+  printDate = (id) => {
+    console.log(id);
+    console.log(this.props.user);
+    axios
+      .get("http://localhost:3010/api/appointments/get-single/" + id, {
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+          Accept: "application/json"
+        },
+        withCredentials: true // <= that's what changed
+      })
+      .then(result => console.log(result.data))
+      .catch(err => console.log("there was an error fetching the data " + err));
+  };
+
+  bookDate = (id) => {
+    const {_id: userId} = this.props.user;
+    const postData = {id, userId}
+    axios
+      .post("http://localhost:3010/api/appointments/book/", postData, {
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+          Accept: "application/json"
+        },
+        withCredentials: true // <= that's what changed
+      })
+      .then(result => console.log(result.data))
+      .catch( err => console.log("there was an error fetching the data ", + err));
+  }
+
   componentDidUpdate(prevProps, prevState) {
     const { date } = this.state;
     const year = date.getFullYear(),
@@ -71,7 +101,7 @@ class Appointment extends React.Component {
                   className="appointment-item"
                   idx={id}
                   key={index}
-                  onClick={this.printLoggedIn}
+                  onClick={() => this.bookDate(id)}
                 >
                   {date.getHours()}
                   {":"}

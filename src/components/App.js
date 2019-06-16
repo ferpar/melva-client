@@ -66,7 +66,7 @@ class App extends React.Component {
     const { navstate = {} } = this.props.location;
     const { error } = navstate;
     const { name, surname, username } = this.state.user;
-    const { loggedIn } = this.state;
+    const { loggedIn, user } = this.state;
     return (
       <div className="main">
         <div className="links">
@@ -86,8 +86,9 @@ class App extends React.Component {
           />
           <ProtectedRoute
             path="/appointments"
+            user={this.state.user ? this.state.user : null}
             loggedIn={this.state.loggedIn}
-            component={Appointments}
+            component={(props) => <Appointments router={props} user={user}/>}
           />
           <Route
             path="/login-guest"
