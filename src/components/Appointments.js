@@ -44,9 +44,10 @@ class Appointment extends React.Component {
       .catch(err => console.log("there was an error fetching the data " + err));
   };
 
-  bookDate = (id) => {
-    const {_id: userId} = this.props.user;
+  bookDate = (id, available) => {
+    const userId = available ? this.props.user._id : null
     const postData = {id, userId}
+    const slotIndex = this.state.appointments.findIndex(appointment => appointment._id===id)
     axios
       .post("http://localhost:3010/api/appointments/book/", postData, {
         headers: {
@@ -55,7 +56,12 @@ class Appointment extends React.Component {
         },
         withCredentials: true // <= that's what changed
       })
-      .then(result => console.log(result.data))
+      .then(result => {
+        console.log(result.data);
+        const newAppointments = [...this.state.appointments]
+        newAppointments[slotIndex].customer = userId;
+        this.setState({appointments: newAppointments})
+      })
       .catch( err => console.log("there was an error fetching the data ", + err));
   }
 
@@ -83,6 +89,7 @@ class Appointment extends React.Component {
 
   render() {
     const { date, appointments } = this.state;
+    console.log(appointments)
     return (
       <div>
         <h2>choose a Date</h2>
@@ -101,7 +108,7 @@ class Appointment extends React.Component {
                   className={available ? "appointment-item available" : "appointment-item"}
                   idx={id}
                   key={index}
-                  onClick={() => this.bookDate(id)}
+                  onClick={() => this.bookDate(id, available)}
                 >
                   {date.getHours()}
                   {":"}
