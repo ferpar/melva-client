@@ -4,6 +4,9 @@ import { hot } from "react-hot-loader";
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/material_green.css";
 
+import {toast} from 'react-toastify';
+toast.configure();
+
 import twoDigits from "../helpers/twodigit.js";
 
 class Appointment extends React.Component {
@@ -60,10 +63,27 @@ class Appointment extends React.Component {
         console.log(result.data);
         const newAppointments = [...this.state.appointments]
         newAppointments[slotIndex].customer = userId;
-        this.setState({appointments: newAppointments})
+        this.setState({appointments: newAppointments},
+          () => {
+            console.log(available)
+            this.notify(slotIndex, available)
+          }
+        )
       })
       .catch( err => console.log("there was an error fetching the data ", + err));
-  }
+  };
+
+  notify = (
+    slotIndex, 
+    available
+  ) => toast(available 
+    ? 
+    "🦄 wow so ez! booked appointment @"
+    + new Date(this.state.appointments[slotIndex].time).getHours() + ":"
+    + ( twoDigits(new Date(this.state.appointments[slotIndex].time).getMinutes( )))
+    : 
+    "❎ booking canceled"
+  )
 
   componentDidUpdate(prevProps, prevState) {
     const { date } = this.state;

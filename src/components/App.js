@@ -7,6 +7,9 @@ import Login from "./Login";
 import GLogin from "./GLogin";
 import ProtectedRoute from "./ProtectedRoute";
 
+import {toast} from 'react-toastify';
+toast.configure();
+
 class App extends React.Component {
    
   state = {
@@ -66,6 +69,8 @@ class App extends React.Component {
   };
 
 
+  notify = () => toast(" 🦄  wow so easy!") 
+
   componentDidMount() {
     this.getLoggedIn();
   }
@@ -78,6 +83,8 @@ class App extends React.Component {
     const { error } = navstate;
     const { name, surname, username } = this.state.user;
     const { loggedIn, user, isLoading } = this.state;
+
+
     return (
       !isLoading ?
       <div className="main">
@@ -86,6 +93,7 @@ class App extends React.Component {
           <Link to="/login-guest">Guest</Link>
           <Link to="/appointments">Appointments</Link>
           <Link to="/">Home</Link>
+          <button onClick={this.notify}>Easy?</button>
           <button onClick={this.handleLogout}>Log out</button>
         </div>
         {loggedIn && <div>Logged in as {name || username}</div>}
