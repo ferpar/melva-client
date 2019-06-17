@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { withRouter } from "react-router-dom";
 import axios from "axios";
 
-const Home = props => {
+const GSignup = props => {
   const [state, setState] = useState({ name: "", surname: "", phone: "" });
 
   const handleChange = ({ name, value }) => {
@@ -12,7 +12,7 @@ const Home = props => {
   const handleSubmit = e => {
     e.preventDefault();
     axios
-      .post("http://localhost:3010/api/auth/login-signup-guest", state, {
+      .post("http://localhost:3010/api/auth/signup-guest", state, {
         headers: {
           "Content-Type": "application/json; charset=utf-8",
           Accept: "application/json"
@@ -30,7 +30,7 @@ const Home = props => {
     <div className="home-container">
       <h1 className="main titile">Bienvenido!</h1>
 
-      <form className="login-signup-guest" onSubmit={e => handleSubmit(e)}>
+      <form className="signup-guest" onSubmit={e => handleSubmit(e)}>
         <label htmlFor="name">nombre</label>
         <input
           name="name"
@@ -63,4 +63,4 @@ const Home = props => {
     </div>
   );
 };
-export default withRouter(Home);
+export default withRouter(GSignup);
