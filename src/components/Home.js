@@ -28,7 +28,7 @@ const Home = props => {
 
   return (
     <div className="home-container">
-      <h1 className="main titile">Bienvenido!</h1>
+      <h1 className="main title">Bienvenido!</h1>
 
       <form className="login-signup-guest" onSubmit={e => handleSubmit(e)}>
         <label htmlFor="name">nombre</label>
