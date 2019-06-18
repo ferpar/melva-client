@@ -1,3 +1,24 @@
+:root {
+ /* color scheme 1 */
+  --silver-sand: #BCD8C1;
+  --yankees-blue: #0B3142;
+  --flax: #E9D985;
+  --zomp: #439A86;
+  --sea-blue: #007991;
+ /* color scheme 2 */
+--wilderness-1: #182E59;
+--wilderness-2: #355B8C;
+--wilderness-3: #6387A6;
+--wilderness-4: #F2E1C2;
+--wilderness-5: #A63B14;
+/* Color Theme Swatches in Hex */
+--dentist-1: #535FA6;
+--dentist-2: #85B4F2;
+--dentist-3: #9BCAF2;
+--dentist-4: #594022;
+--dentist-5: #D9B1A3;
+}
+
 html {
   box-sizing: border-box;
   font-size: 16px;
@@ -5,6 +26,10 @@ html {
 
 *, *:before, *:after {
   box-sizing: inherit;
+}
+
+body {
+  background-color: #999;
 }
 
 body, h1, h2, h3, h4, h5, h6, p, ol, ul {
@@ -21,6 +46,8 @@ img {
   max-width: 100%;
   height: auto;
 }
+
+/* appointment view classes */
 
 .warning {
   color: tomato;
@@ -42,4 +69,120 @@ img {
 
 .available {
   background-color: white;
+}
+
+/* home form css */
+
+input {
+  border: 0;
+  border-bottom: 1px solid #bbb;
+  outline: none;
+  transition: all 0.3s ease-in-out;
+}
+
+input:hover {
+  border-bottom: 1px solid var(--dentist-1);
+}
+
+input:focus {
+  border-bottom: 1px solid rgba(81, 203, 238, 1);
+}
+
+.home-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-wrapper{
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 3rem;
+  border-radius: 6px;
+  box-shadow: 0px 10px 50px #555;
+  background-color: #fff;
+  margin-top: 2rem;
+}
+
+.login-signup-guest{
+  display: grid;
+  grid-template-areas:
+    "name surname"
+    "phone phone"
+    " .    button"
+    ;
+  grid-gap: 0.5rem;
+}
+
+.form-wrapper > h1 {
+  text-align: center;
+  width: 100%;
+  color: #111;
+  margin-bottom: 1rem;
+}
+
+.form-wrapper p {
+  color: var(--wilderness-5);
+}
+
+.field-wrapper {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.name {
+  grid-area: name;
+}
+
+.surname {
+  grid-area: surname;
+}
+
+.phone {
+  grid-area: phone;
+}
+
+.enter-platform{
+  grid-area: button;
+}
+
+label {
+  font-size: 0.8rem;
+  margin-bottom: 0.24rem;
+  color: #222;
+  fonr-weight: lighter;
+}
+
+.enter-platform {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.enter-platform button {
+  background-color: var(--dentist-1);
+  color: #fff;
+  border: 2px solid var(--dentist-1);
+  border-radius: 5px;
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.5rem 0;
+  font-size: 1rem;
+  font-weight: lighter;
+  letter-spacing: 1px;
+  margin-bottom: 0.25rem;
+}
+
+.enter-platform button:hover {
+  color: var(--dentist-1);
+  background-color: #fff;
+  border: 2px solid var(--dentist-1);
+}
+
+.enter-platform button:disabled {
+  color: #fff;
+  background-color: #aaa;
 }

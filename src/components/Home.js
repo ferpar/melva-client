@@ -12,32 +12,40 @@ const BaseHome = ({
   handleLogin
 }) => (
     <div className="home-container">
-      <h1 className="main title">Bienvenido!</h1>
-      <Form className="login-signup-guest" >
-        { touched.name && errors.name && <p>{ errors.name }</p> }
-        <label htmlFor="name">nombre</label>
-        <Field
-          name="name"
-          type="text"
-        />
-        <br />
-
-        <label htmlFor="surname">apellido</label>
-        <Field
-          name="surname"
-          type="text"
-        />
-        <br />
-        { touched.phone && errors.phone && <p>{ errors.phone }</p> } 
-        <label htmlFor="phone">teléfono</label>
-        <Field
-          name="phone"
-          type="text"
-        />
-        <br />
-
-        <button disabled={isSubmitting} type="submit">Entrar</button>
-      </Form>
+      <div className="form-wrapper">
+        <h1 className="main title">Bienvenido!</h1>
+        <Form className="login-signup-guest" >
+          <div className="field-wrapper name">
+            <label htmlFor="name">nombre</label>
+            <Field
+              name="name"
+              type="text"
+            />
+            { touched.name && errors.name && <p>{ errors.name }</p> }
+          </div>
+        
+          <div className="field-wrapper surname">
+            <label htmlFor="surname">apellido</label>
+            <Field
+              name="surname"
+              type="text"
+            />
+            { touched.surname && errors.surname && <p>{ errors.surname }</p> }
+          </div>
+          <div className="field-wrapper phone">
+            <label htmlFor="phone">teléfono</label>
+            <Field
+              name="phone"
+              type="number"
+            />
+            { touched.phone && errors.phone && <p>{ errors.phone }</p> } 
+          </div>
+        
+          <div className="enter-platform">
+            <button disabled={isSubmitting} type="submit">Entrar</button>
+          </div>
+        </Form>
+      </div>
     </div>
   )
 
