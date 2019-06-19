@@ -12,15 +12,12 @@ toast.configure();
 
 class App extends React.Component {
   
-  constructor(props){
-    super(props)
-    this.state = {
+    state = {
       loggedIn: false,
       isLoading: true,
       user: {},
       isNavBarVisible: false
     };
-  }
 
   toggleNavBar = () => {
     this.setState((prevState => ({isNavBarVisible: !prevState.isNavBarVisible})));
