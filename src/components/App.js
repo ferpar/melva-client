@@ -11,12 +11,17 @@ import {toast} from 'react-toastify';
 toast.configure();
 
 class App extends React.Component {
-   
-  state = {
-    loggedIn: false,
-    isLoading: true,
-    user: {}
-  };
+  
+    state = {
+      loggedIn: false,
+      isLoading: true,
+      user: {},
+      isNavBarVisible: false
+    };
+
+  toggleNavBar = () => {
+    this.setState((prevState => ({isNavBarVisible: !prevState.isNavBarVisible})));
+  }
 
   handleLogin = (userObj, redirect = false, redirectURL) => {
     const { navstate = {} } = this.props.location;
@@ -45,8 +50,6 @@ class App extends React.Component {
         withCredentials: true // <= that's what changed
       })
       .then(result => {
-        console.log('didMount');
-        console.log(result);
         this.handleLogin(result.data, false);
       })
       .catch(() => this.setState({isLoading:false}))
@@ -68,26 +71,36 @@ class App extends React.Component {
       );
   };
 
-
   notify = () => toast(" 🦄  wow so easy!") 
 
   componentDidMount() {
     this.getLoggedIn();
+    document.addEventListener('keydown', (event) => {
+      if (event.keyCode === 65) {
+        this.toggleNavBar();
+      }
+    })
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', (event) => {
+      if (event.keyCode === 65) {
+        this.toggleNavBar();
+      }
+    })
   }
 
   render() {
-    console.log('render');
-    console.log(this.state);
-    console.log(this.props);
     const { navstate = {} } = this.props.location;
     const { error } = navstate;
     const { name, surname, username } = this.state.user;
-    const { loggedIn, user, isLoading } = this.state;
+    const { loggedIn, user, isLoading, isNavBarVisible } = this.state;
 
 
     return (
       !isLoading ?
       <div className="main">
+      { isNavBarVisible && 
         <div className="links">
           <Link to="/login">Login</Link>
           <Link to="/login-guest">Guest</Link>
@@ -95,7 +108,7 @@ class App extends React.Component {
           <Link to="/">Home</Link>
           <button onClick={this.notify}>Easy?</button>
           <button onClick={this.handleLogout}>Log out</button>
-        </div>
+        </div>}
         {loggedIn && <div>Logged in as {name || username}</div>}
         {!loggedIn && error && <div>ERROR: {error}</div>}
         <Switch>
