@@ -58,12 +58,11 @@ const Home = withFormik({
     }
   },
   validationSchema: Yup.object().shape({
-    name: Yup.string().required('must enter a name'),
+    name: Yup.string().required('please enter a name'),
     surname: Yup.string(),
-    phone: Yup.string().min(4,'must be at least 4 digits long').required('must enter a phone')
+    phone: Yup.string().min(4,'at least 4 digits long').required('please enter a phone number')
   }),
   handleSubmit(values, {props, setSubmitting }) {
-    console.log(values)
     axios
       .post("http://localhost:3010/api/auth/login-signup-guest", values, {
         headers: {

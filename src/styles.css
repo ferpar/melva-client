@@ -17,11 +17,15 @@
 --dentist-3: #9BCAF2;
 --dentist-4: #594022;
 --dentist-5: #D9B1A3;
+/* bootstrap */
+--warning: #dc3545;
+--primary :#007bff;
 }
 
 html {
   box-sizing: border-box;
   font-size: 16px;
+  font-family: 'Roboto', sans-serif;
 }
 
 *, *:before, *:after {
@@ -29,7 +33,7 @@ html {
 }
 
 body {
-  background-color: #999;
+  background: linear-gradient(to right, var(--dentist-1) 0%, var(--dentist-3) 100%);
 }
 
 body, h1, h2, h3, h4, h5, h6, p, ol, ul {
@@ -48,10 +52,6 @@ img {
 }
 
 /* appointment view classes */
-
-.warning {
-  color: tomato;
-}
 
 .appointments-grid{
   display: grid;
@@ -81,17 +81,18 @@ input {
 }
 
 input:hover {
-  border-bottom: 1px solid var(--dentist-1);
+  border-bottom: 2px solid var(--dentist-1);
 }
 
 input:focus {
-  border-bottom: 1px solid rgba(81, 203, 238, 1);
+  border-bottom: 2px solid rgba(81, 203, 238, 1);
 }
 
 .home-container {
   display: flex;
   justify-content: center;
   align-items: center;
+  min-height: 80vh;
 }
 
 .form-wrapper{
@@ -101,17 +102,26 @@ input:focus {
   border-radius: 6px;
   box-shadow: 0px 10px 50px #555;
   background-color: #fff;
-  margin-top: 2rem;
 }
 
 .login-signup-guest{
   display: grid;
   grid-template-areas:
-    "name surname"
-    "phone phone"
-    " .    button"
+    "name"
+    "surname"
+    "phone"
+    "button"
     ;
   grid-gap: 0.5rem;
+}
+
+@media(min-width: 500px){
+  .login-signup-guest{
+    grid-template-areas:
+      "name surname"
+      "phone phone"
+      " .    button";
+  }
 }
 
 .form-wrapper > h1 {
@@ -122,13 +132,17 @@ input:focus {
 }
 
 .form-wrapper p {
-  color: var(--wilderness-5);
+  color: var(--warning);
+  font-size: 0.8rem;
+  text-align: right;
+  margin-top: 0.2rem;
 }
 
 .field-wrapper {
   display: flex;
   flex-direction: column;
   margin-bottom: 1rem;
+  min-height: 4rem;
 }
 
 .name {
@@ -148,9 +162,9 @@ input:focus {
 }
 
 label {
-  font-size: 0.8rem;
-  margin-bottom: 0.24rem;
-  color: #222;
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+  color: #888;
   fonr-weight: lighter;
 }
 
@@ -163,9 +177,9 @@ label {
 }
 
 .enter-platform button {
-  background-color: var(--dentist-1);
+  background-color: var(--primary);
   color: #fff;
-  border: 2px solid var(--dentist-1);
+  border: 3px solid var(--primary);
   border-radius: 5px;
   width: 100%;
   margin-top: 1rem;
@@ -177,9 +191,9 @@ label {
 }
 
 .enter-platform button:hover {
-  color: var(--dentist-1);
+  color: var(--primary);
   background-color: #fff;
-  border: 2px solid var(--dentist-1);
+  border: 3px solid var(--primary);
 }
 
 .enter-platform button:disabled {
