@@ -53,7 +53,7 @@ const Home = withFormik({
   mapPropsToValues(){
     return{
       name: '',
-      surname: 'b',
+      surname: '',
       phone: ''
     }
   },

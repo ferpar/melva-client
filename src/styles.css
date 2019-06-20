@@ -53,11 +53,42 @@ img {
 
 /* appointment view classes */
 
+.appointments-main{
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  align-items: center;
+}
+
+.top-container {
+  border-radius: 5px;
+  background-color: #fff;
+  display: grid;
+  grid-gap: 1rem;
+  grid-template-columns: 1fr;
+  padding: 1rem;
+  width: 100%;
+  max-width: 30rem;
+}
+
+@media(min-width: 500px) {
+  .top-container {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .appointment-item {
+    min-width: 6rem;
+  }
+
+}
+
 .appointments-grid{
   display: grid;
   grid-gap: 1rem;
   grid-template-columns: 1fr 1fr 1fr;
-  padding: 2rem;
+  padding: 2rem 1rem;
+  max-width: 30rem;
+  width: 100%;
 }
 
 .appointment-item{
@@ -65,6 +96,9 @@ img {
   color: blue;
   border: 1px solid blue;
   border-radius: 5px;
+  padding: 0.5rem 1rem;
+  margin: 0 auto;
+  width: 4rem;
 }
 
 .available {
@@ -73,18 +107,18 @@ img {
 
 /* home form css */
 
-input {
+.home-container input {
   border: 0;
   border-bottom: 1px solid #bbb;
   outline: none;
   transition: all 0.3s ease-in-out;
 }
 
-input:hover {
+.home-container input:hover {
   border-bottom: 2px solid var(--dentist-1);
 }
 
-input:focus {
+.home-container input:focus {
   border-bottom: 2px solid rgba(81, 203, 238, 1);
 }
 

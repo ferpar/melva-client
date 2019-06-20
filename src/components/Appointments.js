@@ -111,10 +111,12 @@ class Appointment extends React.Component {
     const { date, appointments } = this.state;
     console.log(appointments)
     return (
-      <div>
-        <h2>choose a Date</h2>
-        <Flatpickr onChange={e => this.dateChangeHandler(e)} />
-        <h2>{date && date.toDateString()}</h2>
+      <div className="appointments-main">
+        <div className="top-container">
+          <h2>choose a Date</h2>
+          <Flatpickr onChange={e => this.dateChangeHandler(e)} />
+          <h2>{date && date.toDateString()}</h2>
+        </div>
         <div className="appointments-grid">
           {appointments &&
             appointments
