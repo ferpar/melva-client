@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
-import AuthService from "../services/auth.js"
+import AuthService from "../services/auth.js";
+import AppointmentService from "../services/appointments.js";
 import { Switch, Route, Link, withRouter } from "react-router-dom";
 import Appointments from "./Appointments";
 import Home from "./Home";
@@ -22,6 +23,8 @@ class App extends React.Component {
     };
     let authService = new AuthService();
     this.authService = authService;
+    let appointmentService = new AppointmentService();
+    this.appointmentService = appointmentService;
 }
 
   toggleNavBar = () => {
@@ -119,7 +122,13 @@ class App extends React.Component {
             path="/appointments"
             user={this.state.user ? this.state.user : null}
             loggedIn={this.state.loggedIn}
-            component={props => <Appointments router={props} user={user} />}
+            component={props => 
+              <Appointments 
+                router={props} 
+                user={user} 
+                authService = {this.authService}
+                appointmentService = {this.appointmentService}
+              />}
           />
           <Route
             path="/login-guest"

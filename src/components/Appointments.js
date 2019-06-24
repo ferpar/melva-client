@@ -16,33 +16,19 @@ class Appointment extends React.Component {
   };
 
   dateChangeHandler = e => {
-    this.setState({ ...this.state, date: e[0] }, () => console.log(this.state));
+    this.setState({ ...this.state, date: e[0] });
   };
 
   printLoggedIn = () => {
-    axios
-      .get("http://192.168.1.51:3010/api/auth/loggedin", {
-        headers: {
-          "Content-Type": "application/json; charset=utf-8",
-          Accept: "application/json"
-        },
-        withCredentials: true // <= that's what changed
-      })
+    this.props.authService
+      .loggedin()
       .then(result => console.log(result.data))
       .catch(err => console.log("there was an error fetching the data " + err));
   };
 
   printDate = id => {
-    console.log(id);
-    console.log(this.props.user);
-    axios
-      .get("http://192.168.1.51:3010/api/appointments/get-single/" + id, {
-        headers: {
-          "Content-Type": "application/json; charset=utf-8",
-          Accept: "application/json"
-        },
-        withCredentials: true // <= that's what changed
-      })
+    this.props.appointmentService
+      .getSingle(id)
       .then(result => console.log(result.data))
       .catch(err => console.log("there was an error fetching the data " + err));
   };
@@ -53,20 +39,12 @@ class Appointment extends React.Component {
     const slotIndex = this.state.appointments.findIndex(
       appointment => appointment._id === id
     );
-    axios
-      .post("http://192.168.1.51:3010/api/appointments/book/", postData, {
-        headers: {
-          "Content-Type": "application/json; charset=utf-8",
-          Accept: "application/json"
-        },
-        withCredentials: true // <= that's what changed
-      })
+    this.props.appointmentService
+      .book(postData)
       .then(result => {
-        console.log(result.data);
         const newAppointments = [...this.state.appointments];
         newAppointments[slotIndex].customer = userId;
         this.setState({ appointments: newAppointments }, () => {
-          console.log(available);
           this.notify(slotIndex, available);
         });
       })
@@ -95,13 +73,10 @@ class Appointment extends React.Component {
       prevState.date === null ||
       prevState.date.toISOString() !== this.state.date.toISOString()
     ) {
-      axios
-        .get("http://192.168.1.51:3010/api/appointments/get/" + dateStr)
+      this.props.appointmentService
+        .get(dateStr)
         .then(result =>
-          this.setState({ appointments: result.data }, () => {
-            console.log(result);
-            console.log(this.state);
-          })
+          this.setState({ appointments: result.data })
         )
         .catch(err => console.error("Error during appointment retrieval", err));
     }
@@ -109,7 +84,6 @@ class Appointment extends React.Component {
 
   render() {
     const { date, appointments } = this.state;
-    console.log(appointments);
     return (
       <div className="appointments-main">
         <div className="top-container">
