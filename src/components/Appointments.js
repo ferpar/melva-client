@@ -4,7 +4,7 @@ import { hot } from "react-hot-loader";
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/material_green.css";
 
-import {toast} from 'react-toastify';
+import { toast } from "react-toastify";
 toast.configure();
 
 import twoDigits from "../helpers/twodigit.js";
@@ -21,7 +21,7 @@ class Appointment extends React.Component {
 
   printLoggedIn = () => {
     axios
-      .get("http://localhost:3010/api/auth/loggedin", {
+      .get("http://192.168.1.51:3010/api/auth/loggedin", {
         headers: {
           "Content-Type": "application/json; charset=utf-8",
           Accept: "application/json"
@@ -32,11 +32,11 @@ class Appointment extends React.Component {
       .catch(err => console.log("there was an error fetching the data " + err));
   };
 
-  printDate = (id) => {
+  printDate = id => {
     console.log(id);
     console.log(this.props.user);
     axios
-      .get("http://localhost:3010/api/appointments/get-single/" + id, {
+      .get("http://192.168.1.51:3010/api/appointments/get-single/" + id, {
         headers: {
           "Content-Type": "application/json; charset=utf-8",
           Accept: "application/json"
@@ -48,11 +48,13 @@ class Appointment extends React.Component {
   };
 
   bookDate = (id, available) => {
-    const userId = available ? this.props.user._id : null
-    const postData = {id, userId}
-    const slotIndex = this.state.appointments.findIndex(appointment => appointment._id===id)
+    const userId = available ? this.props.user._id : null;
+    const postData = { id, userId };
+    const slotIndex = this.state.appointments.findIndex(
+      appointment => appointment._id === id
+    );
     axios
-      .post("http://localhost:3010/api/appointments/book/", postData, {
+      .post("http://192.168.1.51:3010/api/appointments/book/", postData, {
         headers: {
           "Content-Type": "application/json; charset=utf-8",
           Accept: "application/json"
@@ -61,29 +63,27 @@ class Appointment extends React.Component {
       })
       .then(result => {
         console.log(result.data);
-        const newAppointments = [...this.state.appointments]
+        const newAppointments = [...this.state.appointments];
         newAppointments[slotIndex].customer = userId;
-        this.setState({appointments: newAppointments},
-          () => {
-            console.log(available)
-            this.notify(slotIndex, available)
-          }
-        )
+        this.setState({ appointments: newAppointments }, () => {
+          console.log(available);
+          this.notify(slotIndex, available);
+        });
       })
-      .catch( err => console.log("there was an error fetching the data ", + err));
+      .catch(err => console.log("there was an error fetching the data ", +err));
   };
 
-  notify = (
-    slotIndex, 
-    available
-  ) => toast(available 
-    ? 
-    "🦄 wow so ez! booked appointment @"
-    + new Date(this.state.appointments[slotIndex].time).getHours() + ":"
-    + ( twoDigits(new Date(this.state.appointments[slotIndex].time).getMinutes( )))
-    : 
-    "❎ booking canceled"
-  )
+  notify = (slotIndex, available) =>
+    toast(
+      available
+        ? "🦄 wow so ez! booked appointment @" +
+            new Date(this.state.appointments[slotIndex].time).getHours() +
+            ":" +
+            twoDigits(
+              new Date(this.state.appointments[slotIndex].time).getMinutes()
+            )
+        : "❎ booking canceled"
+    );
 
   componentDidUpdate(prevProps, prevState) {
     const { date } = this.state;
@@ -96,7 +96,7 @@ class Appointment extends React.Component {
       prevState.date.toISOString() !== this.state.date.toISOString()
     ) {
       axios
-        .get("http://localhost:3010/api/appointments/get/" + dateStr)
+        .get("http://192.168.1.51:3010/api/appointments/get/" + dateStr)
         .then(result =>
           this.setState({ appointments: result.data }, () => {
             console.log(result);
@@ -109,7 +109,7 @@ class Appointment extends React.Component {
 
   render() {
     const { date, appointments } = this.state;
-    console.log(appointments)
+    console.log(appointments);
     return (
       <div className="appointments-main">
         <div className="top-container">
@@ -127,7 +127,11 @@ class Appointment extends React.Component {
               }))
               .map(({ date, available, id }, index) => (
                 <button
-                  className={available ? "appointment-item available" : "appointment-item"}
+                  className={
+                    available
+                      ? "appointment-item available"
+                      : "appointment-item"
+                  }
                   idx={id}
                   key={index}
                   onClick={() => this.bookDate(id, available)}

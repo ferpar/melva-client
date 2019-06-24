@@ -12,7 +12,7 @@ const Login = props => {
   const handleSubmit = e => {
     e.preventDefault();
     axios
-      .post("http://localhost:3010/api/auth/login", state, {
+      .post("http://  /api/auth/login", state, {
         headers: {
           "Content-Type": "application/json; charset=utf-8",
           Accept: "application/json"
