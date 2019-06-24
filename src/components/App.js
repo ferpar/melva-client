@@ -48,7 +48,6 @@ class App extends React.Component {
   };
 
   getLoggedIn = () => {
-    console.log(this.authService)
     this.authService
       .loggedin()
       .then(result => {
@@ -110,7 +109,11 @@ class App extends React.Component {
           <Route
             exact
             path="/"
-            render={() => <Home handleLogin={this.handleLogin} authService={this.authService} />}
+            render={() => 
+              <Home 
+                handleLogin={this.handleLogin} 
+                authService={this.authService} 
+              />}
           />
           <ProtectedRoute
             path="/appointments"
@@ -120,11 +123,19 @@ class App extends React.Component {
           />
           <Route
             path="/login-guest"
-            render={() => <GLogin handleLogin={this.handleLogin} />}
+            render={() => 
+              <GLogin 
+                handleLogin={this.handleLogin} 
+                authService={this.authService}
+              />}
           />
           <Route
             path="/login"
-            render={() => <Login handleLogin={this.handleLogin} />}
+            render={() => 
+              <Login 
+                handleLogin={this.handleLogin} 
+                authService={this.authService}
+              />}
           />
         </Switch>
       </div>

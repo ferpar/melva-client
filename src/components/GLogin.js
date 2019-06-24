@@ -11,14 +11,8 @@ const GLogin = props => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    axios
-      .post("http://192.168.1.51:3010/api/auth/login-guest", state, {
-        headers: {
-          "Content-Type": "application/json; charset=utf-8",
-          Accept: "application/json"
-        },
-        withCredentials: true // <= that's what changed
-      })
+    props.authService
+      .guestLogin(state)
       .then(result => {
         console.log(result);
         props.handleLogin(result.data, true, "/appointments");

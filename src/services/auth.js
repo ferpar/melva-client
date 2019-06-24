@@ -13,7 +13,7 @@ class AuthService {
     this.service = service;
   }
 
-  entrance = (values) => {
+  entrance = (values) => { //this is the joint signup/login for guests
     return this.service.post("/login-signup-guest", values)
       .then(result => {
         console.log(result)
@@ -24,13 +24,31 @@ class AuthService {
   loggedin = () => {
     return this.service.get("/loggedin")
       .then(result => result)
-      .catch(err => console.error("error checking ig logged in: service level", err))
+      .catch(err => console.error("error checking if logged in: service level", err))
   }
 
   logout = () => {
     return this.service.get("logout")
       .then(result => result)
       .catch(err => console.error("error attempting to logout: service level", err))
+  }
+
+  guestLogin = (values) => {
+    return this.service.post("/login-guest", values)
+      .then(result => result)
+      .catch(err => console.error("there was an error logging in as a guest. Service level error.", err))
+  }
+
+  guestSignup = (values) => {
+    return this.service.post("/signup-guest", values)
+      .then(result => result)
+      .catch(err => console.error("there was an error during sign-up. Service level.", err))
+  }
+
+  userLogin = (values) => {
+    return this.service.post("/login", values)
+      .then(result => result)
+      .catch(err => console.error("Error during login. Service level", err))
   }
 
 }

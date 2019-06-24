@@ -11,14 +11,8 @@ const Login = props => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    axios
-      .post("http://  /api/auth/login", state, {
-        headers: {
-          "Content-Type": "application/json; charset=utf-8",
-          Accept: "application/json"
-        },
-        withCredentials: true // <= that's what changed
-      })
+    props.authService
+      .userLogin(state)
       .then(result => {
         console.log(result);
         props.handleLogin(result.data, true, "/appointments");
