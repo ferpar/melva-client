@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import { hot } from "react-hot-loader";
 import AuthService from "../services/auth.js";
 import AppointmentService from "../services/appointments.js";
 import { Switch, Route, Link, withRouter } from "react-router-dom";
@@ -154,4 +155,4 @@ class App extends React.Component {
   }
 }
 
-export default withRouter(App);
+export default hot(module)(withRouter(App));

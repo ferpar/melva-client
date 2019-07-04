@@ -1,6 +1,5 @@
 import React from "react";
 import axios from "axios";
-import { hot } from "react-hot-loader";
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/material_green.css";
 
@@ -121,4 +120,4 @@ class Appointment extends React.Component {
   }
 }
 
-export default hot(module)(Appointment);
+export default Appointment;
