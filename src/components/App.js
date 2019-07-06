@@ -10,26 +10,22 @@ import Login from "./Login";
 import GLogin from "./GLogin";
 import ProtectedRoute from "./ProtectedRoute";
 
+import {slide as Menu} from "react-burger-menu";
+
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       loggedIn: false,
       isLoading: true,
+      menuOpen: false,
       user: {},
-      isNavBarVisible: false,
     };
     let authService = new AuthService();
     this.authService = authService;
     let appointmentService = new AppointmentService();
     this.appointmentService = appointmentService;
 }
-
-  toggleNavBar = () => {
-    this.setState(prevState => ({
-      isNavBarVisible: !prevState.isNavBarVisible
-    }));
-  };
 
   handleLogin = (userObj, redirect = false, redirectURL) => {
     const { navstate = {} } = this.props.location;
@@ -67,21 +63,16 @@ class App extends React.Component {
       );
   };
 
-  componentDidMount() {
-    this.getLoggedIn();
-    document.addEventListener("keydown", event => {
-      if (event.keyCode === 65) {
-        this.toggleNavBar();
-      }
-    });
+  handleStateChange (state) {
+    this.setState({menuOpen: state.isOpen})  
   }
 
-  componentWillUnmount() {
-    document.removeEventListener("keydown", event => {
-      if (event.keyCode === 65) {
-        this.toggleNavBar();
-      }
-    });
+  closeMenu () {
+    this.setState({menuOpen: false})
+  }
+
+  componentDidMount() {
+    this.getLoggedIn();
   }
 
   render() {
@@ -92,18 +83,22 @@ class App extends React.Component {
 
     return !isLoading ? (
       <div className="main">
-        <div className="navbar">
-          {isNavBarVisible && (
-            <div className="links">
-              <Link to="/login">Login</Link>
-              <Link to="/login-guest">Guest</Link>
-              <Link to="/appointments">Appointments</Link>
-              <Link to="/">Home</Link>
-              <button onClick={this.handleLogout}>Log out</button>
-            </div>
-          )}
-          {loggedIn && <div>Logged in as {name || username}</div>}
-        </div>
+          <Menu 
+            isOpen={this.state.menuOpen}
+            onStateChange={(state) => this.handleStateChange(state)}
+          >
+              <Link onClick={() => this.closeMenu()} to="/login">Login</Link>
+              <Link onClick={() => this.closeMenu()} to="/login-guest">Guest</Link>
+              <Link onClick={() => this.closeMenu()} to="/appointments">Appointments</Link>
+              <Link onClick={() => this.closeMenu()} to="/">Home</Link>
+              <button onClick={() => {
+                this.handleLogout()
+                this.closeMenu()}
+              }>Log out</button>
+          </Menu>
+          <div className="navbar">
+            {loggedIn && <div>Logged in as {name || username}</div>}
+          </div>
         {!loggedIn && error && <div>ERROR: {error}</div>}
         <Switch>
           <Route
