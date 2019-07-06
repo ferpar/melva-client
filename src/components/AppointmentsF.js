@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/material_green.css";
@@ -6,77 +6,81 @@ import "flatpickr/dist/themes/material_green.css";
 import { toast } from "react-toastify";
 toast.configure();
 
-import Modali from "./Modali.js";
+import Modali, { useModali } from 'modali';
 
 import twoDigits from "../helpers/twodigit.js";
 
-class Appointment extends React.Component {
-  state = {
-    date: null,
-    appointments: []
-  };
+const Appointment = (props) => {
 
-  dateChangeHandler = e => {
-    this.setState({ ...this.state, date: e[0] });
-  };
+  const initialDate = null, initialAppointments = [];
+  const [date , setDate] = useState(initialDate);
+  const [appointments, setAppointments] = useState(initialAppointments);
+  
+  const [firstModal, toggleFirstModal] = useModali({
+    animated: true,
+    centered: true
+  });
+  const [bookInfo, setBookInfo] = useState({id: null, available: false});
 
-  bookDate = (id, available) => {
-    const userId = available ? this.props.user._id : null;
+  const dateChangeHandler = e => {
+   setDate( e[0] );
+  }
+
+  
+  const bookDate = (id, available) => {
+    const userId = available ? props.user._id : null;
     const postData = { id, userId };
-    const slotIndex = this.state.appointments.findIndex(
+    const slotIndex = appointments.findIndex(
       appointment => appointment._id === id
     );
-    this.props.appointmentService
+    props.appointmentService
       .book(postData)
       .then(result => {
-        const newAppointments = [...this.state.appointments];
+        const newAppointments = [...appointments];
         newAppointments[slotIndex].customer = userId;
-        this.setState({ appointments: newAppointments }, () => {
-          this.notify(slotIndex, available);
-        });
+        setAppointments( newAppointments );
       })
+      .then(() => {
+          notify(slotIndex, available);
+        })
       .catch(err => console.log("there was an error fetching the data ", +err));
   };
 
-  notify = (slotIndex, available) =>
+  
+  const notify = (slotIndex, available) =>
     toast(
       available
         ? "🦄 wow so ez! booked appointment @" +
-            new Date(this.state.appointments[slotIndex].time).getHours() +
+            new Date(appointments[slotIndex].time).getHours() +
             ":" +
             twoDigits(
-              new Date(this.state.appointments[slotIndex].time).getMinutes()
+              new Date(appointments[slotIndex].time).getMinutes()
             )
         : "❎ booking canceled"
     );
 
-  componentDidUpdate(prevProps, prevState) {
-    const { date } = this.state;
+  useEffect(()=>{
+    if (date !== null) {
     const year = date.getFullYear(),
       month = date.getMonth() + 1,
       day = date.getDate();
     const dateStr = `${year}-${month}-${day}`;
-    if (
-      prevState.date === null ||
-      prevState.date.toISOString() !== this.state.date.toISOString()
-    ) {
-      this.props.appointmentService
+      props.appointmentService
         .get(dateStr)
         .then(result =>
-          this.setState({ appointments: result.data })
+          setAppointments(result.data)
         )
         .catch(err => console.error("Error during appointment retrieval", err));
     }
-  }
+  },
+  [date]
+  )
 
-  render() {
-    const { date, appointments } = this.state;
     return (
       <div className="appointments-main">
         <div className="top-container">
-          <Modali/>
           <h2>choose a Date</h2>
-          <Flatpickr onChange={e => this.dateChangeHandler(e)} />
+          <Flatpickr onChange={e => dateChangeHandler(e)} />
           <h2>{date && date.toDateString()}</h2>
         </div>
         <div className="appointments-grid">
@@ -96,7 +100,11 @@ class Appointment extends React.Component {
                   }
                   idx={id}
                   key={index}
-                  onClick={() => this.bookDate(id, available)}
+                  onClick={() => {
+                    setBookInfo({id, available})
+                    toggleFirstModal()
+                    }
+                  }
                 >
                   {date.getHours()}
                   {":"}
@@ -104,9 +112,17 @@ class Appointment extends React.Component {
                 </button>
               ))}
         </div>
+            <Modali.Modal {...firstModal}>
+              <p>{bookInfo.available ? "Please confirm your booking" : "Confirm cancelation" }</p>
+              <button onClick={() =>{
+                  bookDate(bookInfo.id, bookInfo.available)
+                  toggleFirstModal()
+              }}> 
+                Confirm
+              </button>
+            </Modali.Modal>
       </div>
     );
-  }
 }
 
 export default Appointment;
