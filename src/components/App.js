@@ -4,7 +4,7 @@ import { hot } from "react-hot-loader";
 import AuthService from "../services/auth.js";
 import AppointmentService from "../services/appointments.js";
 import { Switch, Route, Link, withRouter } from "react-router-dom";
-import Appointments from "./Appointments";
+import Appointments from "./AppointmentsF";
 import Home from "./Home";
 import Login from "./Login";
 import GLogin from "./GLogin";
