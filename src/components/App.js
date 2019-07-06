@@ -10,9 +10,6 @@ import Login from "./Login";
 import GLogin from "./GLogin";
 import ProtectedRoute from "./ProtectedRoute";
 
-import { toast } from "react-toastify";
-toast.configure();
-
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -70,8 +67,6 @@ class App extends React.Component {
       );
   };
 
-  notify = () => toast(" 🦄  wow so easy!");
-
   componentDidMount() {
     this.getLoggedIn();
     document.addEventListener("keydown", event => {
@@ -97,17 +92,18 @@ class App extends React.Component {
 
     return !isLoading ? (
       <div className="main">
-        {isNavBarVisible && (
-          <div className="links">
-            <Link to="/login">Login</Link>
-            <Link to="/login-guest">Guest</Link>
-            <Link to="/appointments">Appointments</Link>
-            <Link to="/">Home</Link>
-            <button onClick={this.notify}>Easy?</button>
-            <button onClick={this.handleLogout}>Log out</button>
-          </div>
-        )}
-        {loggedIn && <div>Logged in as {name || username}</div>}
+        <div className="navbar">
+          {isNavBarVisible && (
+            <div className="links">
+              <Link to="/login">Login</Link>
+              <Link to="/login-guest">Guest</Link>
+              <Link to="/appointments">Appointments</Link>
+              <Link to="/">Home</Link>
+              <button onClick={this.handleLogout}>Log out</button>
+            </div>
+          )}
+          {loggedIn && <div>Logged in as {name || username}</div>}
+        </div>
         {!loggedIn && error && <div>ERROR: {error}</div>}
         <Switch>
           <Route
