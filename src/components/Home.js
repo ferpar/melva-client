@@ -3,6 +3,10 @@ import { withRouter } from "react-router-dom";
 import { withFormik, Form, Field } from "formik";
 import * as Yup from "yup";
 
+import 'react-phone-number-input/style.css'
+import PhoneInput from 'react-phone-number-input'
+
+
 const BaseHome = ({ values, errors, touched, isSubmitting, handleLogin, authService }) => (
   <div className="home-container">
     <div className="form-wrapper">
@@ -21,7 +25,9 @@ const BaseHome = ({ values, errors, touched, isSubmitting, handleLogin, authServ
         </div>
         <div className="field-wrapper phone">
           <label htmlFor="phone">teléfono</label>
-          <Field name="phone" type="number" />
+          <Field name="phone" render={({field, form:{touched, errors, setFieldValue}, ...props}) => (
+            <PhoneInput name="phone" country="ES" {...field} {...props} onBlur={(e)=>{}} onChange={(value)=>{setFieldValue("phone", value)}} />
+          )} />
           {touched.phone && errors.phone && <p>{errors.phone}</p>}
         </div>
 
@@ -57,7 +63,7 @@ const Home = withFormik({
         console.log(result);
         props.handleLogin(result.data, true, "/appointments");
       })
-      .catch(err => console.error("there was an error posting your info", err));
+      .catch(err => console.error("there was an error posting your login info", err));
     setSubmitting(false);
   }
 })(BaseHome);
