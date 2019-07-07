@@ -28,16 +28,17 @@ const Appointment = (props) => {
 
   
   const bookDate = (id, available) => {
-    const userId = available ? props.user._id : null;
-    const postData = { id, userId };
+    const userId = props.user._id;
+    const postData = { id, userId, available };
     const slotIndex = appointments.findIndex(
       appointment => appointment._id === id
     );
     props.appointmentService
       .book(postData)
       .then(result => {
+        //console.log(result.data)
         const newAppointments = [...appointments];
-        newAppointments[slotIndex].customer = userId;
+        newAppointments[slotIndex].customer = available ? userId : null;
         setAppointments( newAppointments );
       })
       .then(() => {
