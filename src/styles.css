@@ -155,7 +155,7 @@ img {
       "name surname"
       "phone phone"
       " .    button";
-  }
+    }
 }
 
 .form-wrapper > h1 {
@@ -181,14 +181,17 @@ img {
 
 .name {
   grid-area: name;
+  max-width: 60vw;
 }
 
 .surname {
   grid-area: surname;
+  max-width: 60vw;
 }
 
 .phone {
   grid-area: phone;
+  max-width: 60vw;
 }
 
 .enter-platform{
