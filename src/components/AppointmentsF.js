@@ -20,6 +20,10 @@ const Appointment = (props) => {
     animated: true,
     centered: true
   });
+  const [secondModal, toggleSecondModal] = useModali({
+    animated: true,
+    centered: true
+  });
   const [bookInfo, setBookInfo] = useState({id: null, available: false});
 
   const dateChangeHandler = e => {
@@ -90,9 +94,10 @@ const Appointment = (props) => {
               .map(appointment => ({
                 date: new Date(appointment.time),
                 available: appointment.customer === null,
-                id: appointment._id
+                id: appointment._id,
+                bookedFor: appointment.customer
               }))
-              .map(({ date, available, id }, index) => (
+              .map(({ date, available, id, bookedFor }, index) => (
                 <button
                   className={
                     available
@@ -102,9 +107,13 @@ const Appointment = (props) => {
                   idx={id}
                   key={index}
                   onClick={() => {
-                    setBookInfo({id, available})
-                    toggleFirstModal()
+                    if (available || props.user._id === bookedFor){ 
+                      setBookInfo({id, available})
+                      toggleFirstModal()
+                    } else {
+                      toggleSecondModal() 
                     }
+                  }
                   }
                 >
                   {date.getHours()}
@@ -120,6 +129,14 @@ const Appointment = (props) => {
                   toggleFirstModal()
               }}> 
                 Confirm
+              </button>
+            </Modali.Modal>
+            <Modali.Modal {...secondModal}>
+              <p>This appointment is not available</p>
+              <button onClick={() =>{
+                  toggleSecondModal()
+              }}> 
+                OK
               </button>
             </Modali.Modal>
       </div>
