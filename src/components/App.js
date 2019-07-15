@@ -8,6 +8,7 @@ import Appointments from "./AppointmentsF";
 import Home from "./Home";
 import Login from "./Login";
 import GLogin from "./GLogin";
+import Profile from "./Profile";
 import ProtectedRoute from "./ProtectedRoute";
 
 import {slide as Menu} from "react-burger-menu";
@@ -88,7 +89,7 @@ class App extends React.Component {
             onStateChange={(state) => this.handleStateChange(state)}
           >
               <Link onClick={() => this.closeMenu()} to="/login">Login</Link>
-              <Link onClick={() => this.closeMenu()} to="/login-guest">Guest</Link>
+              <Link onClick={() => this.closeMenu()} to="/profile">Profile</Link>
               <Link onClick={() => this.closeMenu()} to="/appointments">Appointments</Link>
               <Link onClick={() => this.closeMenu()} to="/">Home</Link>
               <button onClick={() => {
@@ -118,6 +119,19 @@ class App extends React.Component {
               <Appointments 
                 router={props} 
                 user={user} 
+                authService = {this.authService}
+                appointmentService = {this.appointmentService}
+              />}
+          />
+          <ProtectedRoute
+            path="/profile"
+            user={this.state.user ? this.state.user : null}
+            loggedIn={this.state.loggedIn}
+            component={props => 
+              <Profile 
+                router={props} 
+                user={user} 
+                handleLogin = {this.handleLogin}
                 authService = {this.authService}
                 appointmentService = {this.appointmentService}
               />}

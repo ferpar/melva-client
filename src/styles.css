@@ -18,7 +18,7 @@
 --dentist-4: #594022;
 --dentist-5: #D9B1A3;
 /* bootstrap */
---warning: #dc3545;
+--danger: #dc3545;
 --primary :#007bff;
 }
 
@@ -165,8 +165,8 @@ img {
   margin-bottom: 1rem;
 }
 
-.form-wrapper p {
-  color: var(--warning);
+.error-msg {
+  color: var(--danger);
   font-size: 0.8rem;
   text-align: right;
   margin-top: 0.2rem;
@@ -329,4 +329,79 @@ Note: Beware of modifying this element as it can break the animations - you shou
 /* Styling of overlay */
 .bm-overlay {
   background: rgba(0, 0, 0, 0.3);
+}
+
+
+/* Profile Styles */
+
+.profile-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+}
+
+.profile-header{
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.profile-wrapper{
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 3rem 1rem;
+  border-radius: 6px;
+  box-shadow: 0px 10px 50px #555;
+  background-color: #fff;
+}
+
+.profile-wrapper > p {
+  margin-bottom: 1rem;
+}
+
+.edit-button{
+  display: inline-block;
+  background-color: var(--primary);
+  color: #fff;
+  border: 3px solid var(--primary);
+  border-radius: 5px;
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.5rem 0;
+  font-size: 1rem;
+  font-weight: lighter;
+  letter-spacing: 1px;
+  margin-bottom: 0.25rem;
+  max-width: 6rem;
+}
+
+.edit-btn-wrapper{
+  display: flex;
+  justify-content: flex-end;
+}
+
+.edit-save-wrapper{
+  display: flex;
+  justify-content: space-between;
+}
+
+
+.cancel-button{
+  display: inline-block;
+  background-color: var(--danger);
+  color: #fff;
+  border: 3px solid var(--danger);
+  border-radius: 5px;
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.5rem 0;
+  font-size: 1rem;
+  font-weight: lighter;
+  letter-spacing: 1px;
+  margin-bottom: 0.25rem;
+  max-width: 6rem;
 }
