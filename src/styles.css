@@ -339,7 +339,7 @@ Note: Beware of modifying this element as it can break the animations - you shou
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 40vh;
+  min-height: 50vh;
 }
 
 .profile-header{
@@ -361,4 +361,25 @@ Note: Beware of modifying this element as it can break the animations - you shou
 
 .profile-wrapper > p {
   margin-bottom: 1rem;
+}
+
+.edit-button{
+  display: inline-block;
+  background-color: var(--primary);
+  color: #fff;
+  border: 3px solid var(--primary);
+  border-radius: 5px;
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.5rem 0;
+  font-size: 1rem;
+  font-weight: lighter;
+  letter-spacing: 1px;
+  margin-bottom: 0.25rem;
+  max-width: 5rem;
+}
+
+.edit-btn-wrapper{
+  display: flex;
+  justify-content: flex-end;
 }

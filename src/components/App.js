@@ -131,6 +131,7 @@ class App extends React.Component {
               <Profile 
                 router={props} 
                 user={user} 
+                handleLogin = {this.handleLogin}
                 authService = {this.authService}
                 appointmentService = {this.appointmentService}
               />}
