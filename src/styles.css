@@ -165,7 +165,7 @@ img {
   margin-bottom: 1rem;
 }
 
-.form-wrapper p {
+.error-msg {
   color: var(--warning);
   font-size: 0.8rem;
   text-align: right;
@@ -329,4 +329,36 @@ Note: Beware of modifying this element as it can break the animations - you shou
 /* Styling of overlay */
 .bm-overlay {
   background: rgba(0, 0, 0, 0.3);
+}
+
+
+/* Profile Styles */
+
+.profile-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 40vh;
+}
+
+.profile-header{
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.profile-wrapper{
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 3rem 1rem;
+  border-radius: 6px;
+  box-shadow: 0px 10px 50px #555;
+  background-color: #fff;
+}
+
+.profile-wrapper > p {
+  margin-bottom: 1rem;
 }

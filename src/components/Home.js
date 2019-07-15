@@ -15,20 +15,20 @@ const BaseHome = ({ values, errors, touched, isSubmitting, handleLogin, authServ
         <div className="field-wrapper name">
           <label htmlFor="name">nombre</label>
           <Field name="name" type="text" />
-          {touched.name && errors.name && <p>{errors.name}</p>}
+          {touched.name && errors.name && <p className="error-msg">{errors.name}</p>}
         </div>
 
         <div className="field-wrapper surname">
           <label htmlFor="surname">apellido</label>
           <Field name="surname" type="text" />
-          {touched.surname && errors.surname && <p>{errors.surname}</p>}
+          {touched.surname && errors.surname && <p className="error-msg">{errors.surname}</p>}
         </div>
         <div className="field-wrapper phone">
           <label htmlFor="phone">teléfono</label>
           <Field name="phone" render={({field, form:{touched, errors, setFieldValue}, ...props}) => (
             <PhoneInput name="phone" country="ES" {...field} {...props} onBlur={(e)=>{}} onChange={(value)=>{setFieldValue("phone", value)}} />
           )} />
-          {touched.phone && errors.phone && <p>{errors.phone}</p>}
+          {touched.phone && errors.phone && <p className="error-msg">{errors.phone}</p>}
         </div>
 
         <div className="enter-platform">
