@@ -18,7 +18,7 @@
 --dentist-4: #594022;
 --dentist-5: #D9B1A3;
 /* bootstrap */
---warning: #dc3545;
+--danger: #dc3545;
 --primary :#007bff;
 }
 
@@ -166,7 +166,7 @@ img {
 }
 
 .error-msg {
-  color: var(--warning);
+  color: var(--danger);
   font-size: 0.8rem;
   text-align: right;
   margin-top: 0.2rem;
@@ -376,10 +376,32 @@ Note: Beware of modifying this element as it can break the animations - you shou
   font-weight: lighter;
   letter-spacing: 1px;
   margin-bottom: 0.25rem;
-  max-width: 5rem;
+  max-width: 6rem;
 }
 
 .edit-btn-wrapper{
   display: flex;
   justify-content: flex-end;
+}
+
+.edit-save-wrapper{
+  display: flex;
+  justify-content: space-between;
+}
+
+
+.cancel-button{
+  display: inline-block;
+  background-color: var(--danger);
+  color: #fff;
+  border: 3px solid var(--danger);
+  border-radius: 5px;
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.5rem 0;
+  font-size: 1rem;
+  font-weight: lighter;
+  letter-spacing: 1px;
+  margin-bottom: 0.25rem;
+  max-width: 6rem;
 }

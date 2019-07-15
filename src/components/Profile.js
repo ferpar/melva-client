@@ -9,7 +9,7 @@ import * as Yup from "yup";
 import 'react-phone-number-input/style.css'
 import PhoneInput from 'react-phone-number-input'
 
-const BaseHome = ({ values, errors, touched, isSubmitting, handleLogin, authService }) => (
+const BaseHome = ({ values, errors, touched, isSubmitting, handleLogin, authServicei, setEditMode }) => (
   <div className="home-container">
     <div className="form-wrapper">
       <h1 className="main title">Editar perfil</h1>
@@ -33,9 +33,10 @@ const BaseHome = ({ values, errors, touched, isSubmitting, handleLogin, authServ
           {touched.phone && errors.phone && <p className="error-msg">{errors.phone}</p>}
         </div>
 
-        <div className="enter-platform">
-          <button disabled={isSubmitting} type="submit">
-            Entrar
+        <div className="edit-save-wrapper">
+          <button className="cancel-button" onClick={()=>setEditMode(false)} type="button">Cancelar</button>
+          <button className="edit-button" disabled={isSubmitting} type="submit">
+            Guardar 
           </button>
         </div>
       </Form>
@@ -92,8 +93,12 @@ const Profile = ({
   return editMode
     ? ( 
       <div> {console.log(user)}
-        <Home handleLogin={handleLogin} authService={authService} user={user}/>
-        <button onClick={()=>setEditMode(false)}>Back</button>
+        <Home 
+          handleLogin={handleLogin}
+          authService={authService} 
+          user={user}
+          setEditMode={setEditMode}
+        />
       </div> )
     : (
     <div>
