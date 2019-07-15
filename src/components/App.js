@@ -57,11 +57,11 @@ class App extends React.Component {
   handleLogout = () => {
     this.authService
       .logout()
-      .then(
-        this.setState({ ...this.state, loggedIn: false }, () =>
+      .then( () => {
+        this.setState({ ...this.state, loggedIn: false, user: {}, isLoading: true }, () =>
           this.props.history.push("/")
         )
-      );
+      });
   };
 
   handleStateChange (state) {
@@ -76,6 +76,12 @@ class App extends React.Component {
     this.getLoggedIn();
   }
 
+  componentDidUpdate() {
+    if(this.state.isLoading) {
+      this.getLoggedIn()
+    }
+  }
+
   render() {
     const { navstate = {} } = this.props.location;
     const { error } = navstate;
@@ -88,10 +94,10 @@ class App extends React.Component {
             isOpen={this.state.menuOpen}
             onStateChange={(state) => this.handleStateChange(state)}
           >
-              <Link onClick={() => this.closeMenu()} to="/login">Login</Link>
-              <Link onClick={() => this.closeMenu()} to="/profile">Profile</Link>
-              <Link onClick={() => this.closeMenu()} to="/appointments">Appointments</Link>
               <Link onClick={() => this.closeMenu()} to="/">Home</Link>
+              <Link onClick={() => this.closeMenu()} to="/appointments">Appointments</Link>
+              <Link onClick={() => this.closeMenu()} to="/profile">Profile</Link>
+              <Link onClick={() => this.closeMenu()} to="/login">Login</Link>
               <button onClick={() => {
                 this.handleLogout()
                 this.closeMenu()}

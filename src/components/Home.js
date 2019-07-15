@@ -26,7 +26,16 @@ const BaseHome = ({ values, errors, touched, isSubmitting, handleLogin, authServ
         <div className="field-wrapper phone">
           <label htmlFor="phone">teléfono</label>
           <Field name="phone" render={({field, form:{touched, errors, setFieldValue}, ...props}) => (
-            <PhoneInput name="phone" country="ES" {...field} {...props} onBlur={(e)=>{}} onChange={(value)=>{setFieldValue("phone", value)}} />
+            <PhoneInput 
+              name="phone" 
+              country="ES" 
+              {...field} 
+              {...props} 
+              onBlur={(e)=>{}} 
+              onChange={
+                (value)=>{setFieldValue("phone", value)}
+              } 
+            />
           )} />
           {touched.phone && errors.phone && <p className="error-msg">{errors.phone}</p>}
         </div>
@@ -42,7 +51,7 @@ const BaseHome = ({ values, errors, touched, isSubmitting, handleLogin, authServ
 );
 
 const Home = withFormik({
-  mapPropsToValues() {
+  mapPropsToValues({user}) {
     return {
       name: "",
       surname: "",
