@@ -65,7 +65,11 @@ img {
   background-color: #fff;
   display: grid;
   grid-gap: 1rem;
-  grid-template-columns: 1fr;
+  grid-template-areas: 
+    "title"
+    "flatpickr"
+    "date"
+  ;
   padding: 1rem;
   width: 100%;
   max-width: 40rem;
