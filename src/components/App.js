@@ -3,7 +3,7 @@ import axios from "axios";
 import { hot } from "react-hot-loader";
 import AuthService from "../services/auth.js";
 import AppointmentService from "../services/appointments.js";
-import { Switch, Route, Link, withRouter } from "react-router-dom";
+import { Switch, Route, Link, withRouter, Redirect } from "react-router-dom";
 import Appointments from "./AppointmentsF";
 import Home from "./Home";
 import Login from "./Login";
@@ -111,7 +111,10 @@ class App extends React.Component {
           <Route
             exact
             path="/"
-            render={() => 
+            render={() => loggedIn 
+              ? 
+              <Redirect to="/appointments" /> 
+              :
               <Home 
                 handleLogin={this.handleLogin} 
                 authService={this.authService} 
