@@ -16,13 +16,59 @@ const Appointment = (props) => {
   const [date , setDate] = useState(initialDate);
   const [appointments, setAppointments] = useState(initialAppointments);
   
-  const [firstModal, toggleFirstModal] = useModali({
+  const [confirmModal, toggleConfirmModal] = useModali({
     animated: true,
-    centered: true
+    centered: true,
+    buttons: [
+      <Modali.Button
+        label="Volver"
+        isStyleCancel
+        onClick={() => toggleConfirmModal()}
+      />,
+      <Modali.Button
+        label="Confirmar"
+        isStyleDefault
+        onClick={() => {
+                  bookDate(bookInfo.id, bookInfo.available)
+                  toggleConfirmModal()
+        }}
+      />
+    ],
+    title: "Reservar Cita"
   });
-  const [secondModal, toggleSecondModal] = useModali({
+  const [cancelModal, toggleCancelModal] = useModali({
     animated: true,
-    centered: true
+    centered: true,
+    buttons: [
+      <Modali.Button
+        label="Volver"
+        isStyleCancel
+        onClick={() => toggleCancelModal()}
+      />,
+      <Modali.Button
+        label="Confirmar"
+        isStyleDefault
+        onClick={() => {
+                  bookDate(bookInfo.id, bookInfo.available)
+                  toggleCancelModal()
+        }}
+      />
+    ],
+    title: "Cancelar Cita"
+  });
+  const [unavailableModal, toggleUnavailableModal] = useModali({
+    animated: true,
+    centered: true,
+    title: "No disponible",
+    buttons: [
+      <Modali.Button 
+        label="Entendido"
+        isStyleDefault
+        onClick={() => {
+          toggleUnavailableModal()
+        }}
+      />
+    ]
   });
   const [bookInfo, setBookInfo] = useState({id: null, available: false});
 
@@ -55,13 +101,13 @@ const Appointment = (props) => {
   const notify = (slotIndex, available) =>
     toast(
       available
-        ? "🦄 wow so ez! booked appointment @" +
+        ? "🦄 Cita reservada para las " +
             new Date(appointments[slotIndex].time).getHours() +
             ":" +
             twoDigits(
               new Date(appointments[slotIndex].time).getMinutes()
             )
-        : "❎ booking canceled"
+        : "❎ cita cancelada"
     );
 
   useEffect(()=>{
@@ -84,9 +130,14 @@ const Appointment = (props) => {
     return (
       <div className="appointments-main">
         <div className="top-container">
-          <h2>choose a Date</h2>
-          <Flatpickr onChange={e => dateChangeHandler(e)} />
-          <h2>{date && date.toDateString()}</h2>
+          <h2 className="appointments-title">Seleccione una fecha</h2>
+          <Flatpickr className="appointments-flatpickr" onChange={e => dateChangeHandler(e)} />
+          <h2 className="appointments-date" >{date && date.toLocaleDateString('es-ES', {
+            weekday:'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          })}</h2>
         </div>
         <div className="appointments-grid">
           {appointments &&
@@ -96,6 +147,7 @@ const Appointment = (props) => {
                 available: appointment.customer === null,
                 id: appointment._id,
                 bookedFor: appointment.customer
+                
               }))
               .map(({ date, available, id, bookedFor }, index) => (
                 <button
@@ -108,10 +160,16 @@ const Appointment = (props) => {
                   key={index}
                   onClick={() => {
                     if (available || props.user._id === bookedFor){ 
-                      setBookInfo({id, available})
-                      toggleFirstModal()
+                      if (available) {
+                      setBookInfo({id, available, hour: date.getHours() + ":" + twoDigits(date.getMinutes()), date})
+                      toggleConfirmModal()
+                      } else {
+                      setBookInfo({id, available, hour: date.getHours() + ":" + twoDigits(date.getMinutes()), date})
+                      toggleCancelModal()
+                      }
                     } else {
-                      toggleSecondModal() 
+                      setBookInfo({id, available, hour: date.getHours() + ":" + twoDigits(date.getMinutes()), date})
+                      toggleUnavailableModal() 
                     }
                   }
                   }
@@ -122,22 +180,35 @@ const Appointment = (props) => {
                 </button>
               ))}
         </div>
-            <Modali.Modal {...firstModal}>
-              <p>{bookInfo.available ? "Please confirm your booking" : "Confirm cancelation" }</p>
-              <button onClick={() =>{
-                  bookDate(bookInfo.id, bookInfo.available)
-                  toggleFirstModal()
-              }}> 
-                Confirm
-              </button>
+            <Modali.Modal {...confirmModal}>
+              <div className="modal-text">
+                <p>Desea reservar cita para el {bookInfo.date && bookInfo.date.toLocaleDateString('es-ES',{
+                  weekday: 'long',
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })} a las {bookInfo.hour && bookInfo.hour}?</p>
+              </div>
             </Modali.Modal>
-            <Modali.Modal {...secondModal}>
-              <p>This appointment is not available</p>
-              <button onClick={() =>{
-                  toggleSecondModal()
-              }}> 
-                OK
-              </button>
+            <Modali.Modal {...cancelModal}>
+              <div className="modal-text">
+                <p>Desea cancelar su cita prevista para el {bookInfo.date && bookInfo.date.toLocaleDateString('es-ES',{
+                  weekday: 'long',
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })} a las {bookInfo.hour && bookInfo.hour}?</p>
+              </div>
+            </Modali.Modal>
+            <Modali.Modal  {...unavailableModal}>
+              <div className="modal-text">
+                <p>La cita para el {bookInfo.date && bookInfo.date.toLocaleDateString('es-ES',{
+                  weekday: 'long',
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })} a las {bookInfo.hour && bookInfo.hour} no está disponible.</p>
+              </div>
             </Modali.Modal>
       </div>
     );

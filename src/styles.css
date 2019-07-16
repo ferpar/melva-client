@@ -68,18 +68,33 @@ img {
   grid-template-columns: 1fr;
   padding: 1rem;
   width: 100%;
-  max-width: 30rem;
+  max-width: 40rem;
 }
 
 @media(min-width: 500px) {
   .top-container {
-    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "title flatpickr"
+      "date date"
+    ;
   }
 
   .appointment-item {
     min-width: 6rem;
   }
 
+}
+
+.appointments-title{
+  grid-area: title;
+}
+
+.appointments-flatpickr{
+  grid-area: flatpickr;
+}
+
+.appointments-date{
+  grid-area: date;
 }
 
 .appointments-grid{
@@ -103,6 +118,10 @@ img {
 
 .available {
   background-color: white;
+}
+
+.modal-text{
+  padding: 1rem 2rem 0.5rem;
 }
 
 /* home form css */
