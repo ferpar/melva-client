@@ -35,7 +35,9 @@ class Appointment extends React.Component {
           this.notify(slotIndex, available);
         });
       })
-      .catch(err => console.log("there was an error fetching the data ", +err));
+      .catch(err =>
+        console.error("there was an error fetching the data ", err)
+      );
   };
 
   notify = (slotIndex, available) =>
@@ -62,9 +64,7 @@ class Appointment extends React.Component {
     ) {
       this.props.appointmentService
         .get(dateStr)
-        .then(result =>
-          this.setState({ appointments: result.data })
-        )
+        .then(result => this.setState({ appointments: result.data }))
         .catch(err => console.error("Error during appointment retrieval", err));
     }
   }
@@ -74,7 +74,7 @@ class Appointment extends React.Component {
     return (
       <div className="appointments-main">
         <div className="top-container">
-          <Modali/>
+          <Modali />
           <h2>choose a Date</h2>
           <Flatpickr onChange={e => this.dateChangeHandler(e)} />
           <h2>{date && date.toDateString()}</h2>

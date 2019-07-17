@@ -14,7 +14,6 @@ const GLogin = props => {
     props.authService
       .guestLogin(state)
       .then(result => {
-        console.log(result);
         props.handleLogin(result.data, true, "/appointments");
       })
       //    .then( props.history.push('/appointments'))

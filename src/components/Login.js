@@ -14,7 +14,6 @@ const Login = props => {
     props.authService
       .userLogin(state)
       .then(result => {
-        console.log(result);
         props.handleLogin(result.data, true, "/appointments");
       })
       //    .then( props.history.push('/appointments'))

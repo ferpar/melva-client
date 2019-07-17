@@ -14,7 +14,6 @@ const GSignup = props => {
     props.authService
       .guestSignup(state)
       .then(result => {
-        console.log(result);
         props.handleLogin(result.data, true, "/appointments");
       })
       .catch(err => console.error("there was an error posting your info", err));
