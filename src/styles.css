@@ -124,6 +124,10 @@ img {
   background-color: white;
 }
 
+.unavailable {
+  background-color: grey;
+}
+
 .modal-text{
   padding: 1rem 2rem 0.5rem;
 }

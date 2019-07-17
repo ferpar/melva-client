@@ -150,7 +150,9 @@ const Appointment = props => {
             .map(({ date, available, id, bookedFor }, index) => (
               <button
                 className={
+                  (props.user._id === bookedFor || !bookedFor ) ? (
                   available ? "appointment-item available" : "appointment-item"
+                  ) : "appointment-item unavailable"
                 }
                 idx={id}
                 key={index}
