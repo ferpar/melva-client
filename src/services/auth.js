@@ -24,7 +24,13 @@ class AuthService {
   loggedin = () => {
     return this.service.get("/loggedin")
       .then(result => result)
-      .catch(err => console.error("error checking if logged in: service level", err));
+      .catch(err => {
+        if(err.response.status===403){
+        console.log(err.response.data.message) 
+        } else {
+        console.error("error checking if logged in: service level", err)
+        }
+      });
   }
 
   logout = () => {
