@@ -6,8 +6,6 @@ import AppointmentService from "../services/appointments.js";
 import { Switch, Route, Link, withRouter, Redirect } from "react-router-dom";
 import Appointments from "./AppointmentsF";
 import Home from "./Home";
-import Login from "./Login";
-import GLogin from "./GLogin";
 import Profile from "./Profile";
 import ProtectedRoute from "./ProtectedRoute";
 
@@ -97,7 +95,6 @@ class App extends React.Component {
               <Link onClick={() => this.closeMenu()} to="/">Home</Link>
               <Link onClick={() => this.closeMenu()} to="/appointments">Appointments</Link>
               <Link onClick={() => this.closeMenu()} to="/profile">Profile</Link>
-              <Link onClick={() => this.closeMenu()} to="/login">Login</Link>
               <button onClick={() => {
                 this.handleLogout()
                 this.closeMenu()}
@@ -143,22 +140,6 @@ class App extends React.Component {
                 handleLogin = {this.handleLogin}
                 authService = {this.authService}
                 appointmentService = {this.appointmentService}
-              />}
-          />
-          <Route
-            path="/login-guest"
-            render={() => 
-              <GLogin 
-                handleLogin={this.handleLogin} 
-                authService={this.authService}
-              />}
-          />
-          <Route
-            path="/login"
-            render={() => 
-              <Login 
-                handleLogin={this.handleLogin} 
-                authService={this.authService}
               />}
           />
         </Switch>
