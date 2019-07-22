@@ -11,11 +11,18 @@ import Modali, { useModali } from "modali";
 import twoDigits from "../helpers/twodigit.js";
 
 const Appointment = props => {
+
+  //INITIAL VALUES
   const initialDate = null,
     initialAppointments = [];
+
+  //STATE HOOKS ----
   const [date, setDate] = useState(initialDate);
   const [appointments, setAppointments] = useState(initialAppointments);
+  const [bookInfo, setBookInfo] = useState({ id: null, available: false });
+  const [userAppointments, setUserAppointments] = useState([]);
 
+  //Modali Hooks (for modals)
   const [confirmModal, toggleConfirmModal] = useModali({
     animated: true,
     centered: true,
@@ -70,8 +77,8 @@ const Appointment = props => {
       />
     ]
   });
-  const [bookInfo, setBookInfo] = useState({ id: null, available: false });
 
+  // CUSTOM METHODS
   const dateChangeHandler = e => {
     setDate(e[0]);
   };
@@ -84,12 +91,17 @@ const Appointment = props => {
     );
     props.appointmentService
       .book(postData)
-      .then(result => {
+      .then(result => { //Updating selected day's Appointments State
         const newAppointments = [...appointments];
         newAppointments[slotIndex].customer = available ? userId : null;
         setAppointments(newAppointments);
       })
-      .then(() => {
+      .then(() => { //Updating user's Appointments State
+        props.appointmentService
+          .getByUser(props.user._id)
+          .then((result) => setUserAppointments([...result.data]))
+      })
+      .then(() => { //Launching toastify notification
         notify(slotIndex, available);
       })
       .catch(err =>
@@ -97,6 +109,7 @@ const Appointment = props => {
       );
   };
 
+  // TOASTIFY METHOD
   const notify = (slotIndex, available) =>
     toast(
       available
@@ -107,7 +120,8 @@ const Appointment = props => {
         : "❎ cita cancelada"
     );
 
-  useEffect(() => {
+  // EFFECT HOOK(S)
+  useEffect(() => {  //ON DATE CHANGE
     if (date !== null) {
       const year = date.getFullYear(),
         month = date.getMonth() + 1,
@@ -120,8 +134,43 @@ const Appointment = props => {
     }
   }, [date]);
 
+  useEffect(() => { //LOAD USER APPOINTMENTS ON MOUNT
+      props.appointmentService
+        .getByUser(props.user._id)
+        .then((result) => setUserAppointments([...result.data]))
+  }, [])
+
+  //RETURN (render)
   return (
     <div className="appointments-main">
+      {console.log(userAppointments)}
+      <div className="user-appointments-container">
+        <h2 className="user-appointments-title" >Citas reservadas</h2>
+        {userAppointments
+          .map(appointment => ({
+            duration: appointment.duration,
+            date: new Date(appointment.time),
+            id: appointment._id,
+            bookedFor: appointment.customer
+          }))
+          .map(({date, duration, id, bookedFor}, index) => {
+          return (
+            <div key={index} className="user-appointment">
+              <p>
+              {date &&
+                date.toLocaleDateString("es-ES", {
+                  weekday: "long",
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric"
+                })}
+            </p>
+              <p>duración: {duration}</p>
+            </div>
+          )
+        }
+        )}
+      </div>
       <div className="top-container">
         <h2 className="appointments-title">Seleccione una fecha</h2>
         <Flatpickr
