@@ -144,6 +144,7 @@ const Appointment = props => {
   return (
     <div className="appointments-main">
       {console.log(userAppointments)}
+    { (userAppointments.length > 0) &&
       <div className="user-appointments-container">
         <h2 className="user-appointments-title" >Citas reservadas</h2>
         {userAppointments
@@ -154,8 +155,8 @@ const Appointment = props => {
             bookedFor: appointment.customer
           }))
           .map(({date, duration, id, bookedFor}, index) => {
-          return (
-            <div key={index} className="user-appointment">
+            return (
+              <div key={index} className="user-appointment">
               <p>
               {date &&
                 date.toLocaleDateString("es-ES", {
@@ -164,13 +165,14 @@ const Appointment = props => {
                   month: "long",
                   day: "numeric"
                 })}
-            </p>
+              </p>
               <p>duración: {duration}</p>
-            </div>
-          )
-        }
-        )}
-      </div>
+              </div>
+            )
+          }
+          )}
+        </div>
+    }
       <div className="top-container">
         <h2 className="appointments-title">Seleccione una fecha</h2>
         <Flatpickr
