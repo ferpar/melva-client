@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import axios from "axios";
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/material_green.css";
@@ -21,6 +21,7 @@ const Appointment = props => {
   const [appointments, setAppointments] = useState(initialAppointments);
   const [bookInfo, setBookInfo] = useState({ id: null, available: false });
   const [userAppointments, setUserAppointments] = useState([]);
+  const [unmt, setUnmt] = useState(false) //Unmount FLAG
 
   //Modali Hooks (for modals)
   const [confirmModal, toggleConfirmModal] = useModali({
@@ -134,13 +135,20 @@ const Appointment = props => {
     }
   }, [date]);
 
-  useEffect(() => { //LOAD USER APPOINTMENTS ON MOUNT
+  useLayoutEffect(() => { //LOAD USER APPOINTMENTS ON MOUNT
       props.appointmentService
         .getByUser(props.user._id)
         .then((result) => setUserAppointments([...result.data]))
-  }, [])
-
+        .then(() => {
+          setFirstRender(false)
+        })
+    return () => setUnmt(true)
+  }, []) //Notice the []: this effect only runs on mount and unMount
+  
   //RETURN (render)
+  
+  if (unmt) return null; //this prevents errors when unmounting
+
   return (
     <div className="appointments-main">
     { (userAppointments.length > 0) &&
