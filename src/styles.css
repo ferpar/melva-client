@@ -60,6 +60,15 @@ img {
   align-items: center;
 }
 
+.user-appointments-container {
+  border-radius: 5px;
+  background-color: #fff;
+  padding: 1rem;
+  max-width: 40rem;
+  margin-bottom: 2rem;
+  width: 100%;
+}
+
 .top-container {
   border-radius: 5px;
   background-color: #fff;
@@ -91,6 +100,35 @@ img {
 
 .appointments-title{
   grid-area: title;
+}
+
+.user-appointments-title {
+  margin-bottom: 1rem;
+}
+
+.user-appointment {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid grey;
+  padding: 0.5rem;
+}
+
+.cancel-user-appointment {
+  align-self: flex-end;
+  display: inline-block;
+  background-color: var(--danger);
+  color: #fff;
+  border: 3px solid var(--danger);
+  border-radius: 5px;
+  width: 100%;
+  margin-top: 0.25rem;
+  padding: 0.5rem 0;
+  font-size: 1rem;
+  font-weight: lighter;
+  letter-spacing: 1px;
+  margin-bottom: 0.25rem;
+  max-width: 6rem;
 }
 
 .appointments-flatpickr{

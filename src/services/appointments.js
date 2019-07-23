@@ -19,17 +19,22 @@ class AppointmentService {
       .catch(err => console.error("error getting booking information for the selectethe selected date. Service level.", err))
   }
 
-  
+  get = (dateStr) => {
+    return this.service.get("/get/" + dateStr)
+      .then(result => result)
+      .catch(err => console.error("Error retrieving appointments. Service level.", err))
+  }
+
+  getByUser = (userId) => {
+    return this.service.get("/get-by-user/" + userId)
+      .then(result => result)
+      .catch(err => console.error("Error retrieving appintments for this user. Service level.", err))
+  }
+
   book = (values) => {
    return this.service.post("/book", values) 
     .then(result => result)
     .catch(err => console.error("Error attempting to book, service level.", err))
-  }
-
-  get = (dateStr) => {
-    return this.service.get("/get/" + dateStr)
-      .then(result => result)
-      .catch(err => console.error("Error retrieving appointments. Service level", err))
   }
 
 }
