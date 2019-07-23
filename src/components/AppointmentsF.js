@@ -149,24 +149,44 @@ const Appointment = props => {
         <h2 className="user-appointments-title" >Citas reservadas</h2>
         {userAppointments
           .map(appointment => ({
+            available: false,
             duration: appointment.duration,
             date: new Date(appointment.time),
             id: appointment._id,
             bookedFor: appointment.customer
           }))
-          .map(({date, duration, id, bookedFor}, index) => {
+          .map(({available, date, duration, id, bookedFor}, index) => {
             return (
               <div key={index} className="user-appointment">
-              <p>
-              {date &&
-                date.toLocaleDateString("es-ES", {
-                  weekday: "long",
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric"
-                })}
-              </p>
-              <p>duración: {duration}</p>
+              <div>
+                <p>
+                {date &&
+                  date.toLocaleDateString("es-ES", {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric"
+                  })}
+                </p>
+                <p>duración: {duration}</p>
+              </div>
+              <button
+                onClick = { 
+                    () => { 
+                          setBookInfo({
+                            id,
+                            available,
+                            hour:
+                              date.getHours() + ":" + twoDigits(date.getMinutes()),
+                            date
+                          });
+                          toggleCancelModal();
+                    }
+                  }
+                className="cancel-user-appointment"
+              >
+                Cancelar
+              </button>
               </div>
             )
           }
