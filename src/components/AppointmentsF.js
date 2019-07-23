@@ -21,7 +21,7 @@ const Appointment = props => {
   const [appointments, setAppointments] = useState(initialAppointments);
   const [bookInfo, setBookInfo] = useState({ id: null, available: false });
   const [userAppointments, setUserAppointments] = useState([]);
-  const [unmt, setUnmt] = useState(false) //Unmount FLAG
+  const [firstRender, setFirstRender] = useState(true)
 
   //Modali Hooks (for modals)
   const [confirmModal, toggleConfirmModal] = useModali({
@@ -136,19 +136,19 @@ const Appointment = props => {
   }, [date]);
 
   useLayoutEffect(() => { //LOAD USER APPOINTMENTS ON MOUNT
+    let isSubscribed = true;
       props.appointmentService
         .getByUser(props.user._id)
-        .then((result) => setUserAppointments([...result.data]))
-        .then(() => {
-          setFirstRender(false)
+        .then((result) => {
+          if (isSubscribed) {
+            setUserAppointments([...result.data])
+          }
         })
-    return () => setUnmt(true)
-  }, []) //Notice the []: this effect only runs on mount and unMount
+    return () => isSubscribed = false;
+  })
   
-  //RETURN (render)
-  
-  if (unmt) return null; //this prevents errors when unmounting
 
+  //RETURN (render)
   return (
     <div className="appointments-main">
     { (userAppointments.length > 0) &&
