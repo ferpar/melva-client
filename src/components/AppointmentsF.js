@@ -143,7 +143,6 @@ const Appointment = props => {
   //RETURN (render)
   return (
     <div className="appointments-main">
-      {console.log(userAppointments)}
     { (userAppointments.length > 0) &&
       <div className="user-appointments-container">
         <h2 className="user-appointments-title" >Citas reservadas</h2>
