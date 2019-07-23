@@ -92,16 +92,15 @@ class App extends React.Component {
             isOpen={this.state.menuOpen}
             onStateChange={(state) => this.handleStateChange(state)}
           >
-              <Link onClick={() => this.closeMenu()} to="/">Home</Link>
-              <Link onClick={() => this.closeMenu()} to="/appointments">Appointments</Link>
-              <Link onClick={() => this.closeMenu()} to="/profile">Profile</Link>
+              <Link onClick={() => this.closeMenu()} to="/appointments">Citas</Link>
+              <Link onClick={() => this.closeMenu()} to="/profile">Perfil de Usuario</Link>
               <button onClick={() => {
                 this.handleLogout()
                 this.closeMenu()}
-              }>Log out</button>
+              }>Desconectar</button>
           </Menu>
           <div className="navbar">
-            {loggedIn && <div>Logged in as {name || username}</div>}
+            {loggedIn && <div> Usuario: {name || username}</div>}
           </div>
         {!loggedIn && error && <div>ERROR: {error}</div>}
         <Switch>
