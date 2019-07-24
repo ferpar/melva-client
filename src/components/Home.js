@@ -6,6 +6,8 @@ import * as Yup from "yup";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 
+import capitalize from "../helpers/capitalize.js";
+
 const BaseHome = ({
   values,
   errors,
@@ -85,8 +87,13 @@ const Home = withFormik({
       .required("please enter a phone number")
   }),
   handleSubmit(values, { props, setSubmitting }) {
+
+    const processedValues = {...values}
+    processedValues.name = capitalize(values.name)
+    processedValues.surname = capitalize(values.surname)
+
     props.authService
-      .entrance(values)
+      .entrance(processedValues)
       .then(result => {
         props.handleLogin(result.data, true, "/appointments");
       })
