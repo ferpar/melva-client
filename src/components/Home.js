@@ -45,6 +45,7 @@ const BaseHome = ({
               ...props
             }) => (
               <PhoneInput
+                className="phone-input"
                 name="phone"
                 country="ES"
                 {...field}

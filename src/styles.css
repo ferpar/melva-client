@@ -244,6 +244,18 @@ img {
   min-height: 4rem;
 }
 
+.field-wrapper > input {
+  font-size: 1.4rem;
+}
+
+.field-wrapper > label {
+  font-size: 1.2rem;
+}
+
+.phone-input input {
+  font-size: 1.2rem;
+}
+
 .name {
   grid-area: name;
   max-width: 60vw;
