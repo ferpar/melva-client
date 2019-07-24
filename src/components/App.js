@@ -94,8 +94,8 @@ class App extends React.Component {
           >
               <Link onClick={() => this.closeMenu()} to="/appointments">Citas</Link>
               <Link onClick={() => this.closeMenu()} to="/profile">Perfil de Usuario</Link>
-              <button onClick={() => {
-                this.handleLogout()
+              <button onClick={ async () => {
+                await this.handleLogout() //this is important to avoid race between handleLogout and closeMenu
                 this.closeMenu()}
               }>Desconectar</button>
           </Menu>

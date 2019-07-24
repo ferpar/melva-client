@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/material_green.css";
@@ -123,19 +123,23 @@ const Appointment = props => {
 
   // EFFECT HOOK(S)
   useEffect(() => {  //ON DATE CHANGE
+    let isSubscribed = true;
     if (date !== null) {
       const year = date.getFullYear(),
         month = date.getMonth() + 1,
         day = date.getDate();
       const dateStr = `${year}-${month}-${day}`;
+      if (isSubscribed) {
       props.appointmentService
         .get(dateStr)
         .then(result => setAppointments(result.data))
         .catch(err => console.error("Error during appointment retrieval", err));
+      }
     }
+    return () => isSubscribed = false;
   }, [date]);
 
-  useLayoutEffect(() => { //LOAD USER APPOINTMENTS ON MOUNT
+  useEffect(() => { //LOAD USER APPOINTMENTS ON MOUNT
     let isSubscribed = true;
       props.appointmentService
         .getByUser(props.user._id)
