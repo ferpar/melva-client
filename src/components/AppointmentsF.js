@@ -155,10 +155,15 @@ const Appointment = props => {
   //RETURN (render)
   return (
     <div className="appointments-main">
-    { (userAppointments.length > 0) &&
+    { (userAppointments
+        .filter(appointment => //filtering old dates 
+          new Date(appointment.time).getTime() > new Date().getTime()) 
+        .length > 0) &&
       <div className="user-appointments-container">
         <h2 className="user-appointments-title" >Citas reservadas</h2>
         {userAppointments
+          .filter(appointment => //filtering old dates
+            new Date(appointment.time).getTime() > new Date().getTime()) 
           .map(appointment => ({
             available: false,
             duration: appointment.duration,
