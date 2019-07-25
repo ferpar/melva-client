@@ -101,8 +101,11 @@ class App extends React.Component {
           </Menu>
           <div className="navbar">
             {loggedIn && <div> Usuario: {name || username}</div>}
+            {!loggedIn && error && <div className="login-error">ERROR: {error}</div>}
           </div>
-        {!loggedIn && error && <div>ERROR: {error}</div>}
+        <div className="login-error">
+          {!loggedIn && error && <div>ERROR: {error}</div>}
+        </div>
         <Switch>
           <Route
             exact

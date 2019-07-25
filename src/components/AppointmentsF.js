@@ -149,7 +149,7 @@ const Appointment = props => {
           }
         })
     return () => isSubscribed = false;
-  })
+  }, [])
   
 
   //RETURN (render)

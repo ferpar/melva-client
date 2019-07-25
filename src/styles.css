@@ -58,6 +58,7 @@ img {
   flex-direction: column;
   padding: 2rem;
   align-items: center;
+  margin-top: 3rem;
 }
 
 .user-appointments-container {
@@ -191,7 +192,8 @@ img {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 80vh;
+  padding-top: 3rem;
+  min-height: 86vh;
 }
 
 .form-wrapper{
@@ -316,12 +318,23 @@ label {
 }
 
 .navbar {
+  top: 0;
+  position:fixed;
+  width: 100%;
   background-color: #333;
   color: white;
   height: 3rem;
   display: flex;
   justify-content: space-around;
   align-items: center;
+}
+
+.login-error {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  color: orange;
+  width: 100%;
 }
 
 /* Position and sizing of burger button */
@@ -417,6 +430,7 @@ Note: Beware of modifying this element as it can break the animations - you shou
   justify-content: center;
   align-items: center;
   min-height: 50vh;
+  margin-top: 3rem;
 }
 
 .profile-header{
