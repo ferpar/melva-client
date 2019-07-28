@@ -64,7 +64,8 @@ module.exports = {
   plugins : [ 
     new CompressionPlugin(),
     new HtmlWebpackPlugin({
-    template: './src/index.html'
+      template: './src/index.html',
+      favicon: './src/favicon.png'
   })
   ]
 }
