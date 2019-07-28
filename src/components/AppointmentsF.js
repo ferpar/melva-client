@@ -174,35 +174,51 @@ const Appointment = props => {
           .map(({available, date, duration, id, bookedFor}, index) => {
             return (
               <div key={index} className="user-appointment">
-              <div>
-                <p>
-                {date &&
-                  date.toLocaleDateString("es-ES", {
-                    weekday: "long",
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric"
-                  })}
-                </p>
-                <p>duración: {duration}</p>
-              </div>
-              <button
-                onClick = { 
-                    () => { 
-                          setBookInfo({
-                            id,
-                            available,
-                            hour:
-                              date.getHours() + ":" + twoDigits(date.getMinutes()),
-                            date
-                          });
-                          toggleCancelModal();
-                    }
+                <div className="appointment-details">
+                  <p>
+                  {date &&
+                    date.toLocaleDateString("es-ES", {
+                      weekday: "long",
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric"
+                    }).split(",")[1]}
+                  </p>
+                  <p>
+                  {date &&
+                    date.toLocaleDateString("es-ES", {
+                      weekday: "long",
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric"
+                    }).split(",")[0]}
+                  {' '} 
+                  {date &&
+                    date.toLocaleTimeString("es-ES", {
+                      hour: "2-digit",
+                      minute: "2-digit"
+                    }) 
                   }
-                className="cancel-user-appointment"
-              >
-                Cancelar
-              </button>
+                  </p>
+                  <p>duración: {duration} min</p>
+                </div>
+                <button
+                  onClick = { 
+                      () => { 
+                            setBookInfo({
+                              id,
+                              available,
+                              hour:
+                                date.getHours() + ":" + twoDigits(date.getMinutes()),
+                              date
+                            });
+                            toggleCancelModal();
+                      }
+                    }
+                  className="cancel-user-appointment"
+                >
+                  Cancelar
+                </button>
               </div>
             )
           }
