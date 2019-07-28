@@ -36,8 +36,8 @@ const Appointment = props => {
       <Modali.Button
         label="Confirmar"
         isStyleDefault
-        onClick={() => {
-          bookDate(bookInfo.id, bookInfo.available);
+        onClick={async () => {
+          await bookDate(bookInfo.id, bookInfo.available);
           toggleConfirmModal();
         }}
       />
@@ -56,8 +56,8 @@ const Appointment = props => {
       <Modali.Button
         label="Confirmar"
         isStyleDefault
-        onClick={() => {
-          bookDate(bookInfo.id, bookInfo.available);
+        onClick={async () => {
+          await bookDate(bookInfo.id, bookInfo.available);
           toggleCancelModal();
         }}
       />
@@ -225,25 +225,39 @@ const Appointment = props => {
           )}
         </div>
     }
-      <div className="top-container">
-        <h2 className="appointments-title">Seleccione una fecha</h2>
-        <Flatpickr
+    {
+      (userAppointments
+        .filter(appointment => //filtering old dates 
+          new Date(appointment.time).getTime() > new Date().getTime()) 
+        .length <= 0) &&
+        <div className="top-container">
+            <div className="appointments-title">
+              <h2 >Nueva Cita</h2>
+              { !date && <p> Seleccione una fecha</p>}
+            </div>
+            <Flatpickr
           className="appointments-flatpickr"
           onChange={e => dateChangeHandler(e)}
-        />
-        <h2 className="appointments-date">
-          {date &&
-            date.toLocaleDateString("es-ES", {
-              weekday: "long",
-              year: "numeric",
-              month: "long",
-              day: "numeric"
-            })}
-        </h2>
-      </div>
-      <div className="appointments-grid">
-        {appointments &&
-          appointments
+            />
+            <h2 className="appointments-date">
+            {date &&
+              date.toLocaleDateString("es-ES", {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric"
+              })}
+            {date && <p>Por favor, seleccione una cita</p>}
+            </h2>
+        </div>
+    }
+        {
+          (userAppointments
+        .filter(appointment => //filtering old dates 
+          new Date(appointment.time).getTime() > new Date().getTime()) 
+        .length <= 0) &&
+          <div className="appointments-grid">
+            {appointments
             .map(appointment => ({
               date: new Date(appointment.time),
               available: appointment.customer === null,
@@ -297,7 +311,8 @@ const Appointment = props => {
                 {twoDigits(date.getMinutes())}
               </button>
             ))}
-      </div>
+          </div>
+        }
       <Modali.Modal {...confirmModal}>
         <div className="modal-text">
           <p>
