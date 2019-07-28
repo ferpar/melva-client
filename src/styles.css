@@ -103,6 +103,10 @@ img {
   grid-area: title;
 }
 
+.appointments-title > p {
+  margin-top: 0.5rem;
+}
+
 .user-appointments-title {
   margin-bottom: 1rem;
 }
@@ -137,6 +141,11 @@ img {
 
 .appointments-date{
   grid-area: date;
+}
+
+.appointments-date > p {
+  font-size: 1rem;
+  margin-top: 0.5rem;
 }
 
 .appointments-grid{
