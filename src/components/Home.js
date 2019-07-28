@@ -22,7 +22,7 @@ const BaseHome = ({
       <Form className="login-signup-guest">
         <div className="field-wrapper name">
           <label htmlFor="name">nombre</label>
-          <Field name="name" type="text" />
+          <Field name="name" type="text" id="name" />
           {touched.name && errors.name && (
             <p className="error-msg">{errors.name}</p>
           )}
@@ -30,7 +30,7 @@ const BaseHome = ({
 
         <div className="field-wrapper surname">
           <label htmlFor="surname">apellido</label>
-          <Field name="surname" type="text" />
+          <Field name="surname" type="text" id="surname" />
           {touched.surname && errors.surname && (
             <p className="error-msg">{errors.surname}</p>
           )}
@@ -47,6 +47,7 @@ const BaseHome = ({
               <PhoneInput
                 className="phone-input"
                 name="phone"
+                id="phone"
                 country="ES"
                 {...field}
                 {...props}
