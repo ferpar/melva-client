@@ -43,7 +43,7 @@ class AuthService {
 
   logout = () => {
     return this.service
-      .get("logout")
+      .get("/logout")
       .then(result => result)
       .catch(err =>
         console.error("error attempting to logout: service level", err)
