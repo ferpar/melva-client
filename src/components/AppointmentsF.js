@@ -4,6 +4,8 @@ import Flatpickr from "react-flatpickr";
 import { Spanish } from "flatpickr/dist/l10n/es.js";
 import "flatpickr/dist/themes/material_green.css";
 
+import Spinner from "./spinners/Ripple.js";
+
 import { toast } from "react-toastify";
 toast.configure();
 
@@ -233,8 +235,8 @@ const Appointment = props => {
         .length <= 0) &&
         <div className="top-container">
             <div className="appointments-title">
-              <h2 >Nueva Cita</h2>
-              { !date && <p> Seleccione una fecha</p>}
+              <h2>Nueva Cita</h2>
+              { !date && <p> Seleccionar fecha: </p>}
             </div>
             <Flatpickr
           options={{ 
@@ -243,7 +245,7 @@ const Appointment = props => {
             minDate: 'today',
           }}
           className="appointments-flatpickr"
-          placeholder="Escoja una fecha..."
+          placeholder="pulse aquí..."
           onChange={e => dateChangeHandler(e)}
             />
             <h2 className="appointments-date">
@@ -256,12 +258,12 @@ const Appointment = props => {
               })}
             {(appointments.length > 0 && date) ? 
                 <p>Por favor, seleccione una cita</p>
-            :   <p>No hay citas previstas para este día, por favor, escoja otro</p>
+            :   date && <p>No hay citas previstas para este día, por favor, escoja otro</p>
             }
             </h2>
         </div>
     }
-        {
+        { (appointments.length > 0) ?
           (userAppointments
         .filter(appointment => //filtering old dates 
           new Date(appointment.time).getTime() > new Date().getTime()) 
@@ -322,6 +324,7 @@ const Appointment = props => {
               </button>
             ))}
           </div>
+            : date && <Spinner />
         }
       <Modali.Modal {...confirmModal}>
         <div className="modal-text">
