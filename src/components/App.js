@@ -9,6 +9,7 @@ import Home from "./Home";
 import Profile from "./Profile";
 import ProtectedRoute from "./ProtectedRoute";
 
+import Spinner from "./spinners/Ripple.js";
 import {slide as Menu} from "react-burger-menu";
 
 class App extends React.Component {
@@ -147,7 +148,9 @@ class App extends React.Component {
         </Switch>
       </div>
     ) : (
-      <div>Loading...</div>
+      <div className="loading-main" >
+        <Spinner />
+      </div>
     );
   }
 }

@@ -103,8 +103,13 @@ img {
   grid-area: title;
 }
 
+.appointments-title > h2 {
+  font-size: 2rem;
+}
+
 .appointments-title > p {
   margin-top: 0.5rem;
+  font-size: 1.5rem;
 }
 
 .user-appointments-title {
@@ -348,6 +353,16 @@ label {
   display: flex;
   color: orange;
   width: 100%;
+}
+
+.loading-main {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: white;
 }
 
 /* Position and sizing of burger button */
