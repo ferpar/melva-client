@@ -137,6 +137,7 @@ img {
 
 .appointments-flatpickr{
   grid-area: flatpickr;
+  text-align: center;
 }
 
 .appointments-date{

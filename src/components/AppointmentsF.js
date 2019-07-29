@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Flatpickr from "react-flatpickr";
+import { Spanish } from "flatpickr/dist/l10n/es.js";
 import "flatpickr/dist/themes/material_green.css";
 
 import { toast } from "react-toastify";
@@ -236,7 +237,13 @@ const Appointment = props => {
               { !date && <p> Seleccione una fecha</p>}
             </div>
             <Flatpickr
+          options={{ 
+            dateFormat: 'd-m-Y',
+            locale: Spanish,
+            minDate: 'today',
+          }}
           className="appointments-flatpickr"
+          placeholder="Escoja una fecha..."
           onChange={e => dateChangeHandler(e)}
             />
             <h2 className="appointments-date">
@@ -247,7 +254,10 @@ const Appointment = props => {
                 month: "long",
                 day: "numeric"
               })}
-            {date && <p>Por favor, seleccione una cita</p>}
+            {(appointments.length > 0 && date) ? 
+                <p>Por favor, seleccione una cita</p>
+            :   <p>No hay citas previstas para este día, por favor, escoja otro</p>
+            }
             </h2>
         </div>
     }
