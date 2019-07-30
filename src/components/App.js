@@ -48,9 +48,14 @@ class App extends React.Component {
     this.authService
       .loggedin()
       .then(result => {
-        this.handleLogin(result.data, false);
+        if (result.data.message) {
+          this.setState({isLoading: false});
+        } else {
+          this.handleLogin(result.data, false);
+        }
       })
-      .catch(() => this.setState({ isLoading: false }));
+    //legacy from when loggedIn returned a 403 on wrong credentials:
+      .catch(() => this.setState({ isLoading: false })); 
   };
 
   handleLogout = () => {
