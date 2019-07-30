@@ -118,6 +118,7 @@ img {
 
 .user-appointment {
   display: flex;
+  flex-direction: column;
   margin-bottom: 0.5rem;
   border-bottom: 1px solid grey;
   justify-content: space-between;
@@ -129,7 +130,7 @@ img {
   display: inline-block;
   background-color: #fff;
   color: var(--danger);
-  border: 2px solid var(--danger);
+  border: none;
   border-radius: 5px;
   width: 100%;
   margin-top: 0.25rem;
@@ -137,11 +138,36 @@ img {
   font-size: 1rem;
   font-weight: 700;
   letter-spacing: 1px;
-  max-width: 6rem;
+  max-width: 8rem;
 }
 
 .cancel-user-appointment:hover {
   background-color: rgba(220, 53, 69, 0.2);
+}
+
+.exit-button {
+  background-color: var(--primary);
+  color: #fff;
+  border: 3px solid var(--primary);
+  border-radius: 5px;
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.5rem 0;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 0.25rem;
+}
+
+.exit-button:hover {
+  color: #fff;
+  background-color: rgba(0, 123, 255, 0.7);
+  border: 2px solid rgba(0, 123, 255, 0.7);
+}
+
+.exit-button:disabled {
+  color: #fff;
+  background-color: #aaa;
 }
 
 .appointments-flatpickr{

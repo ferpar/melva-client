@@ -164,13 +164,13 @@ const Appointment = props => {
   return (
     <div className="appointments-main">
     { (userAppointments
-        .filter(appointment => //filtering old dates 
+        .filter(appointment => //filtering overdue appointments 
           new Date(appointment.time).getTime() > new Date().getTime()) 
         .length > 0) &&
       <div className="user-appointments-container">
-        <h2 className="user-appointments-title" >Citas reservadas</h2>
+        <h1 className="user-appointments-title" >¡Enhorabuena!</h1>
         {userAppointments
-          .filter(appointment => //filtering old dates
+          .filter(appointment => //filtering overdue appointments
             new Date(appointment.time).getTime() > new Date().getTime()) 
           .map(appointment => ({
             available: false,
@@ -183,24 +183,19 @@ const Appointment = props => {
             return (
               <div key={index} className="user-appointment">
                 <div className="appointment-details">
+                  <h2>Cita Reservada</h2>
                   <p>
+                  {"Para el "}
                   {date &&
                     date.toLocaleDateString("es-ES", {
                       weekday: "long",
                       year: "numeric",
                       month: "long",
                       day: "numeric"
-                    }).split(",")[1]}
+                    })}
                   </p>
                   <p>
-                  {date &&
-                    date.toLocaleDateString("es-ES", {
-                      weekday: "long",
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric"
-                    }).split(",")[0]}
-                  {' '} 
+                  {"A las "}
                   {date &&
                     date.toLocaleTimeString("es-ES", {
                       hour: "2-digit",
@@ -208,7 +203,7 @@ const Appointment = props => {
                     }) 
                   }
                   </p>
-                  <p>duración: {duration} min</p>
+                  <p>Duración: {duration} min</p>
                 </div>
                 <button
                   onClick = { 
@@ -225,17 +220,24 @@ const Appointment = props => {
                     }
                   className="cancel-user-appointment"
                 >
-                  Cancelar
+                  Cancelar Cita
                 </button>
               </div>
             )
           }
-          )}
+        )}
+
+          <button 
+            className="exit-button" 
+            onClick={props.handleLogout}
+          >
+            Terminar y Salir
+          </button>
         </div>
     }
     {
       (userAppointments
-        .filter(appointment => //filtering old dates 
+        .filter(appointment => //filtering overdue appointments 
           new Date(appointment.time).getTime() > new Date().getTime()) 
         .length <= 0) &&
         <div className="top-container">

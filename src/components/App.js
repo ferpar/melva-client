@@ -135,6 +135,7 @@ class App extends React.Component {
                 user={user} 
                 authService = {this.authService}
                 appointmentService = {this.appointmentService}
+                handleLogout = {this.handleLogout}
               />}
           />
           <ProtectedRoute
