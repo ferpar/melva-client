@@ -96,9 +96,11 @@ const Appointment = props => {
     props.appointmentService
       .book(postData)
       .then(result => { //Updating selected day's Appointments State
+        if (date) {
         const newAppointments = [...appointments];
         newAppointments[slotIndex].customer = available ? userId : null;
         setAppointments(newAppointments);
+        }
       })
       .then(() => { //Updating user's Appointments State
         props.appointmentService
