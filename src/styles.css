@@ -147,6 +147,7 @@ img {
 .appointments-flatpickr{
   grid-area: flatpickr;
   text-align: center;
+  font-size: 1.2rem;
 }
 
 .appointments-date{

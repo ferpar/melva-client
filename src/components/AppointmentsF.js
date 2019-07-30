@@ -246,8 +246,11 @@ const Appointment = props => {
             <Flatpickr
           options={{ 
             dateFormat: 'd-m-Y',
+            disableMobile: true,
             locale: Spanish,
             minDate: 'today',
+            altInput: true,
+            altFormat: "F j, Y"
           }}
           className="appointments-flatpickr"
           placeholder="pulse aquí..."
