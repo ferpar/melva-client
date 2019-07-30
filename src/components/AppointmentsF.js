@@ -24,7 +24,7 @@ const Appointment = props => {
   const [appointments, setAppointments] = useState(initialAppointments);
   const [bookInfo, setBookInfo] = useState({ id: null, available: false });
   const [userAppointments, setUserAppointments] = useState([]);
-  const [firstRender, setFirstRender] = useState(true)
+  const [isLoading, setIsLoading] = useState(false);
 
   //Modali Hooks (for modals)
   const [confirmModal, toggleConfirmModal] = useModali({
@@ -133,10 +133,15 @@ const Appointment = props => {
         day = date.getDate();
       const dateStr = `${year}-${month}-${day}`;
       if (isSubscribed) {
+      setIsLoading(true)
       props.appointmentService
         .get(dateStr)
         .then(result => setAppointments(result.data))
-        .catch(err => console.error("Error during appointment retrieval", err));
+        .then(() => setIsLoading(false))
+        .catch(err => {
+          console.error("Error during appointment retrieval", err);
+          setIsLoading(false);
+        });
       }
     }
     return () => isSubscribed = false;
@@ -324,7 +329,7 @@ const Appointment = props => {
               </button>
             ))}
           </div>
-            : date && <Spinner />
+            : isLoading && <Spinner />
         }
       <Modali.Modal {...confirmModal}>
         <div className="modal-text">
