@@ -6,6 +6,7 @@ import AppointmentService from "../services/appointments.js";
 import { Switch, Route, Link, withRouter, Redirect } from "react-router-dom";
 import Appointments from "./AppointmentsF";
 import CustomerLogin from "./Home";
+import UserLogin from "./Login.js";
 import Profile from "./Profile";
 import Book from "./AppointmentsBook";
 import ProtectedRoute from "./ProtectedRoute";
@@ -101,6 +102,7 @@ class App extends React.Component {
           >
               <Link onClick={() => this.closeMenu()} to="/appointments">Citas</Link>
               <Link onClick={() => this.closeMenu()} to="/profile">Perfil de Usuario</Link>
+              <Link onClick={() => this.closeMenu()} to="/login">Acceso Gestión</Link>
               <button onClick={ async () => {
                 await this.handleLogout() //this is important to avoid race between handleLogout and closeMenu
                 this.closeMenu()}
@@ -119,9 +121,20 @@ class App extends React.Component {
             path="/"
             render={() => loggedIn 
               ? 
-              <Redirect to="/appointments" /> 
+              ( user.role==='Admin' ? <Redirect to="/appointments-book" /> : <Redirect to="/appointments" />)
               :
               <CustomerLogin 
+                handleLogin={this.handleLogin} 
+                authService={this.authService} 
+              />}
+          />
+          <Route
+            path="/login"
+            render={() => loggedIn 
+              ? 
+              ( user.role==='Admin' ? <Redirect to="/appointments-book" /> : <Redirect to="/appointments" />)
+              :
+              <UserLogin 
                 handleLogin={this.handleLogin} 
                 authService={this.authService} 
               />}
@@ -130,6 +143,7 @@ class App extends React.Component {
             path="/appointments"
             user={this.state.user ? this.state.user : null}
             loggedIn={this.state.loggedIn}
+            allowedRoles={['Customer']}
             component={props => 
               <Appointments 
                 router={props} 
@@ -156,6 +170,8 @@ class App extends React.Component {
             path="/appointments-book"
             user={this.state.user ? this.state.user : null}
             loggedIn={this.state.loggedIn}
+            allowedRoles={['Admin']}
+            redirectURL={"/login"}
             component={props => 
               <Book 
                 router={props} 

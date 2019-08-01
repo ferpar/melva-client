@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Route, Redirect } from "react-router-dom";
 
-const ProtectedRoute = ({ component: Comp, loggedIn, path, redirectURL="/", allowedRoles=['Customer'], user,  ...rest }) => {
+const ProtectedRoute = ({ component: Comp, loggedIn, path, redirectURL="/", allowedRoles=['Customer', 'Admin'], user,  ...rest }) => {
   return (
     <Route
       path={path}

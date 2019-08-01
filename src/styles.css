@@ -571,3 +571,18 @@ Note: Beware of modifying this element as it can break the animations - you shou
   align-items: center;
   margin-top: 3rem;
 }
+
+.book-list {
+ display: flex;
+ flex-direction: column;
+ background-color: #fff;
+ border-radius: 5px;
+ padding: 2rem;
+}
+
+.appointment-info {
+  margin-top: 2rem;
+  padding: 1rem;
+  boder-radius: 5px;
+  box-shadow: 2px 2px 2px lightgrey;
+}
