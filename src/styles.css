@@ -580,8 +580,12 @@ Note: Beware of modifying this element as it can break the animations - you shou
  padding: 2rem;
 }
 
+.book-list-day {
+  margin-top: 1.5rem;
+}
+
 .appointment-info {
-  margin-top: 2rem;
+  margin-top: 1rem;
   padding: 1rem;
   boder-radius: 5px;
   box-shadow: 2px 2px 2px lightgrey;

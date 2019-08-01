@@ -31,34 +31,35 @@ const AppointmentsBook = props => {
     <div className="appointments-book-main">
       <div className="book-list">
         <h1>Citas pendientes</h1>
-        {appointments
-          .map(appointment => ({
-          date: new Date(appointment.time),
-          available: appointment.customer === null,
-          id: appointment._id,
-          bookedFor: appointment.customer,
-          })
-          )
-          .map(({ date, available, id, bookedFor }, index) => (
-            <div className="appointment-info" key={index}>
-            <p>fecha: <br/> {
-                date.toLocaleDateString("es-Es",
+        { Object.keys(groupedAppointments).map( (day, index) => (
+
+          <div key={index}>
+          <h2 className="book-list-day">{day}</h2>
+            {
+            groupedAppointments[day]
+            .map(appointment => ({
+            date: new Date(appointment.time),
+            available: appointment.customer === null,
+            id: appointment._id,
+            bookedFor: appointment.customer,
+            })
+            )
+            .map(({ date, available, id, bookedFor }, index) => (
+              <div className="appointment-info" key={index}>
+                <p>{bookedFor.name + " " + bookedFor.surname}</p>
+                <p>hora:  {date.toLocaleTimeString("es-Es", 
                   {
-                    weekday: "long",
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric"
+                    hour: "2-digit",
+                    minute: "2-digit"
                   }
-                )}</p>
-              <p> {date.toLocaleTimeString("es-Es", 
-                {
-                  hour: "2-digit",
-                  minute: "2-digit"
-                }
-              )} </p>
-              <p>cliente: <br/> {bookedFor.name + " " + bookedFor.surname}</p>
-            </div>
-          ))
+                )} </p>
+              </div>
+            ))
+            
+            }
+          </div>
+
+        ))
         
         }
       </div>
