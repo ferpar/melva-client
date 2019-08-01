@@ -28,7 +28,7 @@ class AppointmentService {
   getByUser = (userId) => {
     return this.service.get("/get-by-user/" + userId)
       .then(result => result)
-      .catch(err => console.error("Error retrieving appintments for this user. Service level.", err))
+      .catch(err => console.error("Error retrieving appointments for this user. Service level.", err))
   }
 
   book = (values) => {
@@ -37,6 +37,11 @@ class AppointmentService {
     .catch(err => console.error("Error attempting to book, service level.", err))
   }
 
+  getBooked = () => {
+    return this.service.get("/booked")
+      .then(result => result)
+      .catch(err => console.error("Error retrieving pending appointments", err))
+  }
 }
 
 

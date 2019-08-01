@@ -5,8 +5,9 @@ import AuthService from "../services/auth.js";
 import AppointmentService from "../services/appointments.js";
 import { Switch, Route, Link, withRouter, Redirect } from "react-router-dom";
 import Appointments from "./AppointmentsF";
-import Home from "./Home";
+import CustomerLogin from "./Home";
 import Profile from "./Profile";
+import Book from "./AppointmentsBook";
 import ProtectedRoute from "./ProtectedRoute";
 
 import Spinner from "./spinners/Ripple.js";
@@ -120,7 +121,7 @@ class App extends React.Component {
               ? 
               <Redirect to="/appointments" /> 
               :
-              <Home 
+              <CustomerLogin 
                 handleLogin={this.handleLogin} 
                 authService={this.authService} 
               />}
@@ -144,6 +145,19 @@ class App extends React.Component {
             loggedIn={this.state.loggedIn}
             component={props => 
               <Profile 
+                router={props} 
+                user={user} 
+                handleLogin = {this.handleLogin}
+                authService = {this.authService}
+                appointmentService = {this.appointmentService}
+              />}
+          />
+          <ProtectedRoute
+            path="/appointments-book"
+            user={this.state.user ? this.state.user : null}
+            loggedIn={this.state.loggedIn}
+            component={props => 
+              <Book 
                 router={props} 
                 user={user} 
                 handleLogin = {this.handleLogin}
