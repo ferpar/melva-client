@@ -151,13 +151,13 @@ const Appointment = props => {
 
   useEffect(() => { //LOAD USER APPOINTMENTS ON MOUNT
     let isSubscribed = true;
-      props.appointmentService
-        .getByUser(props.user._id)
-        .then((result) => {
-          if (isSubscribed) {
-            setUserAppointments([...result.data])
-          }
-        })
+      if (isSubscribed) {
+        props.appointmentService
+          .getByUser(props.user._id)
+          .then((result) => {
+              setUserAppointments([...result.data])
+          })
+      }
     return () => isSubscribed = false;
   }, [])
   
