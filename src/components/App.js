@@ -19,7 +19,6 @@ class App extends React.Component {
     this.state = {
       loggedIn: false,
       isLoading: true,
-      menuOpen: false,
       user: {},
     };
     let authService = new AuthService();
@@ -68,14 +67,6 @@ class App extends React.Component {
         )
       });
   };
-
-  handleStateChange (state) {
-    this.setState({menuOpen: state.isOpen})  
-  }
-
-  closeMenu () {
-    this.setState({menuOpen: false})
-  }
 
   componentDidMount() {
     this.getLoggedIn();

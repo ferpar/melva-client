@@ -35,8 +35,6 @@ const BaseHome = ({
       isOpen={menuOpen}
       onStateChange={(state) => handleStateChange(state)}
     >
-        <Link onClick={() => closeMenu()} to="/appointments">Citas</Link>
-        <Link onClick={() => closeMenu()} to="/profile">Perfil de Usuario</Link>
         <Link onClick={() => closeMenu()} to="/login">Acceso Gestión</Link>
         <button onClick={ async () => {
           await handleLogout() //this is important to avoid race between handleLogout and closeMenu
