@@ -3,7 +3,7 @@ import axios from 'axios';
 class AppointmentService {
   constructor() {
     let service = axios.create({
-      baseURL:"http://192.168.1.51:3010/api/appointments",
+      baseURL: process.env.API_URL + "/appointments",
       headers: {
         "Content-Type": "application/json; charset=utf-8",
         Accept: "application/json"

@@ -3,7 +3,7 @@ import axios from "axios";
 class AuthService {
   constructor() {
     let service = axios.create({
-      baseURL: "http://192.168.1.51:3010/api/auth",
+      baseURL: process.env.API_URL + "/auth",
       headers: {
         "Content-Type": "application/json; charset=utf-8",
         Accept: "application/json"
