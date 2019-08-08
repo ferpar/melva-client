@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 
 //All this is for the form component---------------------------------
@@ -8,77 +9,84 @@ import * as Yup from "yup";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 
+import {slide as Menu} from "react-burger-menu";
+
 const BaseHome = ({
   values,
   errors,
   touched,
   isSubmitting,
   handleLogin,
-  authServicei,
+  authService,
   setEditMode
-}) => (
-  <div className="home-container">
-    <div className="form-wrapper">
-      <h1 className="main title">Editar perfil</h1>
-      <Form className="login-signup-guest">
-        <div className="field-wrapper name">
-          <label htmlFor="name">nombre</label>
-          <Field name="name" type="text" />
-          {touched.name && errors.name && (
-            <p className="error-msg">{errors.name}</p>
-          )}
-        </div>
+}) => { 
 
-        <div className="field-wrapper surname">
-          <label htmlFor="surname">apellido</label>
-          <Field name="surname" type="text" />
-          {touched.surname && errors.surname && (
-            <p className="error-msg">{errors.surname}</p>
-          )}
-        </div>
-        <div className="field-wrapper phone">
-          <label htmlFor="phone">teléfono</label>
-          <Field
-            name="phone"
-            render={({
-              field,
-              form: { touched, errors, setFieldValue },
-              ...props
-            }) => (
-              <PhoneInput
-                className="phone-input"
-                name="phone"
-                country="ES"
-                {...field}
-                {...props}
-                onBlur={e => {}}
-                onChange={value => {
-                  setFieldValue("phone", value);
-                }}
-              />
+  return (
+  <>  
+    <div className="home-container">
+      <div className="form-wrapper">
+        <h1 className="main title">Editar perfil</h1>
+        <Form className="login-signup-guest">
+          <div className="field-wrapper name">
+            <label htmlFor="name">nombre</label>
+            <Field name="name" type="text" />
+            {touched.name && errors.name && (
+              <p className="error-msg">{errors.name}</p>
             )}
-          />
-          {touched.phone && errors.phone && (
-            <p className="error-msg">{errors.phone}</p>
-          )}
-        </div>
+          </div>
 
-        <div className="edit-save-wrapper">
-          <button
-            className="cancel-button"
-            onClick={() => setEditMode(false)}
-            type="button"
-          >
-            Cancelar
-          </button>
-          <button className="edit-button" disabled={isSubmitting} type="submit">
-            Guardar
-          </button>
-        </div>
-      </Form>
+          <div className="field-wrapper surname">
+            <label htmlFor="surname">apellido</label>
+            <Field name="surname" type="text" />
+            {touched.surname && errors.surname && (
+              <p className="error-msg">{errors.surname}</p>
+            )}
+          </div>
+          <div className="field-wrapper phone">
+            <label htmlFor="phone">teléfono</label>
+            <Field
+              name="phone"
+              render={({
+                field,
+                form: { touched, errors, setFieldValue },
+                ...props
+              }) => (
+                <PhoneInput
+                  className="phone-input"
+                  name="phone"
+                  country="ES"
+                  {...field}
+                  {...props}
+                  onBlur={e => {}}
+                  onChange={value => {
+                    setFieldValue("phone", value);
+                  }}
+                />
+              )}
+            />
+            {touched.phone && errors.phone && (
+              <p className="error-msg">{errors.phone}</p>
+            )}
+          </div>
+
+          <div className="edit-save-wrapper">
+            <button
+              className="cancel-button"
+              onClick={() => setEditMode(false)}
+              type="button"
+            >
+              Cancelar
+            </button>
+            <button className="edit-button" disabled={isSubmitting} type="submit">
+              Guardar
+            </button>
+          </div>
+        </Form>
+      </div>
     </div>
-  </div>
-);
+  </>
+  );
+}
 
 const Home = withFormik({
   mapPropsToValues({ user }) {
@@ -111,14 +119,36 @@ const Home = withFormik({
 
 //From here on: the Profile Component
 
-const Profile = ({ user, handleLogin, authService }) => {
+const Profile = ({ user, handleLogin, handleLogout, authService }) => {
   const initialInfo = {};
   const [userInfo, setUserInfo] = useState(initialInfo);
   const [editMode, setEditMode] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false)
+
+  const handleStateChange = (state) => {
+    setMenuOpen(state.isOpen)  
+  }
+
+  const closeMenu = () => {
+    setMenuOpen(false)
+  }
 
   useEffect(() => {}, [userInfo]);
 
-  return editMode ? (
+  return (
+   <> 
+    <Menu 
+      isOpen={menuOpen}
+      onStateChange={(state) => handleStateChange(state)}
+    >
+        <Link onClick={() => closeMenu()} to="/appointments">Citas</Link>
+        <Link onClick={() => closeMenu()} to="/profile">Perfil de Usuario</Link>
+        <button onClick={ async () => {
+          await handleLogout() //this is important to avoid race between handleLogout and closeMenu
+          closeMenu()}
+        }>Desconectar</button>
+    </Menu>
+    {editMode ? (
     <div>
       {" "}
       <Home
@@ -146,7 +176,9 @@ const Profile = ({ user, handleLogin, authService }) => {
         </div>
       </div>
     </div>
-  );
+  )}
+</>
+);
 };
 
 export default Profile;

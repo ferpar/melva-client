@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 import { withFormik, Form, Field } from "formik";
 import * as Yup from "yup";
 
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
+import {slide as Menu} from "react-burger-menu";
 
 const BaseForm = ({
   values,
@@ -12,8 +13,35 @@ const BaseForm = ({
   touched,
   isSubmitting,
   handleLogin,
+  handleLogout,
   authService
-}) => (
+}) => {
+ 
+
+  const [menuOpen, setMenuOpen] = useState(false)
+
+  const handleStateChange = (state) => {
+    setMenuOpen(state.isOpen)  
+  }
+
+  const closeMenu = () => {
+    setMenuOpen(false)
+  }
+
+  return (
+    <>
+    <Menu 
+      isOpen={menuOpen}
+      onStateChange={(state) => handleStateChange(state)}
+    >
+        <Link onClick={() => closeMenu()} to="/appointments">Citas</Link>
+        <Link onClick={() => closeMenu()} to="/profile">Perfil de Usuario</Link>
+        <Link onClick={() => closeMenu()} to="/login">Acceso Gestión</Link>
+        <button onClick={ async () => {
+          await handleLogout() //this is important to avoid race between handleLogout and closeMenu
+          closeMenu()}
+        }>Desconectar</button>
+    </Menu>
   <div className="home-container">
     <div className="form-wrapper">
       <h1 className="main title">¡Bienvenido!</h1>
@@ -42,7 +70,9 @@ const BaseForm = ({
       </Form>
     </div>
   </div>
+    </>
 );
+}
 
 const LoginForm = withFormik({
   mapPropsToValues({ user }) {

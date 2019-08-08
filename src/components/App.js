@@ -12,7 +12,6 @@ import Book from "./AppointmentsBook";
 import ProtectedRoute from "./ProtectedRoute";
 
 import Spinner from "./spinners/Ripple.js";
-import {slide as Menu} from "react-burger-menu";
 
 class App extends React.Component {
   constructor(props) {
@@ -96,18 +95,6 @@ class App extends React.Component {
 
     return !isLoading ? (
       <div className="main">
-          <Menu 
-            isOpen={this.state.menuOpen}
-            onStateChange={(state) => this.handleStateChange(state)}
-          >
-              <Link onClick={() => this.closeMenu()} to="/appointments">Citas</Link>
-              <Link onClick={() => this.closeMenu()} to="/profile">Perfil de Usuario</Link>
-              <Link onClick={() => this.closeMenu()} to="/login">Acceso Gestión</Link>
-              <button onClick={ async () => {
-                await this.handleLogout() //this is important to avoid race between handleLogout and closeMenu
-                this.closeMenu()}
-              }>Desconectar</button>
-          </Menu>
           <div className="navbar">
             {loggedIn && <div> Usuario: {name || username}</div>}
             {!loggedIn && error && <div className="login-error">ERROR: {error}</div>}
@@ -125,6 +112,7 @@ class App extends React.Component {
               :
               <CustomerLogin 
                 handleLogin={this.handleLogin} 
+                handleLogout={this.handleLogout}
                 authService={this.authService} 
               />}
           />
@@ -136,6 +124,7 @@ class App extends React.Component {
               :
               <UserLogin 
                 handleLogin={this.handleLogin} 
+                handleLogout={this.handleLogout}
                 authService={this.authService} 
               />}
           />
@@ -162,6 +151,7 @@ class App extends React.Component {
                 router={props} 
                 user={user} 
                 handleLogin = {this.handleLogin}
+                handleLogout = {this.handleLogout}
                 authService = {this.authService}
                 appointmentService = {this.appointmentService}
               />}
@@ -177,6 +167,7 @@ class App extends React.Component {
                 router={props} 
                 user={user} 
                 handleLogin = {this.handleLogin}
+                handleLogout = {this.handleLogout}
                 authService = {this.authService}
                 appointmentService = {this.appointmentService}
               />}

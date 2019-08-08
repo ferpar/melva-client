@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { Link } from 'react-router-dom';
 import axios from "axios";
 import Flatpickr from "react-flatpickr";
 import { Spanish } from "flatpickr/dist/l10n/es.js";
 import "flatpickr/dist/themes/material_green.css";
 
+import {slide as Menu} from "react-burger-menu";
 import Spinner from "./spinners/Ripple.js";
 
 import { toast } from "react-toastify";
@@ -25,6 +27,7 @@ const Appointment = props => {
   const [bookInfo, setBookInfo] = useState({ id: null, available: false });
   const [userAppointments, setUserAppointments] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false)
 
   //Modali Hooks (for modals)
   const [confirmModal, toggleConfirmModal] = useModali({
@@ -86,6 +89,15 @@ const Appointment = props => {
   const dateChangeHandler = e => {
     setDate(e[0]);
   };
+
+    // for the menu
+  const handleStateChange = (state) => {
+    setMenuOpen(state.isOpen)  
+  }
+
+  const closeMenu = () => {
+    setMenuOpen(false)
+  }
 
   const bookDate = (id, available) => {
     const userId = props.user._id;
@@ -164,6 +176,18 @@ const Appointment = props => {
 
   //RETURN (render)
   return (
+   <> 
+    <Menu 
+      isOpen={menuOpen}
+      onStateChange={(state) => handleStateChange(state)}
+    >
+        <Link onClick={() => closeMenu()} to="/appointments">Citas</Link>
+        <Link onClick={() => closeMenu()} to="/profile">Perfil de Usuario</Link>
+        <button onClick={ async () => {
+          await props.handleLogout() //this is important to avoid race between handleLogout and closeMenu
+          closeMenu()}
+        }>Desconectar</button>
+    </Menu>
     <div className="appointments-main">
     { (userAppointments
         .filter(appointment => //filtering overdue appointments 
@@ -384,6 +408,7 @@ const Appointment = props => {
         </div>
       </Modali.Modal>
     </div>
+  </>
   );
 };
 
