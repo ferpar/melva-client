@@ -76,8 +76,6 @@ class AuthService {
       .post("/login", values)
       .then(result => result)
       .catch(err => {
-        console.log(err.response);
-        console.log(err.response.data.message);
         console.error("Error during login. Service level", err)
         return err
       });
