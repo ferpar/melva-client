@@ -65,6 +65,7 @@ const BaseForm = ({
             Entrar
           </button>
         </div>
+          <p className="error-msg">{errors.general}</p>
       </Form>
     </div>
   </div>
@@ -83,12 +84,16 @@ const LoginForm = withFormik({
     username: Yup.string().required("introduzca un nombre de usuario"),
     password: Yup.string().required("debe introducir una contraseña")
   }),
-  handleSubmit(values, { props, setSubmitting }) {
+  handleSubmit(values, { props, setSubmitting, setFieldError }) {
 
     props.authService
       .userLogin(values)
       .then(result => {
+        if (result.response.data.message) {
+        setFieldError("general", result.response.data.message)
+        } else {
         props.handleLogin(result.data, true, "/appointments-book");
+        }
       })
       .catch(err =>
         console.error("there was an error posting your login info", err)

@@ -75,7 +75,12 @@ class AuthService {
     return this.service
       .post("/login", values)
       .then(result => result)
-      .catch(err => console.error("Error during login. Service level", err));
+      .catch(err => {
+        console.log(err.response);
+        console.log(err.response.data.message);
+        console.error("Error during login. Service level", err)
+        return err
+      });
   };
 
   userEdit = values => {
