@@ -89,7 +89,7 @@ const LoginForm = withFormik({
     props.authService
       .userLogin(values)
       .then(result => {
-        if (result.response.data.message) {
+        if (result.response) {
         setFieldError("general", result.response.data.message)
         } else {
         props.handleLogin(result.data, true, "/appointments-book");
