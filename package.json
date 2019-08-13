@@ -7,6 +7,7 @@
     "build-lan": "webpack --env.API_URL=http://192.168.1.51:3010/api --config webpack.config.prod.js",
     "build-local": "webpack --env.API_URL=http://localhost:3010/api --config webpack.config.prod.js",
     "build-droplet": "webpack --env.API_URL=http://167.71.86.4/api --config webpack.config.prod.js",
+    "build-dentt": "webpack --env.API_URL=http://dentt.info/api --config webpack.config.prod.js",
     "dev": "webpack-dev-server --env.API_URL=http://localhost:3010/api --open --config webpack.config.dev.js",
     "dev:hot": "npm run dev -- --hot",
     "test": "echo \"Error: no test specified\" && exit 1"
