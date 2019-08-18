@@ -35,10 +35,6 @@ const BaseForm = ({
       onStateChange={(state) => handleStateChange(state)}
     >
         <Link onClick={() => closeMenu()} to="/">Acceso a Citas</Link>
-        <button onClick={ async () => {
-          await handleLogout() //this is important to avoid race between handleLogout and closeMenu
-          closeMenu()}
-        }>Desconectar</button>
     </Menu>
   <div className="home-container">
     <div className="form-wrapper">
