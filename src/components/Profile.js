@@ -8,6 +8,7 @@ import * as Yup from "yup";
 
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
+import smartInput from "react-phone-number-input/smart-input";
 
 import {slide as Menu} from "react-burger-menu";
 
@@ -55,6 +56,7 @@ const BaseHome = ({
                   className="phone-input"
                   name="phone"
                   country="ES"
+                  inputComponent={smartInput}
                   {...field}
                   {...props}
                   onBlur={e => {}}
