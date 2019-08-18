@@ -131,11 +131,11 @@ const Appointment = props => {
   const notify = (slotIndex, available) =>
     toast(
       available
-        ? "🦄 Cita reservada para las " +
+        ? "✔️  Cita reservada para las " +
             new Date(appointments[slotIndex].time).getHours() +
             ":" +
             twoDigits(new Date(appointments[slotIndex].time).getMinutes())
-        : "❎ cita cancelada"
+        : "❎ Cita cancelada"
     );
 
   // EFFECT HOOK(S)
