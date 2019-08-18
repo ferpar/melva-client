@@ -293,7 +293,7 @@ const Appointment = props => {
                 day: "numeric"
               })}
             {(appointments.length > 0 && date) ? 
-                <p>Por favor, seleccione una cita</p>
+                <p>Por favor, seleccione una hora</p>
             :   date && <p>No hay citas previstas para este día, por favor, escoja otro</p>
             }
             </h2>
@@ -311,7 +311,7 @@ const Appointment = props => {
               available: appointment.customer === null,
               id: appointment._id,
               bookedFor: appointment.customer
-            }))
+            })).sort((a,b) => a.date.getHours()-b.date.getHours())
             .map(({ date, available, id, bookedFor }, index) => (
               <button
                 className={
