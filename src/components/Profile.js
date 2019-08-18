@@ -56,7 +56,7 @@ const BaseHome = ({
                   className="phone-input"
                   name="phone"
                   country="ES"
-                  inputComponent={smartInput}
+                  inputComponent={smartInput} //using smart input to prevent the caret from moving to the end
                   {...field}
                   {...props}
                   onBlur={e => {}}
@@ -99,11 +99,11 @@ const Home = withFormik({
     };
   },
   validationSchema: Yup.object().shape({
-    name: Yup.string().required("please enter a name"),
+    name: Yup.string().required("por favor, introduzca un nombre"),
     surname: Yup.string(),
     phone: Yup.string()
-      .min(4, "at least 4 digits long")
-      .required("please enter a phone number")
+      .min(4, "al menos 4 dígitos")
+      .required("por favor, introduzca un teléfono")
   }),
   handleSubmit(values, { props, setSubmitting }) {
     props.authService
