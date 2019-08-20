@@ -9,6 +9,7 @@ import CustomerLogin from "./Home";
 import UserLogin from "./Login.js";
 import Profile from "./Profile";
 import Book from "./AppointmentsBook";
+import CampaignManager from "./Campaigns.js";
 import ProtectedRoute from "./ProtectedRoute";
 
 import Spinner from "./spinners/Ripple.js";
@@ -155,6 +156,22 @@ class App extends React.Component {
             redirectURL={"/login"}
             component={props => 
               <Book 
+                router={props} 
+                user={user} 
+                handleLogin = {this.handleLogin}
+                handleLogout = {this.handleLogout}
+                authService = {this.authService}
+                appointmentService = {this.appointmentService}
+              />}
+          />
+          <ProtectedRoute
+            path="/campaigns"
+            user={this.state.user ? this.state.user : null}
+            loggedIn={this.state.loggedIn}
+            allowedRoles={['Admin']}
+            redirectURL={"/login"}
+            component={props => 
+              <CampaignManager 
                 router={props} 
                 user={user} 
                 handleLogin = {this.handleLogin}
