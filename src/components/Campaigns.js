@@ -5,6 +5,10 @@ import {slide as Menu} from "react-burger-menu";
 import Spinner from "./spinners/Ripple.js";
 
 import translateToGSM from "../helpers/translateToGSM.js";
+import capitalize from "../helpers/capitalize.js";
+import normalizePhone from "../helpers/normalizePhone.js";
+
+import csv from "csvtojson";
 
 const CampaignManager = props => {
 
@@ -71,6 +75,24 @@ const CampaignManager = props => {
     let { value } = e.target
     if(name==="name"){value = value.slice(0,20)}
     setCustomer(prevCustomer => ({...prevCustomer, [name] : value}))
+  }
+
+  const handleCSVImport = async e => {
+    const csvContent= await e.target.files[0].text()
+    csv({
+      delimiter:[";", ",", " ", "|"],
+      headers:["surname", "name", "phone"]
+    })
+      .fromString(csvContent)
+      .then(async jsonObj => {
+        const normalizedJsonObj = await jsonObj.map( recipient => ({ 
+            name: capitalize(recipient.name), 
+            surname: capitalize(recipient.surname), 
+            phone: normalizePhone(recipient.phone)
+        }))
+        setRecipients( prevRecipients => [...prevRecipients, ...normalizedJsonObj] )
+      })
+
   }
 
   // ====
@@ -141,6 +163,10 @@ const CampaignManager = props => {
               <label htmlFor="phone">teléfono</label>
               <input className="add-phone" name="phone" onChange={e => handleCustomerChange(e)} id="phone" placeholder=" Ej.: +346xxxxxxxx" type="phone" value={customer.phone}/>
               <button onClick={e => handleAddCustomer(e)} >Añadir</button>
+              <div className="import-container">
+                <label htmlFor="csv-import">Importar desde .csv</label>
+                <input accept=".csv" id="csv-import" name="csv-import" type="file" onChange={e => handleCSVImport(e)}/>
+              </div>
               <div className="customers-container">
                 <ul className="customers-list">
                   {recipients.map( (recipient,i) => (
