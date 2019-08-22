@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import styles from './Ripple.css'
 
-const Ripple = () => {
+const Ripple = (props) => {
+
+  const {innerMessage = "Cargando..."} = props
+
   const [initialized, setInitalized] = useState(false)
 
   useEffect(() => {
@@ -25,7 +28,7 @@ const Ripple = () => {
       <div />
       <div />
     </div>
-    <p className="ripple-loading" >Cargando...</p>
+    <p className="ripple-loading" >{innerMessage}</p>
   </>
 )
 

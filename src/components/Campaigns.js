@@ -2,9 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 import {slide as Menu} from "react-burger-menu";
+import Spinner from "./spinners/Ripple.js";
+
 import translateToGSM from "../helpers/translateToGSM.js";
 
 const CampaignManager = props => {
+
+  // == Main State ==
+  const [isSending, setIsSending] = useState(false)
+
+
+  // ====
 
   // == Main Form ==
   const [message, setMessage] = useState("")
@@ -26,6 +34,7 @@ const CampaignManager = props => {
 
   const handleSubmit = e => {
     e.preventDefault();
+    setIsSending(true)
     console.log(recipients)
     console.log(message)
     console.log(greeting)
@@ -37,6 +46,7 @@ const CampaignManager = props => {
     props.appointmentService
       .sendCampaign(postData)
         .then( results => console.log(results.data))
+        .then( () => setIsSending(false))
         .catch( err => console.error('error sending the messages', err))
   }
 
@@ -93,53 +103,61 @@ const CampaignManager = props => {
           Desconectar
           </button>
       </Menu>
-      <div className="appointments-book-main">
-        <div className="campaigns-list">
-          <h1>Campañas</h1>
-          <form>
-            <div className="textarea-container">
-              <textarea onChange={e => handleMsgChange(e)} placeholder="Introduzca contenido del SMS..." value={message}/>
-              <div className="greeting-checkbox">
-                <input type="checkbox" id="greeting" name="greeting" checked={greeting} onChange={e => handleGreetingChange(e)}/>
-                <label htmlFor="greeting">Saludo personalizado</label>
-              </div>
-              <p>{ greeting ? message.length + 27 : message.length} caracteres</p>
-              <div className="errors"></div>
-              { showGSM && <textarea readOnly value={greeting ? translateToGSM("Hola (NOMBRE), " + message): translateToGSM(message)}/> }
-              <div className="campaign-buttons">
-                <button className="submit" onClick={e => handleSubmit(e)} type="submit">Enviar mensajes</button>
-                <button className="expand" onClick={e => handleClickGSM(e)}>{ showGSM ? "Ocultar" : "Vista Previa"} </button>
-              </div>
-            </div>
-          </form>
-
-          
+      {
+      isSending 
+        ?
+        <div className="appointments-book-main">
+          <Spinner innerMessage={"Envíando " + recipients.length + " mensajes. \n Esto tomará un segundo por mensaje..."}/>
         </div>
-        <div className="campaigns-list">
-          <div className="list-container">
-            <label htmlFor="name">nombre</label>
-            <input className="add-name" name="name" onChange={e => handleCustomerChange(e)} id="name" placeholder=" max. 20 caracteres" type="text" value={customer.name}/>
-            <label htmlFor="surname">apellidos</label>
-            <input className="add-surname" name="surname" onChange={e => handleCustomerChange(e)} id="surname" type="text" value={customer.surname}/>
-            <label htmlFor="phone">teléfono</label>
-            <input className="add-phone" name="phone" onChange={e => handleCustomerChange(e)} id="phone" placeholder=" Ej.: +346xxxxxxxx" type="phone" value={customer.phone}/>
-            <button onClick={e => handleAddCustomer(e)} >Añadir</button>
-            <div className="customers-container">
-              <ul className="customers-list">
-                {recipients.map( (recipient,i) => (
-                  <li key={i} className="customer-list-item">
-                    <p>{recipient.name}</p>
-                    <p>{recipient.surname}</p>
-                    <p>{recipient.phone}</p>
-                    <button onClick={e => handleRemoveCustomer(e, i)}>-</button>
-                  </li>
-                ))
-                }
-              </ul>
+        :
+        <div className="appointments-book-main">
+          <div className="campaigns-list">
+            <h1>Campañas</h1>
+            <form>
+              <div className="textarea-container">
+                <textarea onChange={e => handleMsgChange(e)} placeholder="Introduzca contenido del SMS..." value={message}/>
+                <div className="greeting-checkbox">
+                  <input type="checkbox" id="greeting" name="greeting" checked={greeting} onChange={e => handleGreetingChange(e)}/>
+                  <label htmlFor="greeting">Saludo personalizado</label>
+                </div>
+                <p>{ greeting ? message.length + 27 : message.length}/160 caracteres</p>
+                <div className="errors"></div>
+                { showGSM && <textarea readOnly value={greeting ? translateToGSM("Hola (NOMBRE), " + message): translateToGSM(message)}/> }
+                <div className="campaign-buttons">
+                  <button className="submit" onClick={e => handleSubmit(e)} type="submit">Enviar mensajes</button>
+                  <button className="expand" onClick={e => handleClickGSM(e)}>{ showGSM ? "Ocultar" : "Vista Previa"} </button>
+                </div>
+              </div>
+            </form>
+
+            
+          </div>
+          <div className="campaigns-list">
+            <div className="list-container">
+              <label htmlFor="name">nombre</label>
+              <input className="add-name" name="name" onChange={e => handleCustomerChange(e)} id="name" placeholder=" max. 20 caracteres" type="text" value={customer.name}/>
+              <label htmlFor="surname">apellidos</label>
+              <input className="add-surname" name="surname" onChange={e => handleCustomerChange(e)} id="surname" type="text" value={customer.surname}/>
+              <label htmlFor="phone">teléfono</label>
+              <input className="add-phone" name="phone" onChange={e => handleCustomerChange(e)} id="phone" placeholder=" Ej.: +346xxxxxxxx" type="phone" value={customer.phone}/>
+              <button onClick={e => handleAddCustomer(e)} >Añadir</button>
+              <div className="customers-container">
+                <ul className="customers-list">
+                  {recipients.map( (recipient,i) => (
+                    <li key={i} className="customer-list-item">
+                      <p>{recipient.name}</p>
+                      <p>{recipient.surname}</p>
+                      <p>{recipient.phone}</p>
+                      <button onClick={e => handleRemoveCustomer(e, i)}>-</button>
+                    </li>
+                  ))
+                  }
+                </ul>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      }
     </>
   )
 }
