@@ -485,7 +485,7 @@ Note: Beware of modifying this element as it can break the animations - you shou
   justify-content: center;
   align-items: center;
   min-height: 50vh;
-  margin-top: 3rem;
+  margin-top: 4.5rem;
 }
 
 .profile-header{
@@ -589,4 +589,29 @@ Note: Beware of modifying this element as it can break the animations - you shou
   padding: 1rem;
   boder-radius: 5px;
   box-shadow: 2px 2px 2px lightgrey;
+}
+
+/*campiaigns view*/
+
+.campaigns-list {
+ display: flex;
+ flex-direction: column;
+ background-color: #fff;
+ border-radius: 5px;
+ min-width: 80vw;
+ padding: 2rem;
+}
+
+.campaigns-list:nth-child(2){
+  margin-top: 1.5rem;
+}
+
+.textarea-container textarea {
+  min-height: 5rem;
+  min-width: 100%;
+}
+
+@media(min-width: 500px) {
+  .campaigns-list {
+  }
 }
