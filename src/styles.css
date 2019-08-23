@@ -716,6 +716,7 @@ Note: Beware of modifying this element as it can break the animations - you shou
 
 #csv-import {
   width: 12rem;
+  display: none;
 }
 
 .customers-list {
@@ -736,34 +737,86 @@ Note: Beware of modifying this element as it can break the animations - you shou
   width: 2rem;
   height: 2rem;
   align-self: center;
+  background-color: #fff;
+  color: var(--danger);
+  border: 2px solid var(--danger);
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: 700;
 }
 
-.campaigns-main button {
+.remove-customer:active {
+  background-color: rgba(220, 53, 69, 0.4);
+  color: #fff;
+}
+
+.cp-button {
   background-color: var(--primary);
   color: #fff;
   border: 2px solid var(--primary);
   border-radius: 5px;
   width: 100%;
-  margin-top: 1rem;
   padding: 0.5rem 0;
   font-size: 1rem;
   font-weight: 700;
   letter-spacing: 1px;
-  margin-bottom: 0.25rem;
+  margin-bottom: 1rem;
+  max-width: 20rem;
 }
 
-.campaigns-main button:hover {
+.cp-button:hover {
   color: #fff;
   background-color: rgba(0, 123, 255, 0.7);
   border: 2px solid rgba(0, 123, 255, 0.7);
 }
 
-.campaigns-main button:disabled {
+.cp-button:disabled {
   color: #fff;
   background-color: #aaa;
 }
 
+
+.cs-button{
+  display: inline-block;
+  background-color: var(--danger);
+  color: #fff;
+  border: 2px solid var(--danger);
+  border-radius: 5px;
+  width: 100%;
+  padding: 0.5rem 0;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 0.25rem;
+  max-width: 20rem;
+}
+
+.cs-button:hover {
+  background-color: rgba(220, 53, 69, 0.2);
+  color: var(--danger);
+}
+
+.csv-import-button {
+  display: inline-block;
+  background-color: var(--zomp);
+  border-radius: 5px;
+  border: 2px solid var(--zomp);
+  padding: 0.5rem;
+  color: white;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  width: 100%;
+  text-align: center;
+  max-width: 20rem;
+}
+
+.csv-import-button:hover {
+  background-color: rgba(67, 153, 134, 0.7);
+}
+
 @media(min-width: 500px) {
+
   .add-recipients-form {
     grid-template-areas:
     "input-array import-container"

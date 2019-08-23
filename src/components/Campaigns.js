@@ -149,8 +149,8 @@ const CampaignManager = props => {
                 </div>
                 { showGSM && <textarea className="translated-textarea"readOnly value={greeting ? translateToGSM("Hola (NOMBRE), " + message): translateToGSM(message)}/> }
                 <div className="campaign-buttons">
-                  <button className="submit" onClick={e => handleSubmit(e)} type="submit">Enviar mensajes</button>
-                  <button className="expand" onClick={e => handleClickGSM(e)}>{ showGSM ? "Ocultar" : "Vista Previa"} </button>
+                  <button className="expand cp-button" onClick={e => handleClickGSM(e)}>{ showGSM ? "Ocultar" : "Vista Previa"} </button>
+                  <button className="submit cs-button" onClick={e => handleSubmit(e)} type="submit">Enviar mensajes</button>
                 </div>
               </div>
             </form>
@@ -174,10 +174,10 @@ const CampaignManager = props => {
                     <label htmlFor="phone">teléfono</label>
                     <input className="add-phone" name="phone" onChange={e => handleCustomerChange(e)} id="phone" placeholder=" Ej.: +346xxxxxxxx" type="phone" value={customer.phone}/>
                   </div>
-                  <button onClick={e => handleAddCustomer(e)} >Añadir</button>
+                  <button className="cp-button" onClick={e => handleAddCustomer(e)} >Añadir</button>
                 </div>
                 <div className="import-container">
-                  <label htmlFor="csv-import">Importar desde .csv</label>
+                  <label className="csv-import-button" htmlFor="csv-import">Importar desde .csv</label>
                   <input accept=".csv" id="csv-import" name="csv-import" type="file" onChange={e => handleCSVImport(e)}/>
                 </div>
               </form>
