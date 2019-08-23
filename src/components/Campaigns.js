@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import {slide as Menu} from "react-burger-menu";
 import Spinner from "./spinners/Ripple.js";
 
+import Modali, { useModali } from "modali";
+
 import translateToGSM from "../helpers/translateToGSM.js";
 import capitalize from "../helpers/capitalize.js";
 import normalizePhone from "../helpers/normalizePhone.js";
@@ -36,22 +38,22 @@ const CampaignManager = props => {
     setGreeting(e.target.checked)
   }
 
-  const handleSubmit = e => {
-    e.preventDefault();
+  const launchCampaign = () => {
+
     setIsSending(true)
-    console.log(recipients)
-    console.log(message)
-    console.log(greeting)
 
     const postData = { msgbody: message, recipients, addGreeting: greeting }
-
-    console.log(postData)
 
     props.appointmentService
       .sendCampaign(postData)
         .then( results => console.log(results.data))
         .then( () => setIsSending(false))
         .catch( err => console.error('error sending the messages', err))
+  }
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    toggleConfirmModal();
   }
 
   // ====
@@ -97,6 +99,29 @@ const CampaignManager = props => {
 
   // ====
 
+  //Modali Hooks (for modals)
+  const [confirmModal, toggleConfirmModal] = useModali({
+    animated: true,
+    centered: true,
+    buttons: [
+      <Modali.Button
+        label="Volver"
+        isStyleCancel
+        onClick={() => toggleConfirmModal()}
+      />,
+      <Modali.Button
+        label="Confirmar"
+        isStyleDefault
+        onClick={async () => {
+          await launchCampaign()
+          toggleConfirmModal();
+        }}
+      />
+    ],
+    title: "Confirmar Envío"
+  });
+  // =====
+  
   // == Menu state and logic ==
   const [menuOpen, setMenuOpen] = useState(false)
 
@@ -125,6 +150,16 @@ const CampaignManager = props => {
           Desconectar
           </button>
       </Menu>
+      <Modali.Modal {...confirmModal}>
+        <div className="modal-text">
+          <p>
+            Confirme el envío de {recipients.length} mensajes con el siguiente mensaje:
+          </p>
+          <p>
+            {"<<"}{greeting ? translateToGSM("Hola (NOMBRE), " + message): translateToGSM(message)}{">>"}
+          </p>
+        </div>
+      </Modali.Modal>
       {
       isSending 
         ?
