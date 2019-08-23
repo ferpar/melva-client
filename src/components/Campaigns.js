@@ -62,7 +62,7 @@ const CampaignManager = props => {
 
   const handleAddCustomer = e => {
     e.preventDefault();
-    setRecipients(prevRecipients => [...prevRecipients, customer])
+    setRecipients(prevRecipients => [customer, ...prevRecipients])
   }
 
   const handleRemoveCustomer = (e, i) => {
@@ -128,23 +128,26 @@ const CampaignManager = props => {
       {
       isSending 
         ?
-        <div className="appointments-book-main">
+        <div className="campaigns-main">
           <Spinner innerMessage={"Envíando " + recipients.length + " mensajes. \n Esto tomará un segundo por mensaje..."}/>
         </div>
         :
-        <div className="appointments-book-main">
-          <div className="campaigns-list">
+        <div className="campaigns-main">
+          <div className="campaigns-message">
             <h1>Campañas</h1>
             <form>
               <div className="textarea-container">
-                <textarea onChange={e => handleMsgChange(e)} placeholder="Introduzca contenido del SMS..." value={message}/>
-                <div className="greeting-checkbox">
-                  <input type="checkbox" id="greeting" name="greeting" checked={greeting} onChange={e => handleGreetingChange(e)}/>
-                  <label htmlFor="greeting">Saludo personalizado</label>
+                <textarea className="main-textarea" onChange={e => handleMsgChange(e)} placeholder="Introduzca contenido del SMS..." value={message}/>
+
+                <div className="info-options">
+                  <div className="greeting-checkbox">
+                    <input type="checkbox" id="greeting" name="greeting" checked={greeting} onChange={e => handleGreetingChange(e)}/>
+                    <label htmlFor="greeting">Saludo personalizado</label>
+                  </div>
+                  <p className="character-counter">{ greeting ? message.length + 27 : message.length}/160 caracteres</p>
+                  <div className="errors"></div>
                 </div>
-                <p>{ greeting ? message.length + 27 : message.length}/160 caracteres</p>
-                <div className="errors"></div>
-                { showGSM && <textarea readOnly value={greeting ? translateToGSM("Hola (NOMBRE), " + message): translateToGSM(message)}/> }
+                { showGSM && <textarea className="translated-textarea"readOnly value={greeting ? translateToGSM("Hola (NOMBRE), " + message): translateToGSM(message)}/> }
                 <div className="campaign-buttons">
                   <button className="submit" onClick={e => handleSubmit(e)} type="submit">Enviar mensajes</button>
                   <button className="expand" onClick={e => handleClickGSM(e)}>{ showGSM ? "Ocultar" : "Vista Previa"} </button>
@@ -154,27 +157,40 @@ const CampaignManager = props => {
 
             
           </div>
-          <div className="campaigns-list">
+          <div className="recipients-list">
             <div className="list-container">
-              <label htmlFor="name">nombre</label>
-              <input className="add-name" name="name" onChange={e => handleCustomerChange(e)} id="name" placeholder=" max. 20 caracteres" type="text" value={customer.name}/>
-              <label htmlFor="surname">apellidos</label>
-              <input className="add-surname" name="surname" onChange={e => handleCustomerChange(e)} id="surname" type="text" value={customer.surname}/>
-              <label htmlFor="phone">teléfono</label>
-              <input className="add-phone" name="phone" onChange={e => handleCustomerChange(e)} id="phone" placeholder=" Ej.: +346xxxxxxxx" type="phone" value={customer.phone}/>
-              <button onClick={e => handleAddCustomer(e)} >Añadir</button>
-              <div className="import-container">
-                <label htmlFor="csv-import">Importar desde .csv</label>
-                <input accept=".csv" id="csv-import" name="csv-import" type="file" onChange={e => handleCSVImport(e)}/>
-              </div>
+              <form className="add-recipients-form">
+              
+                <div className="input-array">
+                  <div className="input-line">
+                    <label htmlFor="name">nombre</label>
+                    <input className="add-name" name="name" onChange={e => handleCustomerChange(e)} id="name" placeholder=" max. 20 caracteres" type="text" value={customer.name}/>
+                  </div>
+                  <div className="input-line">
+                    <label htmlFor="surname">apellidos</label>
+                    <input className="add-surname" name="surname" onChange={e => handleCustomerChange(e)} id="surname" type="text" value={customer.surname}/>
+                  </div>
+                  <div className="input-line">
+                    <label htmlFor="phone">teléfono</label>
+                    <input className="add-phone" name="phone" onChange={e => handleCustomerChange(e)} id="phone" placeholder=" Ej.: +346xxxxxxxx" type="phone" value={customer.phone}/>
+                  </div>
+                  <button onClick={e => handleAddCustomer(e)} >Añadir</button>
+                </div>
+                <div className="import-container">
+                  <label htmlFor="csv-import">Importar desde .csv</label>
+                  <input accept=".csv" id="csv-import" name="csv-import" type="file" onChange={e => handleCSVImport(e)}/>
+                </div>
+              </form>
               <div className="customers-container">
                 <ul className="customers-list">
                   {recipients.map( (recipient,i) => (
                     <li key={i} className="customer-list-item">
-                      <p>{recipient.name}</p>
-                      <p>{recipient.surname}</p>
-                      <p>{recipient.phone}</p>
-                      <button onClick={e => handleRemoveCustomer(e, i)}>-</button>
+                      <div className="customer-fields">
+                        <p>{recipient.name}</p>
+                        <p>{recipient.surname}</p>
+                        <p>{recipient.phone}</p>
+                      </div>
+                      <button className="remove-customer" onClick={e => handleRemoveCustomer(e, i)}>-</button>
                     </li>
                   ))
                   }

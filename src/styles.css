@@ -340,7 +340,7 @@ label {
 .enter-platform button {
   background-color: var(--primary);
   color: #fff;
-  border: 3px solid var(--primary);
+  border: 2px solid var(--primary);
   border-radius: 5px;
   width: 100%;
   margin-top: 1rem;
@@ -591,9 +591,65 @@ Note: Beware of modifying this element as it can break the animations - you shou
   box-shadow: 2px 2px 2px lightgrey;
 }
 
-/*campiaigns view*/
+/*campaigns view*/
 
-.campaigns-list {
+
+
+.campaigns-main {
+  display: grid;
+  grid-template-areas:
+  "message"
+  "list"
+  ;
+  grid-gap: 1.5rem;
+  padding: 2rem;
+  margin-top: 3rem;
+}
+
+.campaigns-message {
+  grid-area: message;
+  display: flex;
+  flex-direction: column;
+ background-color: #fff;
+ border-radius: 5px;
+ min-width: 80vw;
+ padding: 2rem;
+}
+
+.textarea-container {
+  display: grid;
+  grid-template-areas:
+    "main-textarea"
+    "info-options"
+    "translated-textarea"
+    "campaign-buttons";
+  grid-gap: 1rem;
+}
+
+.main-textarea {
+  grid-area: main-textarea;
+}
+
+.info-options {
+  grid-area: info-options;
+}
+
+.translated-textarea {
+  grid-area: translated-textarea;
+}
+
+.campaign-buttons {
+  grid-area: campaign-buttons;
+  display: flex;
+  flex-direction: column;
+}
+
+.campaigns-message > h1 {
+  margin-bottom: 1rem;
+}
+
+.recipients-list{
+  grid-area: list;
  display: flex;
  flex-direction: column;
  background-color: #fff;
@@ -602,16 +658,136 @@ Note: Beware of modifying this element as it can break the animations - you shou
  padding: 2rem;
 }
 
-.campaigns-list:nth-child(2){
-  margin-top: 1.5rem;
-}
-
 .textarea-container textarea {
   min-height: 5rem;
   min-width: 100%;
 }
 
+.list-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.add-recipients-form {
+  display: grid;
+  grid-template-areas:
+    "input-array"
+    "import-container"
+    ;
+  grid-gap: 1rem;
+}
+
+.input-array {
+  grid-area: input-array;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+  min-width: 6rem;
+  max-width: 100%;
+}
+
+.input-line {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.input-line:nth-child(3) {
+  margin-bottom: 1rem;
+}
+
+.input-line label {
+  flex: 1 1 6rem;
+}
+
+.input-line input {
+  flex: 2 1 auto;
+  min-width: 4rem;
+}
+
+.import-container { 
+  align-items: center;
+  grid-area: import-container;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-bottom: 1.5rem;  
+}
+
+#csv-import {
+  width: 12rem;
+}
+
+.customers-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 1rem;
+}
+
+.customer-list-item {
+  display:flex;
+}
+
+.customer-fields {
+  flex: 1;
+}
+
+.remove-customer {
+  width: 2rem;
+  height: 2rem;
+  align-self: center;
+}
+
+.campaigns-main button {
+  background-color: var(--primary);
+  color: #fff;
+  border: 2px solid var(--primary);
+  border-radius: 5px;
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.5rem 0;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 0.25rem;
+}
+
+.campaigns-main button:hover {
+  color: #fff;
+  background-color: rgba(0, 123, 255, 0.7);
+  border: 2px solid rgba(0, 123, 255, 0.7);
+}
+
+.campaigns-main button:disabled {
+  color: #fff;
+  background-color: #aaa;
+}
+
 @media(min-width: 500px) {
-  .campaigns-list {
+  .add-recipients-form {
+    grid-template-areas:
+    "input-array import-container"
+  }
+
+  .customers-list {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .textarea-container {
+    grid-template-areas:
+    "main-textarea main-textarea main-textarea main-textarea info-options"
+    "translated-textarea translated-textarea translated-textarea translated-textarea campaign-buttons";
+  }
+}
+
+@media(min-width: 762px) {
+  .customers-list {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+@media(min-width: 900px) {
+  .customers-list {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
   }
 }
