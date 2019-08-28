@@ -15,6 +15,8 @@ import Modali, { useModali } from "modali";
 
 import twoDigits from "../helpers/twodigit.js";
 
+import logo_rull from "../assets/logo_rull.png";
+
 const Appointment = props => {
 
   //INITIAL VALUES
@@ -280,6 +282,7 @@ const Appointment = props => {
         .length <= 0) &&
         <div className="top-container">
             <div className="appointments-title">
+              <img className="top-logo" src={logo_rull} alt="logo"/>
               <h2>Nueva Cita</h2>
               { !date && <p> Seleccionar fecha: </p>}
             </div>
