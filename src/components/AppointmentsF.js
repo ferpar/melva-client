@@ -236,8 +236,8 @@ const Appointment = props => {
                   {  
                       expandContact && 
                     <div className="contact-details">
-                      <p>Av. San Francisco Javier, 13 (local)</p>
-                      <p>41005 - Sevilla</p>
+                      <p className="address">Av. San Francisco Javier, 13 (local)</p>
+                      <p className="address">41005 - Sevilla</p>
                       <a href="tel:+34954530070">{"\uD83D\uDCDE"} 954 530 070</a>
                       <a href="mailto:sevilla@clinicatull.com">{"\uD83D\uDCEC"} sevilla@clinicarull.com</a>
                     </div>

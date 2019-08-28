@@ -233,6 +233,10 @@ img {
   text-decoration: none;
 }
 
+.address {
+  font-weight: bold;
+}
+
 /* home form css */
 
 .home-container input {
