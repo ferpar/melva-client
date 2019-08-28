@@ -230,17 +230,16 @@ const Appointment = props => {
                     }) 
                   }
                   </p>
+                  <p>En Clínica Rull - Sevilla</p>
                   <p>Duración: {duration} min</p>
-                  <br/>
-                  <h3 >En Clínica Rull - Sevilla </h3> 
                   <p className="expand-contact" onClick={()=>setExpandContact(!expandContact)}>datos de contacto {expandContact ? "\u25b2" : "\u25bc"}</p>
                   {  
                       expandContact && 
                     <div className="contact-details">
                       <p>Av. San Francisco Javier, 13 (local)</p>
                       <p>41005 - Sevilla</p>
-                      <p>{"\uD83D\uDCDE"} 954 530 070</p>
-                      <p>{"\uD83D\uDCEC"} sevilla@clinicarull.com</p>
+                      <a href="tel:+34954530070">{"\uD83D\uDCDE"} 954 530 070</a>
+                      <a href="mailto:sevilla@clinicatull.com">{"\uD83D\uDCEC"} sevilla@clinicarull.com</a>
                     </div>
                   }
                 </div>
