@@ -216,6 +216,17 @@ img {
   padding: 1rem 2rem 0.5rem;
 }
 
+.expand-contact {
+  color: #444;
+  cursor: pointer;
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+}
+
+.contact-details {
+  padding-left: 0.5rem;
+}
+
 /* home form css */
 
 .home-container input {
