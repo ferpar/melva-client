@@ -724,6 +724,7 @@ Note: Beware of modifying this element as it can break the animations - you shou
 
 .input-line:nth-child(3) {
   margin-bottom: 1rem;
+  flex-direction: column;
 }
 
 .input-line label {
@@ -733,6 +734,10 @@ Note: Beware of modifying this element as it can break the animations - you shou
 .input-line input {
   flex: 2 1 auto;
   min-width: 4rem;
+}
+
+.add-phone {
+  min-width: 6rem;
 }
 
 .import-container { 

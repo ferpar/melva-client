@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 
 import {slide as Menu} from "react-burger-menu";
 import Spinner from "./spinners/Ripple.js";
+import "react-phone-number-input/style.css";
+import PhoneInput from "react-phone-number-input";
 
 import Modali, { useModali } from "modali";
 
@@ -206,8 +208,20 @@ const CampaignManager = props => {
                     <input className="add-surname" name="surname" onChange={e => handleCustomerChange(e)} id="surname" type="text" value={customer.surname}/>
                   </div>
                   <div className="input-line">
-                    <label htmlFor="phone">teléfono</label>
-                    <input className="add-phone" name="phone" onChange={e => handleCustomerChange(e)} id="phone" placeholder=" Ej.: +346xxxxxxxx" type="phone" value={customer.phone}/>
+                    
+                    <PhoneInput
+                      className="add-phone"
+                      name="phone"
+                      id="phone"
+                      country="ES"
+                      onChange={value => { 
+                        setCustomer(prevCustomer => ({...prevCustomer, phone : value}))
+                        }
+                      }
+                      placeholder="tel. 6xx xx xx xx"
+                      value={customer.phone}
+                    />
+
                   </div>
                   <button className="cp-button" onClick={e => handleAddCustomer(e)} >Añadir</button>
                 </div>
