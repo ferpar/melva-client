@@ -3,6 +3,7 @@ import axios from "axios";
 import { hot } from "react-hot-loader";
 import AuthService from "../services/auth.js";
 import AppointmentService from "../services/appointments.js";
+import CampaignService from "../services/campaigns.js";
 import { Switch, Route, Link, withRouter, Redirect } from "react-router-dom";
 import Appointments from "./AppointmentsF";
 import CustomerLogin from "./Home";
@@ -26,6 +27,8 @@ class App extends React.Component {
     this.authService = authService;
     let appointmentService = new AppointmentService();
     this.appointmentService = appointmentService;
+    let campaignService = new CampaignService();
+    this.campaignService = campaignService;
 }
 
   handleLogin = (userObj, redirect = false, redirectURL) => {
@@ -178,6 +181,7 @@ class App extends React.Component {
                 handleLogout = {this.handleLogout}
                 authService = {this.authService}
                 appointmentService = {this.appointmentService}
+                campaignService = {this.campaignService}
               />}
           />
         </Switch>
