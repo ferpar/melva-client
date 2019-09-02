@@ -8,6 +8,9 @@ import PhoneInput from "react-phone-number-input";
 
 import Modali, { useModali } from "modali";
 
+import { toast } from "react-toastify";
+toast.configure();
+
 import translateToGSM from "../helpers/translateToGSM.js";
 import capitalize from "../helpers/capitalize.js";
 import normalizePhone from "../helpers/normalizePhone.js";
@@ -42,15 +45,23 @@ const CampaignManager = props => {
     setGreeting(e.target.checked)
   }
 
-  const launchCampaign = () => {
+  const launchCampaign = async () => {
 
     setIsSending(true)
 
-    const postData = { msgbody: message, recipients: recipients.map(recipient => recipient.userId), addGreeting: greeting }
+    const postData = { msgbody: message, recipients: recipients.filter(recipient => (recipient.selected && recipient.smsStatus==="not-sent")), addGreeting: greeting }
 
-    props.appointmentService
+    await props.appointmentService
       .sendCampaign(postData)
-        .then( results => console.log(results.data))
+        .then( async results => {
+          const smsArray = results.data;
+          let tempRecipients = recipients;
+          for (let i = 0; i<smsArray.length; i++) {
+            const j = await recipients.findIndex( recipient => recipient.userId.phone === smsArray[i].entity.to)
+            tempRecipients = await [...tempRecipients.slice(0,j), {...tempRecipients[j], smsId: smsArray[i].entity.id, smsStatus: smsArray[i].entity.status}, ...tempRecipients.slice(j+1)]
+          }
+          await setRecipients(tempRecipients)
+        })
         .then( () => setIsSending(false))
         .catch( err => console.error('error sending the messages', err))
   }
@@ -64,7 +75,7 @@ const CampaignManager = props => {
   
   const saveCampaign = () => {
     
-    const postData = { title, message, recipients: recipients.map(recipient => recipient.userId), customGreeting: greeting }
+    const postData = { title, message, recipients, customGreeting: greeting }
 
     props.campaignService
       .save(postData)
@@ -72,9 +83,10 @@ const CampaignManager = props => {
         .catch( err => console.error("error saving campaign", err))
   }
 
-  const handleSaveCampaign = e => {
+  const handleSaveCampaign = async e => {
     e.preventDefault()
-    saveCampaign()
+    await saveCampaign()
+    notify(title)
   }
 
   const loadCampaign = async (loadTitle) => {
@@ -134,6 +146,14 @@ const CampaignManager = props => {
     e.preventDefault();
     setRecipients([...recipients.slice(0, i), ...recipients.slice(i+1)])
     remCampaignUser(recipients[i]._id)
+  }
+
+  const handleSelectCustomer = async i => {
+     
+    await setRecipients(prevRecipients => {
+      const selected = prevRecipients[i].selected ? false : true  
+      return [...prevRecipients.slice(0,i), {...prevRecipients[i], selected},...prevRecipients.slice(i+1)]
+    })
   }
 
   const handleCustomerChange = e => {
@@ -201,14 +221,26 @@ const CampaignManager = props => {
         label="Borrar"
         isStyleDefault
         onClick={async () => {
+          const removedTitle = title;
           await deleteCampaign()
-          toggleDeleteModal();
+          await toggleDeleteModal()
+          notifyDelete(removedTitle)
         }}
       />
     ],
     title: "Confirmar Borrado"
   });
   // =====
+  
+
+  // == TOASTIFY METHOD ==
+  const notify = (notifyTitle) =>
+    toast(
+         "✔️  Campaña guardada con nombre " + notifyTitle
+    );
+  const notifyDelete = (notifyTitle) => 
+    toast("❎ Campaña " + notifyTitle + " borrada.")
+  // ====
   
   // == Menu state and logic ==
   const [menuOpen, setMenuOpen] = useState(false)
@@ -256,7 +288,7 @@ const CampaignManager = props => {
       <Modali.Modal {...confirmModal}>
         <div className="modal-text">
           <p>
-            Confirme el envío de {recipients.length} mensajes con el siguiente mensaje:
+            Confirme el envío de {recipients.filter(recipient => (recipient.selected && recipient.smsStatus==="not-sent")).length} mensajes con el siguiente mensaje:
           </p>
           <p>
             {"<<"}{greeting ? translateToGSM("Hola (NOMBRE), " + message): translateToGSM(message)}{">>"}
@@ -353,11 +385,20 @@ const CampaignManager = props => {
               <div className="customers-container">
                 <ul className="customers-list">
                   {recipients.map( (recipient,i) => (
-                    <li key={i} className="customer-list-item">
-                      <div className="customer-fields">
+                    <li key={i} className={recipient.selected ? "customer-list-item selected" : "customer-list-item"}>
+                      <div onClick={() => handleSelectCustomer(i)} className="customer-fields">
                         <p>{recipient.userId.name}</p>
                         <p>{recipient.userId.surname}</p>
-                        <p>{recipient.userId.phone}</p>
+                        <p>
+                            {recipient.userId.phone}  {" "} 
+                            {recipient.smsStatus === "not-sent" ?
+                                <span style={{color: "grey"}}>N</span> : 
+                                (recipient.smsStatus === "enqueued" ? 
+                                  <span style={{color: "blue"}}>E</span> :
+                                  (recipient.smsStatus === "delivered" ?
+                                    <span style={{color: "green"}}>D</span> :
+                                   <span style={{color: "red"}}>-</span>))}
+                        </p>
                       </div>
                       <button className="remove-customer" onClick={e => handleRemoveCustomer(e, i)}>-</button>
                     </li>
