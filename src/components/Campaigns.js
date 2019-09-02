@@ -19,13 +19,15 @@ const CampaignManager = props => {
   // == Main State ==
   const [isSending, setIsSending] = useState(false)
 
-
   // ====
 
   // == Main Form ==
+  const [title, setTitle] = useState("")
   const [message, setMessage] = useState("")
   const [showGSM, setShowGSM] = useState(false)
   const [greeting, setGreeting] = useState(false)
+
+  const [campaigns, setCampaigns] = useState([])
 
   const handleMsgChange = e => {
     setMessage(e.target.value);
@@ -44,7 +46,7 @@ const CampaignManager = props => {
 
     setIsSending(true)
 
-    const postData = { msgbody: message, recipients, addGreeting: greeting }
+    const postData = { msgbody: message, recipients: recipients.map(recipient => recipient.userId), addGreeting: greeting }
 
     props.appointmentService
       .sendCampaign(postData)
@@ -58,27 +60,87 @@ const CampaignManager = props => {
     toggleConfirmModal();
   }
 
+    //Campaign buttons
+  
+  const saveCampaign = () => {
+    
+    const postData = { title, message, recipients: recipients.map(recipient => recipient.userId), customGreeting: greeting }
+
+    props.campaignService
+      .save(postData)
+        .then( results => setCampaigns( prevCampaigns => [...prevCampaigns, results.data]))
+        .catch( err => console.error("error saving campaign", err))
+  }
+
+  const handleSaveCampaign = e => {
+    e.preventDefault()
+    saveCampaign()
+  }
+
+  const loadCampaign = async (loadTitle) => {
+    await props.campaignService
+      .getByTitle(loadTitle)
+        .then(async result => {
+          const {title, message, customGreeting, campaignUsers} = result.data;
+
+          await setTitle(title)
+          await setMessage(message)
+          await setGreeting(customGreeting)
+          await setRecipients(campaignUsers)
+        })
+  }
+
+  const handleLoadCampaign = e => {
+    console.log(e.target.value)
+    loadCampaign(e.target.value)
+  }
+
+  const deleteCampaign = async () => {
+    const id = await campaigns.find(elem => elem.title===title)._id;
+    await props.campaignService
+      .remove({id})
+        .then( async () => {
+          await setTitle("")
+          await setMessage("")
+          await setGreeting(false)
+          await setRecipients([])
+        })
+  }
+
+  const handleDelete = e => {
+     e.preventDefault()
+     toggleDeleteModal()
+  }
+
   // ====
 
   // == SubForm ==
   const [recipients, setRecipients] = useState([])
-  const [customer, setCustomer] = useState({name: "", surname: "", phone: ""})
+  const [customer, setCustomer] = useState({userId: {name: "", surname: "", phone: ""}})
 
   const handleAddCustomer = e => {
     e.preventDefault();
     setRecipients(prevRecipients => [customer, ...prevRecipients])
   }
 
+  const remCampaignUser = id => {
+    props.campaignService
+      .removeCampaignUser({id})
+        .then(result => console.log(result.data))
+      
+  }
+
   const handleRemoveCustomer = (e, i) => {
     e.preventDefault();
     setRecipients([...recipients.slice(0, i), ...recipients.slice(i+1)])
+    remCampaignUser(recipients[i]._id)
   }
 
   const handleCustomerChange = e => {
     const { name } = e.target
     let { value } = e.target
     if(name==="name"){value = value.slice(0,20)}
-    setCustomer(prevCustomer => ({...prevCustomer, [name] : value}))
+    setCustomer(prevCustomer => ({...prevCustomer, userId:{ ...prevCustomer.userId, [name] : value}}))
   }
 
   const handleCSVImport = async e => {
@@ -89,10 +151,12 @@ const CampaignManager = props => {
     })
       .fromString(csvContent)
       .then(async jsonObj => {
-        const normalizedJsonObj = await jsonObj.map( recipient => ({ 
+        const normalizedJsonObj = await jsonObj.map( recipient => ({
+          userId: {
             name: capitalize(recipient.name), 
             surname: capitalize(recipient.surname), 
             phone: normalizePhone(recipient.phone)
+          }
         }))
         setRecipients( prevRecipients => [...prevRecipients, ...normalizedJsonObj] )
       })
@@ -122,6 +186,28 @@ const CampaignManager = props => {
     ],
     title: "Confirmar Envío"
   });
+
+
+  const [deleteModal, toggleDeleteModal] = useModali({
+    animated: true,
+    centered: true,
+    buttons: [
+      <Modali.Button
+        label="Volver"
+        isStyleCancel
+        onClick={() => toggleDeleteModal()}
+      />,
+      <Modali.Button
+        label="Borrar"
+        isStyleDefault
+        onClick={async () => {
+          await deleteCampaign()
+          toggleDeleteModal();
+        }}
+      />
+    ],
+    title: "Confirmar Borrado"
+  });
   // =====
   
   // == Menu state and logic ==
@@ -136,6 +222,21 @@ const CampaignManager = props => {
   }
 
   // =====
+  
+  // == LifeCycle Hooks ==
+  
+  useEffect(() => {
+    let isSubscribed = true;
+      if (isSubscribed) {
+        props.campaignService
+          .load()
+          .then(results => {
+            console.log(results.data)
+            setCampaigns(results.data)
+          })
+      }
+    return () => isSubscribed = false;
+  }, [])
 
   return (
    
@@ -159,6 +260,16 @@ const CampaignManager = props => {
           </p>
           <p>
             {"<<"}{greeting ? translateToGSM("Hola (NOMBRE), " + message): translateToGSM(message)}{">>"}
+          </p>
+        </div>
+      </Modali.Modal>
+      <Modali.Modal {...deleteModal}>
+        <div className="modal-text">
+          <p>
+            Confirme el BORRADO PERMANENTE de la siguiente campaña:
+          </p>
+          <p>
+            {"<<"}{title}{">>"}
           </p>
         </div>
       </Modali.Modal>
@@ -188,11 +299,20 @@ const CampaignManager = props => {
                 <div className="campaign-buttons">
                   <button className="expand cp-button" onClick={e => handleClickGSM(e)}>{ showGSM ? "Ocultar" : "Vista Previa"} </button>
                   <button className="submit cs-button" onClick={e => handleSubmit(e)} type="submit">Enviar mensajes</button>
+                  <label htmlFor="title">nombre de campaña</label>
+                  <input name="title" id="title" type="text" value={title} onChange={(e) => setTitle(e.target.value)}/>
+                  <button className="save cp-button" onClick={e => handleSaveCampaign(e)}>Guardar Campaña</button>
+                  <label htmlFor="campaign-select">cargar campaña</label>
+                  <select onChange={e => handleLoadCampaign(e)} id="campaign-select" name="campaign-select">
+                    <option value="">seleccionar campaña</option>
+                    {campaigns.map( (campaign, ind) => (
+                      <option key={ind} value={campaign.id}>{campaign.title}</option>
+                    ))}
+                  </select>
+                  <button className="delete cs-button" onClick={e => handleDelete(e)} >Borrar Campaña</button>
                 </div>
               </div>
             </form>
-
-            
           </div>
           <div className="recipients-list">
             <div className="list-container">
@@ -215,7 +335,7 @@ const CampaignManager = props => {
                       id="phone"
                       country="ES"
                       onChange={value => { 
-                        setCustomer(prevCustomer => ({...prevCustomer, phone : value}))
+                        setCustomer(prevCustomer => ({...prevCustomer, userId: { ...prevCustomer.userId, phone : value}}))
                         }
                       }
                       placeholder="tel. 6xx xx xx xx"
@@ -235,9 +355,9 @@ const CampaignManager = props => {
                   {recipients.map( (recipient,i) => (
                     <li key={i} className="customer-list-item">
                       <div className="customer-fields">
-                        <p>{recipient.name}</p>
-                        <p>{recipient.surname}</p>
-                        <p>{recipient.phone}</p>
+                        <p>{recipient.userId.name}</p>
+                        <p>{recipient.userId.surname}</p>
+                        <p>{recipient.userId.phone}</p>
                       </div>
                       <button className="remove-customer" onClick={e => handleRemoveCustomer(e, i)}>-</button>
                     </li>

@@ -785,6 +785,10 @@ Note: Beware of modifying this element as it can break the animations - you shou
   color: #fff;
 }
 
+.save , .delete {
+  margin-top: 0.5rem;
+}
+
 .cp-button {
   background-color: var(--primary);
   color: #fff;

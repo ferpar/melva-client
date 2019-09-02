@@ -19,6 +19,12 @@ class AppointmentService {
       .catch(err => console.error("Error saving the campaign to the DB", err))
   }
 
+  load = () => {
+    return this.service.get("/all")
+      .then(result => result)
+      .catch(err => console.error("Error retrieving all campaigns", err))
+  }
+
   getByTitle = title => {
     return this.service.get("/get-by-title/" + title)
       .then(result => result)
