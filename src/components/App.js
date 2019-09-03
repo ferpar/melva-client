@@ -184,6 +184,16 @@ class App extends React.Component {
                 campaignService = {this.campaignService}
               />}
           />
+          <Route
+            path="/:linkid"
+            render={ ({match, history}) => {
+             this.authService
+              .linkLogin({linkid: match.params.linkid, secret: "test"})
+              .then(result => this.handleLogin(result.data, true, "/appointments") )
+              .catch( err => {console.log("nice try ;p"); history.push("/")})
+            }
+            }
+          />
         </Switch>
       </div>
     ) : (
