@@ -91,8 +91,10 @@ const CampaignManager = props => {
 
   const handleSaveCampaign = async e => {
     e.preventDefault()
+    if (title) {
     await saveCampaign()
     notify(title)
+    }
   }
 
   const loadCampaign = async (loadTitle) => {
@@ -297,7 +299,9 @@ const CampaignManager = props => {
             Confirme el envío de {recipients.filter(recipient => (recipient.selected && recipient.smsStatus==="not-sent")).length} mensajes con el siguiente mensaje:
           </p>
           <p>
-            {"<<"}{greeting ? translateToGSM("Hola (NOMBRE), " + message): translateToGSM(message)}{">>"}
+            {"<<"}{greeting ? ( customLink ? translateToGSM("Hola (NOMBRE), " + message + " https://dentt.info/xxxxxxxxx") 
+              : translateToGSM("Hola (NOMBRE), " + message) ) : 
+                ( customLink ? translateToGSM(message + " https://dentt.info/xxxxxxxxx") : translateToGSM(message) )}{">>"}
           </p>
         </div>
       </Modali.Modal>
@@ -315,7 +319,14 @@ const CampaignManager = props => {
       isSending 
         ?
         <div className="campaigns-main">
-          <Spinner innerMessage={"Envíando " + recipients.length + " mensajes. \n Esto tomará un segundo por mensaje..."}/>
+          <Spinner 
+            innerMessage={
+              "Envíando " + 
+              recipients.filter(recipient => (
+                recipient.selected && recipient.smsStatus==="not-sent")).length + 
+                " mensajes. \n Esto tomará un segundo por mensaje..."
+            }
+          />
         </div>
         :
         <div className="campaigns-main">
@@ -339,7 +350,19 @@ const CampaignManager = props => {
                   </p>
                   <div className="errors"></div>
                 </div>
-                { showGSM && <textarea className="translated-textarea"readOnly value={greeting ? translateToGSM("Hola (NOMBRE), " + message): translateToGSM(message)}/> }
+                { 
+                  showGSM && 
+                  <textarea 
+                    className="translated-textarea" 
+                    readOnly 
+                    value={greeting ? 
+                      ( customLink ? 
+                          translateToGSM("Hola (NOMBRE), " + 
+                          message + " https://dentt.info/xxxxxxxxx") : 
+                        translateToGSM("Hola (NOMBRE), " + message))
+                      : ( customLink ? translateToGSM(message + 
+                        " https://dentt.info/xxxxxxxxx") : 
+                        translateToGSM(message) )}/> }
                 <div className="campaign-buttons">
                   <button className="expand cp-button" onClick={e => handleClickGSM(e)}>{ showGSM ? "Ocultar" : "Vista Previa"} </button>
                   <button className="submit cs-button" onClick={e => handleSubmit(e)} type="submit">Enviar mensajes</button>
