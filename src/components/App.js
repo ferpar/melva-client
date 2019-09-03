@@ -190,7 +190,9 @@ class App extends React.Component {
              this.authService
               .linkLogin({linkid: match.params.linkid, secret: "test"})
               .then(result => this.handleLogin(result.data, true, "/appointments") )
-              .catch( err => {console.log("nice try ;p"); history.push("/")})
+              .catch( err => {console.log("nice try ;)"); history.push("/")})
+
+              return (<h1>Test</h1>)
             }
             }
           />
