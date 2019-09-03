@@ -332,7 +332,11 @@ const CampaignManager = props => {
                     <input type="checkbox" id="link" name="link" checked={customLink} onChange={e => handleLinkChange(e)}/>
                     <label htmlFor="link">Enlace personalizado</label>
                   </div>
-                  <p className="character-counter">{ greeting ? message.length + 27 : message.length}/160 caracteres</p>
+                  <p className="character-counter">{ greeting ? 
+                    (customLink ? message.length + 27 + 29 : message.length + 27) :
+                    (customLink ? message.length + 29: message.length)}
+                    /160 caracteres
+                  </p>
                   <div className="errors"></div>
                 </div>
                 { showGSM && <textarea className="translated-textarea"readOnly value={greeting ? translateToGSM("Hola (NOMBRE), " + message): translateToGSM(message)}/> }
