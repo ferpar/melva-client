@@ -21,6 +21,7 @@ const CampaignManager = props => {
 
   // == Main State ==
   const [isSending, setIsSending] = useState(false)
+  const [filter, setFilter] = useState("all")
 
   // ====
 
@@ -153,8 +154,8 @@ const CampaignManager = props => {
     remCampaignUser(recipients[i]._id)
   }
 
-  const handleSelectCustomer = async i => {
-     
+  const handleSelectCustomer = async id => {
+    const i = recipients.findIndex(recipient => recipient._id === id)
     await setRecipients(prevRecipients => {
       const selected = prevRecipients[i].selected ? false : true  
       return [...prevRecipients.slice(0,i), {...prevRecipients[i], selected},...prevRecipients.slice(i+1)]
@@ -389,10 +390,37 @@ const CampaignManager = props => {
                 </div>
               </form>
               <div className="customers-container">
+                <div><p>filter by:</p>
+                  <button onClick={() => setFilter("all")}>all</button>
+                  <button onClick={() => setFilter("not-sent")}>not-sent</button>
+                  <button onClick={() => setFilter("enqueued")}>enqueued</button>
+                  <button onClick={() => setFilter("delivered")}>delivered</button>
+                  <button onClick={() => setFilter("clicked")}>clicked on</button>
+                  <button onClick={() => setFilter("booked")}>Appointment Booked</button>
+                </div>
                 <ul className="customers-list">
-                  {recipients.map( (recipient,i) => (
+                  {recipients
+                    .filter(recipient => {
+                      switch (filter) {
+                        case "all":
+                          return recipient;
+                        case "not-sent":
+                          return recipient.smsStatus==="not-sent";
+                        case "enqueued":
+                          return recipient.smsStatus==="enqueued";
+                        case "delivered":
+                          return recipient.smsStatus==="delivered";
+                        case "clicked":
+                          return recipient.linkClicked;
+                        case "booked":
+                          return recipient.appointmentBooked;
+                        default:
+                          return recipient;
+                      }
+                    })
+                    .map( (recipient,i) => (
                     <li key={i} className={recipient.selected ? "customer-list-item selected" : "customer-list-item"}>
-                      <div onClick={() => handleSelectCustomer(i)} className="customer-fields">
+                      <div onClick={() => handleSelectCustomer(recipient._id)} className="customer-fields">
                         <p>{recipient.userId.name}</p>
                         <p>{recipient.userId.surname}</p>
                         <p>
