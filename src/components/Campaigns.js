@@ -81,7 +81,8 @@ const CampaignManager = props => {
   
   const saveCampaign = () => {
     
-    const postData = { title, message, recipients, customGreeting: greeting }
+    const postData = { title, message, recipients, customGreeting: greeting, customLink }
+    console.log(postData)
 
     props.campaignService
       .save(postData)
@@ -101,11 +102,12 @@ const CampaignManager = props => {
     await props.campaignService
       .getByTitle(loadTitle)
         .then(async result => {
-          const {title, message, customGreeting, campaignUsers} = result.data;
+          const {title, message, customGreeting, customLink, campaignUsers} = result.data;
 
           await setTitle(title)
           await setMessage(message)
           await setGreeting(customGreeting)
+          await setCustomLink(customLink)
           await setRecipients(campaignUsers)
         })
   }
