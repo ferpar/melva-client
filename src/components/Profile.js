@@ -55,6 +55,7 @@ const BaseHome = ({
                 <PhoneInput
                   className="phone-input"
                   name="phone"
+                  disabled
                   country="ES"
                   inputComponent={smartInput} //using smart input to prevent the caret from moving to the end
                   {...field}

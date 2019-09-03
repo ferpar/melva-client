@@ -89,6 +89,16 @@ class AuthService {
         console.error("Error during profile edit. Service level", err)
       );
   };
+
+  linkLogin = values => {
+    return this.service
+      .post("/link-login", values)
+      .then(result => result)
+      .catch(err =>
+        console.error("Error during link-login. Service level", err)
+      );
+  };
 }
+
 
 export default AuthService;

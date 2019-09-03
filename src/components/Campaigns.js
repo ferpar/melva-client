@@ -8,6 +8,9 @@ import PhoneInput from "react-phone-number-input";
 
 import Modali, { useModali } from "modali";
 
+import { toast } from "react-toastify";
+toast.configure();
+
 import translateToGSM from "../helpers/translateToGSM.js";
 import capitalize from "../helpers/capitalize.js";
 import normalizePhone from "../helpers/normalizePhone.js";
@@ -18,14 +21,18 @@ const CampaignManager = props => {
 
   // == Main State ==
   const [isSending, setIsSending] = useState(false)
-
+  const [filter, setFilter] = useState("all")
 
   // ====
 
   // == Main Form ==
+  const [title, setTitle] = useState("")
   const [message, setMessage] = useState("")
   const [showGSM, setShowGSM] = useState(false)
   const [greeting, setGreeting] = useState(false)
+  const [customLink, setCustomLink] = useState(false)
+
+  const [campaigns, setCampaigns] = useState([])
 
   const handleMsgChange = e => {
     setMessage(e.target.value);
@@ -40,15 +47,27 @@ const CampaignManager = props => {
     setGreeting(e.target.checked)
   }
 
-  const launchCampaign = () => {
+  const handleLinkChange = e => {
+    setCustomLink(e.target.checked)
+  }
+
+  const launchCampaign = async () => {
 
     setIsSending(true)
 
-    const postData = { msgbody: message, recipients, addGreeting: greeting }
+    const postData = { msgbody: message, recipients: recipients.filter(recipient => (recipient.selected && recipient.smsStatus==="not-sent")), addGreeting: greeting, addLink: customLink}
 
-    props.appointmentService
+    await props.appointmentService
       .sendCampaign(postData)
-        .then( results => console.log(results.data))
+        .then( async results => {
+          const smsArray = results.data;
+          let tempRecipients = recipients;
+          for (let i = 0; i<smsArray.length; i++) {
+            const j = await recipients.findIndex( recipient => recipient.userId.phone === smsArray[i].entity.to)
+            tempRecipients = await [...tempRecipients.slice(0,j), {...tempRecipients[j], smsId: smsArray[i].entity.id, smsStatus: smsArray[i].entity.status}, ...tempRecipients.slice(j+1)]
+          }
+          await setRecipients(tempRecipients)
+        })
         .then( () => setIsSending(false))
         .catch( err => console.error('error sending the messages', err))
   }
@@ -58,27 +77,96 @@ const CampaignManager = props => {
     toggleConfirmModal();
   }
 
+    //Campaign buttons
+  
+  const saveCampaign = () => {
+    
+    const postData = { title, message, recipients, customGreeting: greeting }
+
+    props.campaignService
+      .save(postData)
+        .then( results => setCampaigns( prevCampaigns => [...prevCampaigns, results.data]))
+        .catch( err => console.error("error saving campaign", err))
+  }
+
+  const handleSaveCampaign = async e => {
+    e.preventDefault()
+    await saveCampaign()
+    notify(title)
+  }
+
+  const loadCampaign = async (loadTitle) => {
+    await props.campaignService
+      .getByTitle(loadTitle)
+        .then(async result => {
+          const {title, message, customGreeting, campaignUsers} = result.data;
+
+          await setTitle(title)
+          await setMessage(message)
+          await setGreeting(customGreeting)
+          await setRecipients(campaignUsers)
+        })
+  }
+
+  const handleLoadCampaign = e => {
+    console.log(e.target.value)
+    loadCampaign(e.target.value)
+  }
+
+  const deleteCampaign = async () => {
+    const id = await campaigns.find(elem => elem.title===title)._id;
+    await props.campaignService
+      .remove({id})
+        .then( async () => {
+          await setTitle("")
+          await setMessage("")
+          await setGreeting(false)
+          await setRecipients([])
+        })
+  }
+
+  const handleDelete = e => {
+     e.preventDefault()
+     toggleDeleteModal()
+  }
+
   // ====
 
   // == SubForm ==
   const [recipients, setRecipients] = useState([])
-  const [customer, setCustomer] = useState({name: "", surname: "", phone: ""})
+  const [customer, setCustomer] = useState({userId: {name: "", surname: "", phone: ""}})
 
   const handleAddCustomer = e => {
     e.preventDefault();
     setRecipients(prevRecipients => [customer, ...prevRecipients])
   }
 
+  const remCampaignUser = id => {
+    props.campaignService
+      .removeCampaignUser({id})
+        .then(result => console.log(result.data))
+      
+  }
+
   const handleRemoveCustomer = (e, i) => {
     e.preventDefault();
     setRecipients([...recipients.slice(0, i), ...recipients.slice(i+1)])
+    remCampaignUser(recipients[i]._id)
+  }
+
+  const handleSelectCustomer = async id => {
+    const i = recipients.findIndex(recipient => recipient._id === id)
+    await setRecipients(prevRecipients => {
+      const selected = prevRecipients[i].selected ? false : true  
+      return [...prevRecipients.slice(0,i), {...prevRecipients[i], selected},...prevRecipients.slice(i+1)]
+    })
   }
 
   const handleCustomerChange = e => {
     const { name } = e.target
     let { value } = e.target
     if(name==="name"){value = value.slice(0,20)}
-    setCustomer(prevCustomer => ({...prevCustomer, [name] : value}))
+    setCustomer(prevCustomer => ({...prevCustomer, userId:{ ...prevCustomer.userId, [name] : value}}))
   }
 
   const handleCSVImport = async e => {
@@ -89,10 +177,12 @@ const CampaignManager = props => {
     })
       .fromString(csvContent)
       .then(async jsonObj => {
-        const normalizedJsonObj = await jsonObj.map( recipient => ({ 
+        const normalizedJsonObj = await jsonObj.map( recipient => ({
+          userId: {
             name: capitalize(recipient.name), 
             surname: capitalize(recipient.surname), 
             phone: normalizePhone(recipient.phone)
+          }
         }))
         setRecipients( prevRecipients => [...prevRecipients, ...normalizedJsonObj] )
       })
@@ -122,7 +212,41 @@ const CampaignManager = props => {
     ],
     title: "Confirmar Envío"
   });
+
+
+  const [deleteModal, toggleDeleteModal] = useModali({
+    animated: true,
+    centered: true,
+    buttons: [
+      <Modali.Button
+        label="Volver"
+        isStyleCancel
+        onClick={() => toggleDeleteModal()}
+      />,
+      <Modali.Button
+        label="Borrar"
+        isStyleDefault
+        onClick={async () => {
+          const removedTitle = title;
+          await deleteCampaign()
+          await toggleDeleteModal()
+          notifyDelete(removedTitle)
+        }}
+      />
+    ],
+    title: "Confirmar Borrado"
+  });
   // =====
+  
+
+  // == TOASTIFY METHOD ==
+  const notify = (notifyTitle) =>
+    toast(
+         "✔️  Campaña guardada con nombre " + notifyTitle
+    );
+  const notifyDelete = (notifyTitle) => 
+    toast("❎ Campaña " + notifyTitle + " borrada.")
+  // ====
   
   // == Menu state and logic ==
   const [menuOpen, setMenuOpen] = useState(false)
@@ -136,6 +260,21 @@ const CampaignManager = props => {
   }
 
   // =====
+  
+  // == LifeCycle Hooks ==
+  
+  useEffect(() => {
+    let isSubscribed = true;
+      if (isSubscribed) {
+        props.campaignService
+          .load()
+          .then(results => {
+            console.log(results.data)
+            setCampaigns(results.data)
+          })
+      }
+    return () => isSubscribed = false;
+  }, [])
 
   return (
    
@@ -155,10 +294,20 @@ const CampaignManager = props => {
       <Modali.Modal {...confirmModal}>
         <div className="modal-text">
           <p>
-            Confirme el envío de {recipients.length} mensajes con el siguiente mensaje:
+            Confirme el envío de {recipients.filter(recipient => (recipient.selected && recipient.smsStatus==="not-sent")).length} mensajes con el siguiente mensaje:
           </p>
           <p>
             {"<<"}{greeting ? translateToGSM("Hola (NOMBRE), " + message): translateToGSM(message)}{">>"}
+          </p>
+        </div>
+      </Modali.Modal>
+      <Modali.Modal {...deleteModal}>
+        <div className="modal-text">
+          <p>
+            Confirme el BORRADO PERMANENTE de la siguiente campaña:
+          </p>
+          <p>
+            {"<<"}{title}{">>"}
           </p>
         </div>
       </Modali.Modal>
@@ -180,19 +329,34 @@ const CampaignManager = props => {
                   <div className="greeting-checkbox">
                     <input type="checkbox" id="greeting" name="greeting" checked={greeting} onChange={e => handleGreetingChange(e)}/>
                     <label htmlFor="greeting">Saludo personalizado</label>
+                    <input type="checkbox" id="link" name="link" checked={customLink} onChange={e => handleLinkChange(e)}/>
+                    <label htmlFor="link">Enlace personalizado</label>
                   </div>
-                  <p className="character-counter">{ greeting ? message.length + 27 : message.length}/160 caracteres</p>
+                  <p className="character-counter">{ greeting ? 
+                    (customLink ? message.length + 27 + 29 : message.length + 27) :
+                    (customLink ? message.length + 29: message.length)}
+                    /160 caracteres
+                  </p>
                   <div className="errors"></div>
                 </div>
                 { showGSM && <textarea className="translated-textarea"readOnly value={greeting ? translateToGSM("Hola (NOMBRE), " + message): translateToGSM(message)}/> }
                 <div className="campaign-buttons">
                   <button className="expand cp-button" onClick={e => handleClickGSM(e)}>{ showGSM ? "Ocultar" : "Vista Previa"} </button>
                   <button className="submit cs-button" onClick={e => handleSubmit(e)} type="submit">Enviar mensajes</button>
+                  <label htmlFor="title">nombre de campaña</label>
+                  <input name="title" id="title" type="text" value={title} onChange={(e) => setTitle(e.target.value)}/>
+                  <button className="save cp-button" onClick={e => handleSaveCampaign(e)}>Guardar Campaña</button>
+                  <label htmlFor="campaign-select">cargar campaña</label>
+                  <select onChange={e => handleLoadCampaign(e)} id="campaign-select" name="campaign-select">
+                    <option value="">seleccionar campaña</option>
+                    {campaigns.map( (campaign, ind) => (
+                      <option key={ind} value={campaign.id}>{campaign.title}</option>
+                    ))}
+                  </select>
+                  <button className="delete cs-button" onClick={e => handleDelete(e)} >Borrar Campaña</button>
                 </div>
               </div>
             </form>
-
-            
           </div>
           <div className="recipients-list">
             <div className="list-container">
@@ -215,13 +379,12 @@ const CampaignManager = props => {
                       id="phone"
                       country="ES"
                       onChange={value => { 
-                        setCustomer(prevCustomer => ({...prevCustomer, phone : value}))
+                        setCustomer(prevCustomer => ({...prevCustomer, userId: { ...prevCustomer.userId, phone : value}}))
                         }
                       }
                       placeholder="tel. 6xx xx xx xx"
                       value={customer.phone}
                     />
-
                   </div>
                   <button className="cp-button" onClick={e => handleAddCustomer(e)} >Añadir</button>
                 </div>
@@ -231,13 +394,54 @@ const CampaignManager = props => {
                 </div>
               </form>
               <div className="customers-container">
+                <div><p>filter by:</p>
+                  <button onClick={() => setFilter("all")}>all</button>
+                  <button onClick={() => setFilter("not-sent")}>not-sent</button>
+                  <button onClick={() => setFilter("enqueued")}>enqueued</button>
+                  <button onClick={() => setFilter("delivered")}>delivered</button>
+                  <button onClick={() => setFilter("clicked")}>clicked on</button>
+                  <button onClick={() => setFilter("booked")}>Appointment Booked</button>
+                </div>
                 <ul className="customers-list">
-                  {recipients.map( (recipient,i) => (
-                    <li key={i} className="customer-list-item">
-                      <div className="customer-fields">
-                        <p>{recipient.name}</p>
-                        <p>{recipient.surname}</p>
-                        <p>{recipient.phone}</p>
+                  {recipients
+                    .filter(recipient => {
+                      switch (filter) {
+                        case "all":
+                          return recipient;
+                        case "not-sent":
+                          return recipient.smsStatus==="not-sent";
+                        case "enqueued":
+                          return recipient.smsStatus==="enqueued";
+                        case "delivered":
+                          return recipient.smsStatus==="delivered";
+                        case "clicked":
+                          return recipient.linkClicked;
+                        case "booked":
+                          return recipient.appointmentBooked;
+                        default:
+                          return recipient;
+                      }
+                    })
+                    .map( (recipient,i) => (
+                    <li key={i} className={recipient.selected ? "customer-list-item selected" : "customer-list-item"}>
+                      <div onClick={() => handleSelectCustomer(recipient._id)} className="customer-fields">
+                        <p>{recipient.userId.name}</p>
+                        <p>{recipient.userId.surname}</p>
+                        <p>
+                            {recipient.userId.phone}  {" "} 
+                            {recipient.smsStatus === "not-sent" ?
+                                <span style={{color: "grey"}}>N</span> : 
+                                (recipient.smsStatus === "enqueued" ? 
+                                  <span style={{color: "blue"}}>E</span> :
+                                  (recipient.smsStatus === "delivered" ?
+                                    <span style={{color: "green"}}>D</span> :
+                                   <span style={{color: "red"}}>-</span>))}
+                            {" "}
+                            {recipient.linkClicked && <span style={{color: "orange"}}>C</span>}
+                            {" "}
+                            {recipient.appointmentBooked && <span style={{color: "red"}}>B!</span>}
+                                
+                        </p>
                       </div>
                       <button className="remove-customer" onClick={e => handleRemoveCustomer(e, i)}>-</button>
                     </li>

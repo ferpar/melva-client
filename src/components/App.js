@@ -3,6 +3,7 @@ import axios from "axios";
 import { hot } from "react-hot-loader";
 import AuthService from "../services/auth.js";
 import AppointmentService from "../services/appointments.js";
+import CampaignService from "../services/campaigns.js";
 import { Switch, Route, Link, withRouter, Redirect } from "react-router-dom";
 import Appointments from "./AppointmentsF";
 import CustomerLogin from "./Home";
@@ -26,6 +27,8 @@ class App extends React.Component {
     this.authService = authService;
     let appointmentService = new AppointmentService();
     this.appointmentService = appointmentService;
+    let campaignService = new CampaignService();
+    this.campaignService = campaignService;
 }
 
   handleLogin = (userObj, redirect = false, redirectURL) => {
@@ -49,7 +52,7 @@ class App extends React.Component {
     this.authService
       .loggedin()
       .then(result => {
-        if (result.data.message) {
+        if (result.data.message) { //there will only be data.message if wrong credentials/error
           this.setState({isLoading: false});
         } else {
           this.handleLogin(result.data, false);
@@ -178,7 +181,20 @@ class App extends React.Component {
                 handleLogout = {this.handleLogout}
                 authService = {this.authService}
                 appointmentService = {this.appointmentService}
+                campaignService = {this.campaignService}
               />}
+          />
+          <Route
+            path="/:linkid"
+            render={ ({match, history}) => {
+             this.authService
+              .linkLogin({linkid: match.params.linkid, secret: "test"})
+              .then(result => this.handleLogin(result.data, true, "/appointments") )
+              .catch( err => {console.log("nice try ;)"); history.push("/")})
+
+              return (<h1>Test</h1>)
+            }
+            }
           />
         </Switch>
       </div>

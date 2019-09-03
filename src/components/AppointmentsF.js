@@ -104,7 +104,8 @@ const Appointment = props => {
 
   const bookDate = (id, available) => {
     const userId = props.user._id;
-    const postData = { id, userId, available };
+    const activeCampaign = props.user.activeCampaign
+    const postData = { id, userId, available, activeCampaign };
     const slotIndex = appointments.findIndex(
       appointment => appointment._id === id
     );
