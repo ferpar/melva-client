@@ -52,7 +52,7 @@ class App extends React.Component {
     this.authService
       .loggedin()
       .then(result => {
-        if (result.data.message) {
+        if (result.data.message) { //there will only be data.message if wrong credentials/error
           this.setState({isLoading: false});
         } else {
           this.handleLogin(result.data, false);

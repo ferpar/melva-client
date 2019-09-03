@@ -29,6 +29,7 @@ const CampaignManager = props => {
   const [message, setMessage] = useState("")
   const [showGSM, setShowGSM] = useState(false)
   const [greeting, setGreeting] = useState(false)
+  const [customLink, setCustomLink] = useState(false)
 
   const [campaigns, setCampaigns] = useState([])
 
@@ -45,11 +46,15 @@ const CampaignManager = props => {
     setGreeting(e.target.checked)
   }
 
+  const handleLinkChange = e => {
+    setCustomLink(e.target.checked)
+  }
+
   const launchCampaign = async () => {
 
     setIsSending(true)
 
-    const postData = { msgbody: message, recipients: recipients.filter(recipient => (recipient.selected && recipient.smsStatus==="not-sent")), addGreeting: greeting }
+    const postData = { msgbody: message, recipients: recipients.filter(recipient => (recipient.selected && recipient.smsStatus==="not-sent")), addGreeting: greeting, addLink: customLink}
 
     await props.appointmentService
       .sendCampaign(postData)
@@ -323,6 +328,8 @@ const CampaignManager = props => {
                   <div className="greeting-checkbox">
                     <input type="checkbox" id="greeting" name="greeting" checked={greeting} onChange={e => handleGreetingChange(e)}/>
                     <label htmlFor="greeting">Saludo personalizado</label>
+                    <input type="checkbox" id="link" name="link" checked={customLink} onChange={e => handleLinkChange(e)}/>
+                    <label htmlFor="link">Enlace personalizado</label>
                   </div>
                   <p className="character-counter">{ greeting ? message.length + 27 : message.length}/160 caracteres</p>
                   <div className="errors"></div>
