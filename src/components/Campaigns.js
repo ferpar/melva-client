@@ -380,7 +380,6 @@ const CampaignManager = props => {
                       placeholder="tel. 6xx xx xx xx"
                       value={customer.phone}
                     />
-
                   </div>
                   <button className="cp-button" onClick={e => handleAddCustomer(e)} >Añadir</button>
                 </div>
@@ -405,6 +404,11 @@ const CampaignManager = props => {
                                   (recipient.smsStatus === "delivered" ?
                                     <span style={{color: "green"}}>D</span> :
                                    <span style={{color: "red"}}>-</span>))}
+                            {" "}
+                            {recipient.linkClicked && <span style={{color: "orange"}}>C</span>}
+                            {" "}
+                            {recipient.appointmentBooked && <span style={{color: "red"}}>B!</span>}
+                                
                         </p>
                       </div>
                       <button className="remove-customer" onClick={e => handleRemoveCustomer(e, i)}>-</button>
