@@ -88,8 +88,10 @@ img {
 @media(min-width: 500px) {
   .top-container {
     grid-template-areas:
-      "title flatpickr"
-      "date date"
+      "title"
+      "flatpickr"
+      "date"
+      
     ;
   }
 
@@ -183,6 +185,16 @@ img {
   text-align: center;
   font-size: 1.2rem;
   min-width: 14rem;
+}
+
+.appointments-flatpickr::placeholder{
+  color: #FF4200;
+}
+
+@media (min-width: 500px) {
+  .appointments-flatpickr {
+    max-height: 2rem;
+  }
 }
 
 .appointments-date{
