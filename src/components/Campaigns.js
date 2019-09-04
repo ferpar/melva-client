@@ -368,20 +368,26 @@ const CampaignManager = props => {
                 <div className="campaign-buttons">
                   <button className="expand cp-button" onClick={e => handleClickGSM(e)}>{ showGSM ? "Ocultar" : "Vista Previa"} </button>
                   <button className="submit cs-button" onClick={e => handleSubmit(e)} type="submit">Enviar mensajes</button>
-                  <label htmlFor="title">nombre de campaña</label>
-                  <input name="title" id="title" type="text" value={title} onChange={(e) => setTitle(e.target.value)}/>
-                  <button className="save cp-button" onClick={e => handleSaveCampaign(e)}>Guardar Campaña</button>
-                  <label htmlFor="campaign-select">cargar campaña</label>
-                  <select onChange={e => handleLoadCampaign(e)} id="campaign-select" name="campaign-select">
-                    <option value="">seleccionar campaña</option>
-                    {campaigns.map( (campaign, ind) => (
-                      <option key={ind} value={campaign.id}>{campaign.title}</option>
-                    ))}
-                  </select>
-                  <button className="delete cs-button" onClick={e => handleDelete(e)} >Borrar Campaña</button>
                 </div>
               </div>
             </form>
+          </div>
+          <div className="campaign-management">
+              <div className="campaign-name">
+                <label htmlFor="title">nombre de campaña</label>
+                <input name="title" id="title" type="text" value={title} onChange={(e) => setTitle(e.target.value)}/>
+              </div>
+              <button className="save cp-button" onClick={e => handleSaveCampaign(e)}>Guardar Campaña</button>
+              <hr/>
+              <label htmlFor="campaign-select">cargar campaña</label>
+              <select onChange={e => handleLoadCampaign(e)} id="campaign-select" name="campaign-select">
+                <option value="">seleccionar campaña</option>
+                {campaigns.map( (campaign, ind) => (
+                  <option key={ind} value={campaign.id}>{campaign.title}</option>
+                ))}
+              </select>
+              <hr/>
+              <button className="delete cs-button" onClick={e => handleDelete(e)} >Borrar Campaña</button>
           </div>
           <div className="recipients-list">
             <div className="list-container">

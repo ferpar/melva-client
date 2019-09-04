@@ -629,6 +629,7 @@ Note: Beware of modifying this element as it can break the animations - you shou
   display: grid;
   grid-template-areas:
   "message"
+  "management"
   "list"
   ;
   grid-gap: 1.5rem;
@@ -676,6 +677,16 @@ Note: Beware of modifying this element as it can break the animations - you shou
 
 .campaigns-message > h1 {
   margin-bottom: 1rem;
+}
+
+.campaign-management {
+ grid-area: management;
+ display: flex;
+ flex-direction: column;
+ background-color: #fff;
+ border-radius: 5px;
+ min-width: 80vw;
+ padding: 1rem 2rem;
 }
 
 .recipients-list{
@@ -758,10 +769,14 @@ Note: Beware of modifying this element as it can break the animations - you shou
   display: grid;
   grid-template-columns: 1fr;
   grid-gap: 1rem;
+  margin-top: 1rem;
 }
 
 .customer-list-item {
   display:flex;
+  border-radius: 5px;
+  border: 1px solid lightgrey;
+  padding: 0.25rem;
 }
 
 .customer-fields {
@@ -789,7 +804,12 @@ Note: Beware of modifying this element as it can break the animations - you shou
   margin-top: 0.5rem;
 }
 
-.selected { background-color: grey }
+.selected { background-color: #CFD3E7 }
+
+.campaigns-header { 
+  display: flex;
+  flex-direction: column;
+}
 
 .cp-button {
   background-color: var(--primary);
@@ -861,6 +881,19 @@ Note: Beware of modifying this element as it can break the animations - you shou
   .add-recipients-form {
     grid-template-areas:
     "input-array import-container"
+  }
+
+  .campaign-management {
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    min-width: 2rem;
+  }
+
+  .campaigns-main {
+    grid-template-areas:
+      "message message management"
+      "list list list"
   }
 
   .customers-list {
