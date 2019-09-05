@@ -198,8 +198,10 @@ const Appointment = props => {
               setUserAppointments([...result.data])
           })
         .then(() => {
-          if (props.user.consent !== true){
+          if (props.user.consent === null){
           toggleConsentModal()
+          } else if (props.user.consent === false) {
+            props.handleLogout()
           }
         })
       }

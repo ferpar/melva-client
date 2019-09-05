@@ -178,6 +178,17 @@ const Profile = ({ user, handleLogin, handleLogout, authService }) => {
           </div>
         </div>
       </div>
+      <div className="profile-second-container">
+        <div className="profile-wrapper">
+          <button 
+            className="consent-button"
+            onClick = { () => 
+              authService.consent({_id: props.user._id, consent: false}) 
+            } >
+            Revocar Consentimiento
+          </button>
+        </div>
+      </div>
     </div>
   )}
 </>
