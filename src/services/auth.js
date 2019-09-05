@@ -98,6 +98,15 @@ class AuthService {
         console.error("Error during link-login. Service level", err)
       );
   };
+
+  consent = values => {
+    return this.service
+      .post("/consent", values)
+      .then(result => result)
+      .catch( err =>
+          console.error("Error sending consent value", err)
+      );
+  };
 }
 
 

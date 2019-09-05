@@ -87,6 +87,59 @@ const Appointment = props => {
       />
     ]
   });
+  const [consentModal, toggleConsentModal] = useModali({
+    animated: true,
+    centered: false,
+    overlayClose: false,
+    keyboardClose: false,
+    closeButton: false,
+    buttons: [
+      <Modali.Button
+        label="No, Gracias"
+        isStyleCancel
+        onClick={ async () => {
+          await toggleConsentModal();
+          await toggleConfirmRemoveModal();
+        }
+        }
+      />,
+      <Modali.Button
+        label="De acuerdo"
+        isStyleDefault
+        onClick={async () => {
+          await props.authService.consent({_id: props.user._id, consent: true})
+          toggleConsentModal();
+        }}
+      />
+    ],
+    title: "Antes de entrar..."
+  })
+  const [confirmRemoveModal, toggleConfirmRemoveModal] = useModali({
+    animated: true,
+    overlayClose: false,
+    keyboardClose: false,
+    closeButton: false,
+    buttons: [
+      <Modali.Button
+        label="Volver"
+        isStyleCancel
+        onClick={ async () => {
+          toggleConfirmRemoveModal();
+          toggleConsentModal();
+        }
+        }
+      />,
+      <Modali.Button
+        label="Borrar"
+        isStyleDefault
+        onClick={async () => {
+          await props.campaignService.removeUser({id: props.user._id})
+          await props.handleLogout()   
+        }}
+      />
+    ],
+    title: "La privacidad es un derecho"
+  })
 
   // CUSTOM METHODS
   const dateChangeHandler = e => {
@@ -165,7 +218,7 @@ const Appointment = props => {
     return () => isSubscribed = false;
   }, [date]);
 
-  useEffect(() => { //LOAD USER APPOINTMENTS ON MOUNT
+  useEffect( () => { //LOAD USER APPOINTMENTS ON MOUNT and consent MODAL
     let isSubscribed = true;
       if (isSubscribed) {
         props.appointmentService
@@ -173,6 +226,13 @@ const Appointment = props => {
           .then((result) => {
               setUserAppointments([...result.data])
           })
+        .then(() => {
+          if (props.user.consent === null){
+          toggleConsentModal()
+          } else if (props.user.consent === false) {
+            props.handleLogout()
+          }
+        })
       }
     return () => isSubscribed = false;
   }, [])
@@ -420,6 +480,28 @@ const Appointment = props => {
                 day: "numeric"
               })}{" "}
             a las {bookInfo.hour && bookInfo.hour} no está disponible.
+          </p>
+        </div>
+      </Modali.Modal>
+      <Modali.Modal {...consentModal}>
+        <div className="modal-text">
+          <p>
+          <em> ¡ Bienvenido {props.user.name} ! </em>
+          </p>
+          <br/>
+          <p>
+            {"Como paciente de la \"Clínica Rull\" queremos mejorar tu experiencia con nosotros ofreciéndote servicios de cita online, recordatorios e información que sea de tu interés."}
+          </p>
+          <br/>
+          <p>
+            {"Puedes modificar/borrar tus datos en la sección <Mi Perfil>. Por favor, marca la opcion deseada a continuación:"}
+          </p>
+        </div>
+      </Modali.Modal>
+      <Modali.Modal {...confirmRemoveModal}>
+        <div className="modal-text">
+          <p>
+            {"Si confirma esta acción se borrarán sus datos y no se le enviarán más mensajes."}
           </p>
         </div>
       </Modali.Modal>

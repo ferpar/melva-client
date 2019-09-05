@@ -530,6 +530,14 @@ Note: Beware of modifying this element as it can break the animations - you shou
   margin-top: 4.5rem;
 }
 
+.profile-second-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2.5rem;
+}
+
 .profile-header{
   align-items: center;
   display: flex;
@@ -545,6 +553,13 @@ Note: Beware of modifying this element as it can break the animations - you shou
   border-radius: 6px;
   box-shadow: 0px 10px 50px #555;
   background-color: #fff;
+  width: 85%;
+}
+
+@media (min-width: 500px) {
+  .profile-wrapper{
+    width: 26rem;
+  }
 }
 
 .profile-wrapper > p {
@@ -603,6 +618,24 @@ Note: Beware of modifying this element as it can break the animations - you shou
   color: var(--danger);
 }
 
+.consent-button{
+  display: inline-block;
+  background-color: var(--danger);
+  color: #fff;
+  border: 2px solid var(--danger);
+  border-radius: 5px;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 0.25rem;
+}
+
+.consent-button:hover {
+  background-color: rgba(220, 53, 69, 0.2);
+  color: var(--danger);
+}
 /* appointments book css */
 
 
