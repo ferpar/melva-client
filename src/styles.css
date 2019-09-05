@@ -402,6 +402,7 @@ label {
 .enter-platform button:disabled {
   color: #fff;
   background-color: #aaa;
+  border: none;
 }
 
 .navbar {

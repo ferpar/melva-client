@@ -85,7 +85,7 @@ const BaseHome = ({
           </div>
 
           <div className="enter-platform">
-            <button disabled={isSubmitting} type="submit">
+            <button disabled type="submit">
               Entrar
             </button>
           </div>
@@ -95,6 +95,8 @@ const BaseHome = ({
   </>
 )
 };
+
+//disabled={isSubmitting}
 
 const Home = withFormik({
   mapPropsToValues({ user }) {
