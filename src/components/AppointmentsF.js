@@ -90,13 +90,16 @@ const Appointment = props => {
   const [consentModal, toggleConsentModal] = useModali({
     animated: true,
     centered: false,
+    overlayClose: false,
+    keyboardClose: false,
+    closeButton: false,
     buttons: [
       <Modali.Button
         label="No, Gracias"
         isStyleCancel
         onClick={ async () => {
-          await props.campaignService.removeUser({id: props.user._id})
-          await props.handleLogout()
+          await toggleConsentModal();
+          await toggleConfirmRemoveModal();
         }
         }
       />,
@@ -110,6 +113,32 @@ const Appointment = props => {
       />
     ],
     title: "Antes de entrar..."
+  })
+  const [confirmRemoveModal, toggleConfirmRemoveModal] = useModali({
+    animated: true,
+    overlayClose: false,
+    keyboardClose: false,
+    closeButton: false,
+    buttons: [
+      <Modali.Button
+        label="Volver"
+        isStyleCancel
+        onClick={ async () => {
+          toggleConfirmRemoveModal();
+          toggleConsentModal();
+        }
+        }
+      />,
+      <Modali.Button
+        label="Borrar"
+        isStyleDefault
+        onClick={async () => {
+          await props.campaignService.removeUser({id: props.user._id})
+          await props.handleLogout()   
+        }}
+      />
+    ],
+    title: "La privacidad es un derecho"
   })
 
   // CUSTOM METHODS
@@ -457,7 +486,7 @@ const Appointment = props => {
       <Modali.Modal {...consentModal}>
         <div className="modal-text">
           <p>
-          Bienvenido {props.user.name}!
+          <em> ¡ Bienvenido {props.user.name} ! </em>
           </p>
           <br/>
           <p>
@@ -466,6 +495,13 @@ const Appointment = props => {
           <br/>
           <p>
             {"Puedes modificar/borrar tus datos en la sección <Mi Perfil>. Por favor, marca la opcion deseada a continuación:"}
+          </p>
+        </div>
+      </Modali.Modal>
+      <Modali.Modal {...confirmRemoveModal}>
+        <div className="modal-text">
+          <p>
+            {"Si confirma esta acción se borrarán sus datos y no se le enviarán más mensajes."}
           </p>
         </div>
       </Modali.Modal>

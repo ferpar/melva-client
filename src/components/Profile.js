@@ -132,6 +132,9 @@ const Profile = ({ user, handleLogin, handleLogout, authService, campaignService
 
   const [confirmRemoveModal, toggleConfirmRemoveModal] = useModali({
     animated: true,
+    overlayClose: false,
+    keyboardClose: false,
+    closeButton: false,
     buttons: [
       <Modali.Button
         label="Volver"
@@ -218,7 +221,7 @@ const Profile = ({ user, handleLogin, handleLogout, authService, campaignService
               toggleConfirmRemoveModal()
             }
             } >
-            Revocar Consentimiento
+            Borrar Cuenta
           </button>
         </div>
       </div>
