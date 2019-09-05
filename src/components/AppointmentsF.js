@@ -87,6 +87,30 @@ const Appointment = props => {
       />
     ]
   });
+  const [consentModal, toggleConsentModal] = useModali({
+    animated: true,
+    centered: false,
+    buttons: [
+      <Modali.Button
+        label="No, Gracias"
+        isStyleCancel
+        onClick={ async () => {
+          await props.authService.consent({_id: props.user._id, consent: false})
+          await props.handleLogout()
+        }
+        }
+      />,
+      <Modali.Button
+        label="De acuerdo"
+        isStyleDefault
+        onClick={async () => {
+          await props.authService.consent({_id: props.user._id, consent: true})
+          toggleConsentModal();
+        }}
+      />
+    ],
+    title: "Antes de entrar..."
+  })
 
   // CUSTOM METHODS
   const dateChangeHandler = e => {
@@ -165,7 +189,7 @@ const Appointment = props => {
     return () => isSubscribed = false;
   }, [date]);
 
-  useEffect(() => { //LOAD USER APPOINTMENTS ON MOUNT
+  useEffect( () => { //LOAD USER APPOINTMENTS ON MOUNT and consent MODAL
     let isSubscribed = true;
       if (isSubscribed) {
         props.appointmentService
@@ -173,6 +197,11 @@ const Appointment = props => {
           .then((result) => {
               setUserAppointments([...result.data])
           })
+        .then(() => {
+          if (props.user.consent !== true){
+          toggleConsentModal()
+          }
+        })
       }
     return () => isSubscribed = false;
   }, [])
@@ -420,6 +449,21 @@ const Appointment = props => {
                 day: "numeric"
               })}{" "}
             a las {bookInfo.hour && bookInfo.hour} no está disponible.
+          </p>
+        </div>
+      </Modali.Modal>
+      <Modali.Modal {...consentModal}>
+        <div className="modal-text">
+          <p>
+          Bienvenido {props.user.name}!
+          </p>
+          <br/>
+          <p>
+            {"Como paciente de la \"Clínica Rull\" queremos mejorar tu experiencia con nosotros ofreciéndote servicios de cita online, recordatorios e información que sea de tu interés."}
+          </p>
+          <br/>
+          <p>
+            {"Puedes modificar/borrar tus datos en la sección <Mi Perfil>. Por favor, marca la opcion deseada a continuación:"}
           </p>
         </div>
       </Modali.Modal>
