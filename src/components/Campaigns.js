@@ -79,15 +79,27 @@ const CampaignManager = props => {
 
     //Campaign buttons
   
-  const saveCampaign = () => {
+  const loadCampaigns = () => {
+
+        props.campaignService
+          .load()
+          .then(results => {
+            console.log(results.data)
+            setCampaigns(results.data)
+          })
+  }
+
+  const saveCampaign = async () => {
     
     const postData = { title, message, recipients, customGreeting: greeting, customLink }
     console.log(postData)
 
-    props.campaignService
+    await props.campaignService
       .save(postData)
         .then( results => setCampaigns( prevCampaigns => [...prevCampaigns, results.data]))
         .catch( err => console.error("error saving campaign", err))
+
+    await loadCampaigns()
   }
 
   const handleSaveCampaign = async e => {
@@ -127,6 +139,7 @@ const CampaignManager = props => {
           await setGreeting(false)
           await setRecipients([])
         })
+    await loadCampaigns()
   }
 
   const handleDelete = e => {
@@ -140,9 +153,9 @@ const CampaignManager = props => {
   const [recipients, setRecipients] = useState([])
   const [customer, setCustomer] = useState({userId: {name: "", surname: "", phone: ""}})
 
-  const handleAddCustomer = e => {
+  const handleAddCustomer = async e => {
     e.preventDefault();
-    setRecipients(prevRecipients => [customer, ...prevRecipients])
+    await setRecipients(prevRecipients => [customer, ...prevRecipients])
   }
 
   const remCampaignUser = id => {
@@ -152,10 +165,10 @@ const CampaignManager = props => {
       
   }
 
-  const handleRemoveCustomer = (e, i) => {
+  const handleRemoveCustomer = async (e, i) => {
     e.preventDefault();
-    setRecipients([...recipients.slice(0, i), ...recipients.slice(i+1)])
-    remCampaignUser(recipients[i]._id)
+    await setRecipients([...recipients.slice(0, i), ...recipients.slice(i+1)])
+    await remCampaignUser(recipients[i]._id)
   }
 
   const handleSelectCustomer = async id => {
@@ -270,12 +283,7 @@ const CampaignManager = props => {
   useEffect(() => {
     let isSubscribed = true;
       if (isSubscribed) {
-        props.campaignService
-          .load()
-          .then(results => {
-            console.log(results.data)
-            setCampaigns(results.data)
-          })
+        loadCampaigns();
       }
     return () => isSubscribed = false;
   }, [])
