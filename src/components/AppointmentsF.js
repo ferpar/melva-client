@@ -352,7 +352,7 @@ const Appointment = props => {
             dateFormat: 'd-m-Y',
             disableMobile: true,
             locale: Spanish,
-            minDate: 'today',
+            minDate: new Date( new Date().setDate( new Date().getDate() + 1)),
             altInput: true,
             altFormat: "F j, Y"
           }}
