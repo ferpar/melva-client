@@ -95,7 +95,7 @@ const Appointment = props => {
         label="No, Gracias"
         isStyleCancel
         onClick={ async () => {
-          await props.authService.consent({_id: props.user._id, consent: false})
+          await props.campaignService.removeUser({id: props.user._id})
           await props.handleLogout()
         }
         }

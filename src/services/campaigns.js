@@ -43,6 +43,12 @@ class AppointmentService {
       .catch(err => console.error("Error removing campaignUser and all its references", err))
   }
 
+  removeUser = values => {
+    return this.service.post("remove-user", values)
+      .then(result => result)
+      .catch(err => console.error("Error removing user and respective references", err))
+  }
+
   remove = values => {
     return this.service.post("/remove", values)
       .then(result => result)

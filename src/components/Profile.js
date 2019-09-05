@@ -12,6 +12,8 @@ import smartInput from "react-phone-number-input/smart-input";
 
 import {slide as Menu} from "react-burger-menu";
 
+import Modali, { useModali } from "modali";
+
 const BaseHome = ({
   values,
   errors,
@@ -122,11 +124,34 @@ const Home = withFormik({
 
 //From here on: the Profile Component
 
-const Profile = ({ user, handleLogin, handleLogout, authService }) => {
+const Profile = ({ user, handleLogin, handleLogout, authService, campaignService}) => {
   const initialInfo = {};
   const [userInfo, setUserInfo] = useState(initialInfo);
   const [editMode, setEditMode] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false)
+
+  const [confirmRemoveModal, toggleConfirmRemoveModal] = useModali({
+    animated: true,
+    buttons: [
+      <Modali.Button
+        label="Volver"
+        isStyleCancel
+        onClick={ () => {
+          toggleConfirmRemoveModal()
+        }
+        }
+      />,
+      <Modali.Button
+        label="Borrar"
+        isStyleDefault
+        onClick={async () => {
+          await campaignService.removeUser({id: user._id})
+          await handleLogout()   
+        }}
+      />
+    ],
+    title: "Borrado de cuenta"
+  })
 
   const handleStateChange = (state) => {
     setMenuOpen(state.isOpen)  
@@ -151,6 +176,13 @@ const Profile = ({ user, handleLogin, handleLogout, authService }) => {
           closeMenu()}
         }>Desconectar</button>
     </Menu>
+    <Modali.Modal {...confirmRemoveModal}>
+      <div className="modal-text">
+        <p>
+          {"Si confirma esta acción se borrarán sus datos de usuario y no se le enviarán más mensajes."}
+        </p>
+      </div>
+    </Modali.Modal>
     {editMode ? (
     <div>
       {" "}
@@ -182,8 +214,9 @@ const Profile = ({ user, handleLogin, handleLogout, authService }) => {
         <div className="profile-wrapper">
           <button 
             className="consent-button"
-            onClick = { () => 
-              authService.consent({_id: props.user._id, consent: false}) 
+            onClick = { async () => { 
+              toggleConfirmRemoveModal()
+            }
             } >
             Revocar Consentimiento
           </button>
