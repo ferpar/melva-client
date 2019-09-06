@@ -6,7 +6,7 @@ import AppointmentService from "../services/appointments.js";
 import CampaignService from "../services/campaigns.js";
 import { Switch, Route, Link, withRouter, Redirect } from "react-router-dom";
 import Appointments from "./AppointmentsF";
-import CustomerLogin from "./Home";
+import Home from "./Home";
 import UserLogin from "./Login.js";
 import Profile from "./Profile";
 import Book from "./AppointmentsBook";
@@ -105,7 +105,7 @@ class App extends React.Component {
               ? 
               ( user.role==='Admin' ? <Redirect to="/appointments-book" /> : <Redirect to="/appointments" />)
               :
-              <CustomerLogin 
+              <Home 
                 handleLogin={this.handleLogin} 
                 handleLogout={this.handleLogout}
                 authService={this.authService} 
