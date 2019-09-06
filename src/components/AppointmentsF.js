@@ -133,7 +133,7 @@ const Appointment = props => {
         label="Borrar"
         isStyleDefault
         onClick={async () => {
-          await props.campaignService.removeUser({id: props.user._id})
+          await props.campaignService.removeUser({id: props.user._id, blacklist: true})
           await props.handleLogout()   
         }}
       />

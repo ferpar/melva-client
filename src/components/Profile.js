@@ -148,7 +148,7 @@ const Profile = ({ user, handleLogin, handleLogout, authService, campaignService
         label="Borrar"
         isStyleDefault
         onClick={async () => {
-          await campaignService.removeUser({id: user._id})
+          await campaignService.removeUser({id: user._id, blacklist: true})
           await handleLogout()   
         }}
       />
