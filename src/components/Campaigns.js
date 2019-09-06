@@ -21,6 +21,7 @@ const CampaignManager = props => {
 
   // == Main State ==
   const [isSending, setIsSending] = useState(false)
+  const [isSaving, setIsSaving] = useState(false)
   const [filter, setFilter] = useState("all")
 
   // ====
@@ -104,9 +105,11 @@ const CampaignManager = props => {
 
   const handleSaveCampaign = async e => {
     e.preventDefault()
+    setIsSaving(true)
     if (title) {
     await saveCampaign()
-    notify(title)
+    await notify(title)
+    setIsSaving(false)
     }
   }
 
@@ -385,7 +388,7 @@ const CampaignManager = props => {
                 <label htmlFor="title">nombre de campaña</label>
                 <input name="title" id="title" type="text" value={title} onChange={(e) => setTitle(e.target.value)}/>
               </div>
-              <button className="save cp-button" onClick={e => handleSaveCampaign(e)}>Guardar Campaña</button>
+              <button disabled={isSaving} className="save cp-button" onClick={e => handleSaveCampaign(e)}>{isSaving ? "Guardando..." : "Guardar Campaña"}</button>
               <hr/>
               <label htmlFor="campaign-select">cargar campaña</label>
               <select onChange={e => handleLoadCampaign(e)} id="campaign-select" name="campaign-select">
@@ -426,6 +429,7 @@ const CampaignManager = props => {
                     />
                   </div>
                   <button className="cp-button" onClick={e => handleAddCustomer(e)} >Añadir</button>
+                  <p>List size: {recipients.length}</p>
                 </div>
                 <div className="import-container">
                   <label className="csv-import-button" htmlFor="csv-import">Importar desde .csv</label>
