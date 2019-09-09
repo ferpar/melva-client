@@ -429,7 +429,14 @@ const CampaignManager = props => {
                     />
                   </div>
                   <button className="cp-button" onClick={e => handleAddCustomer(e)} >Añadir</button>
-                  <p>List size: {recipients.length}</p>
+                  <p>
+                    List size: {recipients.length}, 
+                    Sent: { recipients.filter( recipient => (recipient.smsStatus === "enqueued" || recipient.smsStatus === "delivered")).length},
+                    Enqueued: {recipients.filter( recipient => recipient.smsStatus === "enqueued" ).length},
+                    Delivered: {recipients.filter( recipient => recipient.smsStatus === "delivered").length}, 
+                    Clicked on: {recipients.filter( recipient => recipient.linkClicked).length},
+                    Booked: {recipients.filter( recipient => recipient.appointmentBooked).length}
+                  </p>
                 </div>
                 <div className="import-container">
                   <label className="csv-import-button" htmlFor="csv-import">Importar desde .csv</label>
