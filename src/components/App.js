@@ -15,6 +15,8 @@ import ProtectedRoute from "./ProtectedRoute";
 
 import Spinner from "./spinners/Ripple.js";
 
+const level = ["", "XVaB8_*", "_Vwy3zA"]
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -103,7 +105,7 @@ class App extends React.Component {
             path="/"
             render={() => loggedIn 
               ? 
-              ( user.role==='Admin' ? <Redirect to="/appointments-book" /> : <Redirect to="/appointments" />)
+              ( (user.role==='Admin' && level.includes(user.accessLevel)) ? <Redirect to="/appointments-book" /> : <Redirect to="/appointments" />)
               :
               <Home 
                 handleLogin={this.handleLogin} 
@@ -115,7 +117,7 @@ class App extends React.Component {
             path="/login"
             render={() => loggedIn 
               ? 
-              ( user.role==='Admin' ? <Redirect to="/appointments-book" /> : <Redirect to="/appointments" />)
+              ( (user.role==='Admin' && level.includes(user.accessLevel)) ? <Redirect to="/appointments-book" /> : <Redirect to="/appointments" />)
               :
               <UserLogin 
                 handleLogin={this.handleLogin} 
@@ -158,6 +160,7 @@ class App extends React.Component {
             user={this.state.user ? this.state.user : null}
             loggedIn={this.state.loggedIn}
             allowedRoles={['Admin']}
+            accessLevel={[level[1], level[2]]}
             redirectURL={"/login"}
             component={props => 
               <Book 
@@ -174,6 +177,7 @@ class App extends React.Component {
             user={this.state.user ? this.state.user : null}
             loggedIn={this.state.loggedIn}
             allowedRoles={['Admin']}
+            accessLevel={[level[2]]}
             redirectURL={"/login"}
             component={props => 
               <CampaignManager 
