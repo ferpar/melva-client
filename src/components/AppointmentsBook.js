@@ -70,6 +70,7 @@ const AppointmentsBook = props => {
               bookedFor: appointment.customer,
               })
               )
+              .sort( (a,b) => a.date.getHours() - b.date.getHours())
               .map(({ date, available, id, bookedFor }, index) => (
                 <div className="appointment-info" key={index}>
                   <p>{bookedFor.name + " " + bookedFor.surname}</p>
