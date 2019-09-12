@@ -275,6 +275,10 @@ img {
   border-bottom: 2px solid rgba(81, 203, 238, 1);
 }
 
+.home-wrapper {
+  padding: 0 1.5rem;
+}
+
 .home-container {
   display: flex;
   justify-content: center;

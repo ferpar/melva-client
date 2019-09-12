@@ -29,10 +29,12 @@ const Home = ({
     >
         <Link onClick={() => closeMenu()} to="/login">Acceso Gestión</Link>
     </Menu>
-    <div className="home-container">
-      <div className="form-wrapper">
-        <img className="top-logo" src={logo_rull} alt="logo"/>
-        <h1 className="main title">¡Gracias por su visita!</h1>
+    <div className="home-wrapper">
+      <div className="home-container">
+        <div className="form-wrapper">
+          <img className="top-logo" src={logo_rull} alt="logo"/>
+          <h1 className="main title">¡Gracias por su visita!</h1>
+        </div>
       </div>
     </div>
   </>
