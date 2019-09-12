@@ -58,6 +58,7 @@ const AppointmentsBook = props => {
       <div className="appointments-book-main">
         <div className="book-list">
           <h1>Citas pendientes</h1>
+            <div className="booking-grid">
           { Object.keys(groupedAppointments).map( (day, index) => (
 
             <div key={index}>
@@ -95,6 +96,7 @@ const AppointmentsBook = props => {
           ))
           
           }
+        </div>
         </div>
       </div>
       )}

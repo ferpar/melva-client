@@ -683,6 +683,32 @@ Note: Beware of modifying this element as it can break the animations - you shou
   position: absolute;
 }
 
+.booking-grid {
+  display: flex;
+  flex-direction: column;
+}
+
+@media(min-width: 500px){
+  .booking-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media(min-width: 900px){
+  .booking-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+@media(min-width: 1200px){
+  .booking-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+}
+
 /*campaigns view*/
 
 
