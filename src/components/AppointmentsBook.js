@@ -42,6 +42,7 @@ const AppointmentsBook = props => {
         isOpen={menuOpen}
         onStateChange={(state) => handleStateChange(state)}
       >
+          {console.log(appointments)}{ console.log(groupedAppointments)}
           <Link onClick={() => closeMenu()} to="/campaigns">Gestor de campañas</Link>
           <button onClick={ async () => {
             await props.handleLogout() //this is important to avoid race between handleLogout and closeMenu
@@ -68,10 +69,11 @@ const AppointmentsBook = props => {
               available: appointment.customer === null,
               id: appointment._id,
               bookedFor: appointment.customer,
+              updated: new Date(appointment.updated_at)
               })
               )
               .sort( (a,b) => a.date.getHours() - b.date.getHours())
-              .map(({ date, available, id, bookedFor }, index) => (
+              .map(({ date, available, id, bookedFor, updated }, index) => (
                 <div className="appointment-info" key={index}>
                   <p>{bookedFor.name + " " + bookedFor.surname}</p>
                   <p>hora:  {date.toLocaleTimeString("es-Es", 
@@ -80,6 +82,10 @@ const AppointmentsBook = props => {
                       minute: "2-digit"
                     }
                   )} </p>
+                  {(new Date() - updated <= 3600*1000*12)
+                    && <span className="ball"></span>}
+                  {(new Date() - updated <= 3600*1000*12) 
+                    && <p>Hace {parseInt((new Date() - updated) / 1000 / 3600)} horas</p>}
                 </div>
               ))
               
