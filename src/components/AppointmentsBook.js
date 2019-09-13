@@ -59,7 +59,12 @@ const AppointmentsBook = props => {
         <div className="book-list">
           <h1>Citas pendientes</h1>
             <div className="booking-grid">
-          { Object.keys(groupedAppointments).map( (day, index) => (
+          { Object.keys(groupedAppointments)
+            .sort((a,b) => {
+              const dateA = a.split(' ')[1].split('/');
+              const dateB = b.split(' ')[1].split('/');
+              return (  new Date(dateA[2], dateA[1], dateA[0]).getTime()  - new Date(dateB[2], dateB[1], dateB[0]).getTime())})
+            .map( (day, index) => (
 
             <div key={index}>
             <h2 className="book-list-day">{day}</h2>
