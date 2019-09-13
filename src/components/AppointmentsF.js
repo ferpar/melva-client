@@ -354,7 +354,12 @@ const Appointment = props => {
             locale: Spanish,
             minDate: new Date( new Date().setDate( new Date().getDate() + 1)),
             altInput: true,
-            altFormat: "F j, Y"
+            altFormat: "F j, Y",
+            disable: [
+              function(date) {
+                return (date.getDay() === 0 || date.getDay() === 1 || date.getDay() === 6);
+              }
+            ]
           }}
           className="appointments-flatpickr"
           placeholder="pulse aquí..."
