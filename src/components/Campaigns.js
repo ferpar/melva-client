@@ -473,8 +473,16 @@ const CampaignManager = props => {
                       }
                     })
                     .map( (recipient,i) => (
-                    <li key={i} className={recipient.selected ? "customer-list-item selected" : "customer-list-item"}>
-                      <div onClick={() => handleSelectCustomer(recipient._id)} className="customer-fields">
+                    <li 
+                      key={i} 
+                      className = {
+                        recipient.selected ? (
+                          (new Date() - new Date(recipient.updated_at) <= 3600*1000*12) 
+                            ? "customer-list-item selected new-customer" : "customer-list-item selected") : (
+                           (new Date() - new Date(recipient.updated_at) <= 3600*1000*12) ?  "customer-list-item new-customer" : "customer-list-item")}>
+                      <div 
+                        onClick={() => handleSelectCustomer(recipient._id)} 
+                        className="customer-fields">
                         <p>{recipient.userId.name}</p>
                         <p>{recipient.userId.surname}</p>
                         <p>
@@ -490,6 +498,9 @@ const CampaignManager = props => {
                             {recipient.linkClicked && <span style={{color: "orange"}}>C</span>}
                             {" "}
                             {recipient.appointmentBooked && <span style={{color: "red"}}>B!</span>}
+                            {" "}
+                            {(new Date() - new Date(recipient.updated_at) <= 3600*1000*12)
+                              && <span className="ball"></span>}
                                 
                         </p>
                       </div>
