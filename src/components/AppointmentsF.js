@@ -392,7 +392,9 @@ const Appointment = props => {
               available: appointment.customer === null,
               id: appointment._id,
               bookedFor: appointment.customer
-            })).sort((a,b) => a.date.getHours()-b.date.getHours())
+            }))            
+              .sort((a,b) => a.date.getMinutes()- b.date.getMinutes())
+              .sort((a,b) => a.date.getHours()-b.date.getHours())
             .map(({ date, available, id, bookedFor }, index) => (
               <button
                 className={
@@ -491,7 +493,7 @@ const Appointment = props => {
       <Modali.Modal {...consentModal}>
         <div className="modal-text">
           <p>
-          <em> ¡ Bienvenido {props.user.name} ! </em>
+          <em> ¡ Hola {props.user.name} ! </em>
           </p>
           <br/>
           <p>

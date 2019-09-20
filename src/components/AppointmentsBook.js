@@ -77,6 +77,7 @@ const AppointmentsBook = props => {
               updated: new Date(appointment.updated_at)
               })
               )
+              .sort((a,b) => a.date.getMinutes()- b.date.getMinutes())
               .sort( (a,b) => a.date.getHours() - b.date.getHours())
               .map(({ date, available, id, bookedFor, updated }, index) => (
                 <div className="appointment-info" key={index}>
