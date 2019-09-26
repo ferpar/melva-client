@@ -127,9 +127,13 @@ const CampaignManager = props => {
         })
   }
 
-  const handleLoadCampaign = e => {
+  const handleLoadCampaign = async e => {
     console.log(e.target.value)
-    loadCampaign(e.target.value)
+
+    const campaignTitles = []
+    campaigns.forEach( campaign => {campaignTitles.push(campaign.title)})
+
+    if (campaignTitles.includes(e.target.value)) await loadCampaign(e.target.value)
   }
 
   const deleteCampaign = async () => {
