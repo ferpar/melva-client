@@ -984,8 +984,9 @@ Note: Beware of modifying this element as it can break the animations - you shou
 
   .campaigns-main {
     grid-template-areas:
-      "message message management"
-      "list list list"
+      "message"
+      "management"
+      "list"
   }
 
   .customers-list {
@@ -1002,6 +1003,17 @@ Note: Beware of modifying this element as it can break the animations - you shou
 @media(min-width: 762px) {
   .customers-list {
     grid-template-columns: 1fr 1fr 1fr;
+  }
+  .campaigns-main {
+    grid-template-areas:
+      "message message management"
+      "list list list"
+  }
+  .campaign-management {
+    min-width: 12rem;
+  }
+  .campaigns-message {
+    min-width: 70vw;
   }
 }
 
