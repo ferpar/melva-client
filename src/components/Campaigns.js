@@ -90,9 +90,10 @@ const CampaignManager = props => {
           })
   }
 
-  const saveCampaign = async () => {
+  const saveCampaign = async ( newRecipients) => {
     
     const postData = { title, message, recipients, customGreeting: greeting, customLink }
+    if (newRecipients) postData.recipients = newRecipients;
     console.log(postData)
 
     await props.campaignService
@@ -100,7 +101,7 @@ const CampaignManager = props => {
         .then( results => setCampaigns( prevCampaigns => [...prevCampaigns, results.data]))
         .catch( err => console.error("error saving campaign", err))
 
-    await loadCampaigns()
+    await refreshCampaigns()
   }
 
   const handleSaveCampaign = async e => {
@@ -114,17 +115,21 @@ const CampaignManager = props => {
   }
 
   const loadCampaign = async (loadTitle) => {
-    await props.campaignService
-      .getByTitle(loadTitle)
-        .then(async result => {
-          const {title, message, customGreeting, customLink, campaignUsers} = result.data;
+    if (loadTitle) { 
+      await props.campaignService
+        .getByTitle(loadTitle)
+          .then(async result => {
+            const {title, message, customGreeting, customLink, campaignUsers} = result.data;
 
-          await setTitle(title)
-          await setMessage(message)
-          await setGreeting(customGreeting)
-          await setCustomLink(customLink)
-          await setRecipients(campaignUsers)
-        })
+            await setTitle(title)
+            await setMessage(message)
+            await setGreeting(customGreeting)
+            await setCustomLink(customLink)
+            await setRecipients(campaignUsers)
+          })
+    } else {
+      console.log("inadequate campaign title")
+    }
   }
 
   const handleLoadCampaign = async e => {
@@ -133,7 +138,11 @@ const CampaignManager = props => {
     const campaignTitles = []
     campaigns.forEach( campaign => {campaignTitles.push(campaign.title)})
 
-    if (campaignTitles.includes(e.target.value)) await loadCampaign(e.target.value)
+    if (campaignTitles.includes(e.target.value)) {
+      await loadCampaign(e.target.value) 
+    } else {
+      await loadCampaign(undefined)
+    }
   }
 
   const deleteCampaign = async () => {
@@ -154,6 +163,16 @@ const CampaignManager = props => {
      toggleDeleteModal()
   }
 
+  const refreshCampaigns = async () => {
+    const actualCampaign = title;
+    await loadCampaigns()
+    await loadCampaign(title)
+  }
+
+  const handleRefresh = async () => {
+    await refreshCampaigns()
+  }
+
   // ====
 
   // == SubForm ==
@@ -162,7 +181,9 @@ const CampaignManager = props => {
 
   const handleAddCustomer = async e => {
     e.preventDefault();
+    const newRecipients = [customer, ...recipients];
     await setRecipients(prevRecipients => [customer, ...prevRecipients])
+    await saveCampaign(newRecipients)
   }
 
   const remCampaignUser = id => {
@@ -447,7 +468,10 @@ const CampaignManager = props => {
                   <input accept=".csv" id="csv-import" name="csv-import" type="file" onChange={e => handleCSVImport(e)}/>
                 </div>
               </form>
-              <div className="customers-container">
+              <div className="customers-container"> 
+                <div>
+                    <button onClick={() => handleRefresh()} >Refresh</button>
+                </div>
                 <div><p>filter by:</p>
                   <button onClick={() => setFilter("all")}>all</button>
                   <button onClick={() => setFilter("not-sent")}>not-sent</button>
