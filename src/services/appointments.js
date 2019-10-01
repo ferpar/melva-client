@@ -46,7 +46,7 @@ class AppointmentService {
   sendCampaign = (values) => {
    return this.service.post("/test-multimsg", values) 
     .then(result => result)
-    .catch(err => console.error("Error attempting to book, service level.", err))
+    .catch(err => console.error("Error sending campaign messages, service level.", err))
   }
 }
 
