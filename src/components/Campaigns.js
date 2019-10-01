@@ -85,7 +85,6 @@ const CampaignManager = props => {
         props.campaignService
           .load()
           .then(results => {
-            console.log(results.data)
             setCampaigns(results.data)
           })
   }
@@ -94,7 +93,6 @@ const CampaignManager = props => {
     
     const postData = { title, message, recipients, customGreeting: greeting, customLink }
     if (newRecipients) postData.recipients = newRecipients;
-    console.log(postData)
 
     await props.campaignService
       .save(postData)
@@ -133,7 +131,6 @@ const CampaignManager = props => {
   }
 
   const handleLoadCampaign = async e => {
-    console.log(e.target.value)
 
     const campaignTitles = []
     campaigns.forEach( campaign => {campaignTitles.push(campaign.title)})
@@ -189,8 +186,6 @@ const CampaignManager = props => {
   const remCampaignUser = id => {
     props.campaignService
       .removeCampaignUser({id})
-        .then(result => console.log(result.data))
-      
   }
 
   const handleRemoveCustomer = async (e, i) => {
@@ -229,7 +224,9 @@ const CampaignManager = props => {
             phone: normalizePhone(recipient.phone)
           }
         }))
-        setRecipients( prevRecipients => [...prevRecipients, ...normalizedJsonObj] )
+        const newRecipients = [...recipients, ...normalizedJsonObj]
+        await setRecipients( prevRecipients => [...prevRecipients, ...normalizedJsonObj] )
+        await saveCampaign(newRecipients)
       })
 
   }
