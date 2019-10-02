@@ -5,6 +5,7 @@ import {slide as Menu} from "react-burger-menu";
 import Spinner from "./spinners/Ripple.js";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
+import Switch from "react-ios-switch";
 
 import Modali, { useModali } from "modali";
 
@@ -175,6 +176,7 @@ const CampaignManager = props => {
   // == SubForm ==
   const [recipients, setRecipients] = useState([])
   const [customer, setCustomer] = useState({userId: {name: "", surname: "", phone: ""}})
+  const [removeSwitch, setRemoveSwitch] = useState(false)
 
   const handleAddCustomer = async e => {
     e.preventDefault();
@@ -466,8 +468,17 @@ const CampaignManager = props => {
                 </div>
               </form>
               <div className="customers-container"> 
-                <div>
-                    <button onClick={() => handleRefresh()} >Refresh</button>
+                <div className="customers-controls">
+                    <button onClick={() => handleRefresh()} >Recargar</button>
+                    <div className="remove-switch">
+                      <Switch 
+                        className = "switch-control"
+                        checked = {removeSwitch}
+                        onChange={checked => setRemoveSwitch(!removeSwitch)}
+                        onColor = "#dc3545"
+                      />
+                      { removeSwitch ? <p> Borrado activado </p> : <p> Borrado inactivo </p>}
+                    </div>
                 </div>
                 <div><p>filter by:</p>
                   <button onClick={() => setFilter("all")}>all</button>
@@ -529,7 +540,13 @@ const CampaignManager = props => {
                                 
                         </p>
                       </div>
-                      <button className="remove-customer" onClick={e => handleRemoveCustomer(e, i)}>-</button>
+                      <button 
+                        className="remove-customer" 
+                        disabled={!removeSwitch}
+                        onClick={e => handleRemoveCustomer(e, i)}
+                      >
+                          -
+                      </button>
                     </li>
                   ))
                   }
