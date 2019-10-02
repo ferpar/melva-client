@@ -5,6 +5,7 @@ import {slide as Menu} from "react-burger-menu";
 import Spinner from "./spinners/Ripple.js";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
+import Switch from "react-ios-switch";
 
 import Modali, { useModali } from "modali";
 
@@ -175,6 +176,7 @@ const CampaignManager = props => {
   // == SubForm ==
   const [recipients, setRecipients] = useState([])
   const [customer, setCustomer] = useState({userId: {name: "", surname: "", phone: ""}})
+  const [removeSwitch, setRemoveSwitch] = useState(false)
 
   const handleAddCustomer = async e => {
     e.preventDefault();
@@ -466,8 +468,16 @@ const CampaignManager = props => {
                 </div>
               </form>
               <div className="customers-container"> 
-                <div>
+                <div className="customers-controls">
                     <button onClick={() => handleRefresh()} >Refresh</button>
+                    <div className="remove-switch">
+                      <Switch 
+                        checked = {removeSwitch}
+                        onChange={checked => setRemoveSwitch(!removeSwitch)}
+                        onColor = "#dc3545"
+                      />
+                      { removeSwitch ? <p> Borrado activado </p> : <p> Borrado desactivado </p>}
+                    </div>
                 </div>
                 <div><p>filter by:</p>
                   <button onClick={() => setFilter("all")}>all</button>

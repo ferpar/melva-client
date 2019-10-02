@@ -45,6 +45,7 @@
     "react-dom": "^16.8.6",
     "react-flatpickr": "^3.9.0",
     "react-hot-loader": "^4.8.4",
+    "react-ios-switch": "^0.1.19",
     "react-phone-number-input": "^2.3.19",
     "react-router-dom": "^5.0.1",
     "react-toastify": "^5.2.1",
