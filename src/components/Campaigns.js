@@ -469,14 +469,15 @@ const CampaignManager = props => {
               </form>
               <div className="customers-container"> 
                 <div className="customers-controls">
-                    <button onClick={() => handleRefresh()} >Refresh</button>
+                    <button onClick={() => handleRefresh()} >Recargar</button>
                     <div className="remove-switch">
                       <Switch 
+                        className = "switch-control"
                         checked = {removeSwitch}
                         onChange={checked => setRemoveSwitch(!removeSwitch)}
                         onColor = "#dc3545"
                       />
-                      { removeSwitch ? <p> Borrado activado </p> : <p> Borrado desactivado </p>}
+                      { removeSwitch ? <p> Borrado activado </p> : <p> Borrado inactivo </p>}
                     </div>
                 </div>
                 <div><p>filter by:</p>

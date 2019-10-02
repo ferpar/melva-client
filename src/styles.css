@@ -868,6 +868,11 @@ Note: Beware of modifying this element as it can break the animations - you shou
 
 .remove-switch > p {
   margin-left: 0.5rem;
+  flex-shrink: 2;
+}
+
+.switch-control {
+  flex-shrink:0;
 }
 
 .customers-list {
