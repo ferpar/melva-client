@@ -540,7 +540,13 @@ const CampaignManager = props => {
                                 
                         </p>
                       </div>
-                      <button className="remove-customer" onClick={e => handleRemoveCustomer(e, i)}>-</button>
+                      <button 
+                        className="remove-customer" 
+                        disabled={!removeSwitch}
+                        onClick={e => handleRemoveCustomer(e, i)}
+                      >
+                          -
+                      </button>
                     </li>
                   ))
                   }
