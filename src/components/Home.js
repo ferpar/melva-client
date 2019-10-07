@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { withRouter, Link } from "react-router-dom";
 import {slide as Menu} from "react-burger-menu";
 
-import capitalize from "../helpers/capitalize.js";
 import logo_rull from "../assets/logo_rull.png";
 
 const Home = ({

@@ -198,7 +198,6 @@ class App extends React.Component {
               .then(result => this.handleLogin(result.data, true, "/appointments") )
               .catch( err => {console.log("nice try ;)"); history.push("/")})
 
-              return (<h1>Test</h1>)
             }
             }
           />
