@@ -12,6 +12,7 @@ import Profile from "./Profile";
 import Book from "./AppointmentsBook";
 import CampaignManager from "./Campaigns.js";
 import ProtectedRoute from "./ProtectedRoute";
+import LinkRedirect from "./LinkRedirect.js";
 
 import Spinner from "./spinners/Ripple.js";
 
@@ -192,13 +193,9 @@ class App extends React.Component {
           />
           <Route
             path="/:linkid"
-            render={ ({match, history}) => {
-             this.authService
-              .linkLogin({linkid: match.params.linkid, secret: "test"})
-              .then(result => this.handleLogin(result.data, true, "/appointments") )
-              .catch( err => {console.log("nice try ;)"); history.push("/")})
-
-            }
+            render={ ({match, history}) => (
+              <LinkRedirect match={match} history={history} authService={this.authService} handleLogin={this.handleLogin}/>
+             )
             }
           />
         </Switch>
