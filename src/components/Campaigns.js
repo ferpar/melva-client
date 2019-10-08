@@ -485,6 +485,7 @@ const CampaignManager = props => {
                   <button onClick={() => setFilter("not-sent")}>not-sent</button>
                   <button onClick={() => setFilter("enqueued")}>enqueued</button>
                   <button onClick={() => setFilter("delivered")}>delivered</button>
+                  <button onClick={() => setFilter("failed")}>failed</button>
                   <button onClick={() => setFilter("clicked")}>clicked on</button>
                   <button onClick={() => setFilter("booked")}>Appointment Booked</button>
                 </div>
@@ -500,6 +501,8 @@ const CampaignManager = props => {
                           return recipient.smsStatus==="enqueued";
                         case "delivered":
                           return recipient.smsStatus==="delivered";
+                        case "failed":
+                          return recipient.smsStatus==="failed";
                         case "clicked":
                           return recipient.linkClicked;
                         case "booked":
@@ -529,7 +532,9 @@ const CampaignManager = props => {
                                   <span style={{color: "blue"}}>E</span> :
                                   (recipient.smsStatus === "delivered" ?
                                     <span style={{color: "green"}}>D</span> :
-                                   <span style={{color: "red"}}>-</span>))}
+                                    (recipient.smsStatus === "failed" ?
+                                    <span style={{color: "red"}}>F</span> :
+                                   <span style={{color: "red"}}>-</span>)))}
                             {" "}
                             {recipient.linkClicked && <span style={{color: "orange"}}>C</span>}
                             {" "}
