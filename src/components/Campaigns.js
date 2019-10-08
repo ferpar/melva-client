@@ -458,6 +458,7 @@ const CampaignManager = props => {
                     Sent: { recipients.filter( recipient => (recipient.smsStatus === "enqueued" || recipient.smsStatus === "delivered")).length},
                     Enqueued: {recipients.filter( recipient => recipient.smsStatus === "enqueued" ).length},
                     Delivered: {recipients.filter( recipient => recipient.smsStatus === "delivered").length}, 
+                    Failed: {recipients.filter( recipient => recipient.smsStatus === "failed").length}, 
                     Clicked on: {recipients.filter( recipient => recipient.linkClicked).length},
                     Booked: {recipients.filter( recipient => recipient.appointmentBooked).length}
                   </p>
