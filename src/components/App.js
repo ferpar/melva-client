@@ -5,6 +5,7 @@ import AuthService from "../services/auth.js";
 import AppointmentService from "../services/appointments.js";
 import CampaignService from "../services/campaigns.js";
 import { Switch, Route, Link, withRouter, Redirect } from "react-router-dom";
+
 import Appointments from "./AppointmentsF";
 import Home from "./Home";
 import UserLogin from "./Login.js";
@@ -13,6 +14,7 @@ import Book from "./AppointmentsBook";
 import CampaignManager from "./Campaigns.js";
 import ProtectedRoute from "./ProtectedRoute";
 import LinkRedirect from "./LinkRedirect.js";
+import Dashboard from "./Dashboard.js";
 
 import Spinner from "./spinners/Ripple.js";
 
@@ -172,6 +174,23 @@ class App extends React.Component {
                 authService = {this.authService}
                 appointmentService = {this.appointmentService}
               />}
+          />
+          <ProtectedRoute 
+            path="/dashboard"
+            user={this.state.user ? this.state.user : null}
+            loggedIn={this.state.loggedIn} 
+            allowedRole={['Admin']}
+            accessLevel={[level[2]]}
+            redirectURL={"/login"}
+            component={ props => 
+              <Dashboard 
+                router={props}
+                user={user}
+                handleLogin = {this.handleLogin}
+                handleLogout = {this.handleLogout}
+                authService = {this.authService}
+              />
+            }
           />
           <ProtectedRoute
             path="/campaigns"
