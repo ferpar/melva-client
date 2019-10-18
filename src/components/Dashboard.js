@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import Spinner from "./spinners/Ripple.js";
 import { slide as Menu } from "react-burger-menu";
 
+import FranchiseForm from "./Dashboard/FranchiseForm.js";
+
 const Dashboard = props => {
   const { franchise } = props.user
   const [isLoading, setIsLoading] = useState(true);
@@ -48,6 +50,7 @@ const Dashboard = props => {
             <div className="franchise-config">
               <p>Empezemos por introducir los datos de tu franquicia</p>
               <button>comenzar</button>
+              <FranchiseForm/>
             </div>
           )
           }</>)
