@@ -32,15 +32,6 @@ const BaseForm = ({
           </div>
 
           <div className="fra-buttons-wrapper">
-            {console.log(errors)}
-            {console.log(touched)}
-            <button
-              className="cancel-button"
- //             onClick={() => setEditMode(false)}
-              type="button"
-            >
-              Cancelar
-            </button>
             <button className="fra-edit-button" disabled={isSubmitting} type="submit">
               Guardar
             </button>
