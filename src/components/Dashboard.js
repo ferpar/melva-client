@@ -9,6 +9,7 @@ import FranchiseForm from "./Dashboard/FranchiseForm.js";
 const Dashboard = props => {
   const { franchise } = props.user
   const [isLoading, setIsLoading] = useState(true);
+  const [isConfiguring, setIsConfiguring] = useState(false);
 
   const [menuOpen, setMenuOpen] = useState(false);
   const handleStateChange = state => {
@@ -48,9 +49,14 @@ const Dashboard = props => {
             </div>
           ) : ( 
             <div className="franchise-config">
-              <p>Empezemos por introducir los datos de tu franquicia</p>
-              <button>comenzar</button>
+            { isConfiguring ? 
               <FranchiseForm/>
+              : (
+                <>
+              <p>Empezemos por introducir los datos de tu franquicia</p>
+              <button onClick={() => setIsConfiguring(true)}>comenzar</button>
+                </>
+              )}
             </div>
           )
           }</>)

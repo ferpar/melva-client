@@ -17,7 +17,7 @@ const BaseForm = ({
     
           <div className="franchise-field-wrapper fra-name">
             <label htmlFor="name">nombre</label>
-            <Field name="name" type="text" />
+            <Field name="name" type="text" placeholder="Ej: Clínicas Isidro" />
             {touched.name && errors.name && (
               <p className="fra-error-msg">{errors.name}</p>  
             )}
@@ -25,7 +25,7 @@ const BaseForm = ({
 
           <div className="franchise-field-wrapper fra-sms-name">
             <label htmlFor="sms">nombre abreviado</label>
-            <Field name="sms" type="text" />
+            <Field name="sms" type="text" placeholder="Ej: Clin.Isidro"/>
             {touched.sms && errors.sms && (
               <p className="fra-error-msg">{errors.sms}</p>
             )}
