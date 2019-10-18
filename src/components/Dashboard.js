@@ -5,6 +5,7 @@ import Spinner from "./spinners/Ripple.js";
 import { slide as Menu } from "react-burger-menu";
 
 const Dashboard = props => {
+  const { franchise } = props.user
   const [isLoading, setIsLoading] = useState(true);
 
   const [menuOpen, setMenuOpen] = useState(false);
@@ -16,6 +17,7 @@ const Dashboard = props => {
   }
   
   useEffect( () => {
+    console.log(props.user)
     setIsLoading(false)
   }, [])
 
@@ -32,19 +34,23 @@ const Dashboard = props => {
             closeMenu()}
           }>Desconectar</button>
       </Menu>
+
       { isLoading ? 
         (
           <div className="appointments-book-main">
             <Spinner />
           </div>
-        ) : (
-          <div className="appointments-book-main">
-            <br/>
-            <br/>
-            <br/>
-            <h1>testing...</h1>
-          </div>
-        )
+        ) : (<>{ franchise ? (
+            <div className="appointments-book-main">
+              <h1>testing...</h1>
+            </div>
+          ) : ( 
+            <div className="franchise-config">
+              <p>Empezemos por introducir los datos de tu franquicia</p>
+              <button>comenzar</button>
+            </div>
+          )
+          }</>)
       }
     </>
     

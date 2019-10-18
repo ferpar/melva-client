@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
+import {slide as Menu} from "react-burger-menu";
+import Modali, { useModali } from "modali";
+
 //All this is for the form component---------------------------------
 import { withFormik, Form, Field } from "formik";
 import * as Yup from "yup";
@@ -10,9 +13,6 @@ import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 import smartInput from "react-phone-number-input/smart-input";
 
-import {slide as Menu} from "react-burger-menu";
-
-import Modali, { useModali } from "modali";
 
 const BaseHome = ({
   values,
