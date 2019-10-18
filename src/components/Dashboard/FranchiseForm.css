@@ -108,6 +108,9 @@
   justify-content: space-around;
 }
 
+/* buttons and error messages could be using the non "fra" classes (@styles.css),
+ * for now they've been separated to make this a standalone component */
+
 .fra-edit-button{
   display: inline-block;
   background-color: var(--primary);
@@ -148,4 +151,12 @@
 .fra-cancel-button:hover {
   background-color: rgba(220, 53, 69, 0.2);
   color: var(--danger);
+}
+
+.fra-error-msg {
+  color: var(--danger);
+  font-size: 0.8rem;
+  text-align: right;
+  margin-top: 0.2rem;
+  max-width: 18rem;
 }
