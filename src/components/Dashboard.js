@@ -50,7 +50,11 @@ const Dashboard = props => {
           ) : ( 
             <div className="franchise-config">
             { isConfiguring ? 
-              <FranchiseForm/>
+              <FranchiseForm
+                user = {props.user}
+                handleLogin = {props.handleLogin}
+                franchiseService = {props.franchiseService}
+              />
               : (
                 <>
               <p>Empezemos por introducir los datos de tu franquicia</p>

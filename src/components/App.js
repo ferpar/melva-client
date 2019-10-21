@@ -4,6 +4,7 @@ import { hot } from "react-hot-loader";
 import AuthService from "../services/auth.js";
 import AppointmentService from "../services/appointments.js";
 import CampaignService from "../services/campaigns.js";
+import FranchiseService from "../services/franchises.js";
 import { Switch, Route, Link, withRouter, Redirect } from "react-router-dom";
 
 import Appointments from "./AppointmentsF";
@@ -34,6 +35,8 @@ class App extends React.Component {
     this.appointmentService = appointmentService;
     let campaignService = new CampaignService();
     this.campaignService = campaignService;
+    let franchiseService = new FranchiseService;
+    this.franchiseService = franchiseService;
 }
 
   handleLogin = (userObj, redirect = false, redirectURL) => {
@@ -189,6 +192,7 @@ class App extends React.Component {
                 handleLogin = {this.handleLogin}
                 handleLogout = {this.handleLogout}
                 authService = {this.authService}
+                franchiseService = {this.franchiseService}
               />
             }
           />

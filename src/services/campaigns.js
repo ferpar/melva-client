@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-class AppointmentService {
+class CampaignService {
   constructor() {
     let service = axios.create({
       baseURL: process.env.API_URL + "/campaigns",
@@ -58,4 +58,4 @@ class AppointmentService {
 }
 
 
-export default AppointmentService;
+export default CampaignService;

@@ -24,10 +24,10 @@ const BaseForm = ({
           </div>
 
           <div className="franchise-field-wrapper fra-sms-name">
-            <label htmlFor="sms">nombre abreviado</label>
-            <Field name="sms" type="text" placeholder="Ej: Clin.Isidro"/>
-            {touched.sms && errors.sms && (
-              <p className="fra-error-msg">{errors.sms}</p>
+            <label htmlFor="smsName">nombre abreviado</label>
+            <Field name="smsName" type="text" placeholder="Ej: Clin.Isidro"/>
+            {touched.smsName && errors.smsName && (
+              <p className="fra-error-msg">{errors.smsName}</p>
             )}
           </div>
 
@@ -46,18 +46,23 @@ const FranchiseForm = withFormik({
   mapPropsToValues() {
     return {
       name: "",
-      sms: ""
+      smsName: ""
     };
   },
   validationSchema: Yup.object().shape({
     name: Yup.string().required("por favor, introduzca nombre de la franquicia"),
-    "sms": Yup.string()
+    "smsName": Yup.string()
       .min(3, "mínimo 3 caracteres")
       .max(11, "máximo 11 caracteres")
-      .required("Este nombre encabeza los SMS/mensajes a pacientes")
+      .required("Este nombre encabeza los SMS/mensajes a pacientes") //if possible: improve this explanation
   }),
-  handleSubmit(values, {props, setSubmitting}) {
-    console.log(values);
+  async handleSubmit(values, {props, setSubmitting}) {
+    const savedFranchise = await props.franchiseService.saveFranchise(values)
+    .catch(err => console.error("[Handler] error saving Franchise data", err));
+    console.log(savedFranchise)
+    try {
+      await props.handleLogin(savedFranchise.data.updatedUser, true, "/dashboard")
+    } catch(err) { console.error("[Handler] error handling re-login", err);}
     setSubmitting(false);
   }
 })(BaseForm);
