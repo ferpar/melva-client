@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import "./Dashboard/Dashboard.css";
 
 import Spinner from "./spinners/Ripple.js";
 import { slide as Menu } from "react-burger-menu";
 
 import FranchiseForm from "./Dashboard/FranchiseForm.js";
 import IntroMsg from "./Dashboard/IntroMsg.js";
+import FranchiseInfo from "./Dashboard/FranchiseInfo.js";
 
 const Dashboard = props => {
   const { franchise } = props.user
@@ -22,9 +24,13 @@ const Dashboard = props => {
   }
 
   const handleIsConfiguring = () => {
-    setIsConfiguring(true)
+    setIsConfiguring(!isConfiguring)
   }
   
+  const handleIsEditing = () => {
+    setIsEditing(!isEditing)
+  }
+
   useEffect( () => {
     console.log(props.user)
     setIsLoading(false)
@@ -46,20 +52,27 @@ const Dashboard = props => {
 
       { isLoading ? 
         (
-          <div className="appointments-book-main">
+          <div className="franchise-container">
             <Spinner />
           </div>
         ) : (<>{ franchise ? (
-            <div className="appointments-book-main">
+            <div className="franchise-container">
             { isEditing ? (
-              <h1>EditFranchiseForm...</h1>
+              <FranchiseForm
+                user={props.user}
+                handleLogin={props.handleLogin}
+                franchiseService={props.franchiseService}
+              />
             ) : (
-              <h1>DisplayFranchiseInfo...</h1>
+              <FranchiseInfo
+                franchise={franchise}
+                handleIsEditing={handleIsEditing}
+              />
             )
             }
             </div>
           ) : ( 
-            <div className="franchise-config">
+            <div className="franchise-container">
             { isConfiguring ? 
               <FranchiseForm
                 user = {props.user}

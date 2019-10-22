@@ -22,5 +22,14 @@
 --primary :#007bff;
 }
 
+/* Dashboard css */
+
+.franchise-container {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  align-items: center;
+  margin-top: 3rem;
+} 
 
 
