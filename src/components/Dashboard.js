@@ -11,6 +11,7 @@ const Dashboard = props => {
   const { franchise } = props.user
   const [isLoading, setIsLoading] = useState(true);
   const [isConfiguring, setIsConfiguring] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   const [menuOpen, setMenuOpen] = useState(false);
   const handleStateChange = state => {
@@ -50,7 +51,12 @@ const Dashboard = props => {
           </div>
         ) : (<>{ franchise ? (
             <div className="appointments-book-main">
-              <h1>testing...</h1>
+            { isEditing ? (
+              <h1>EditFranchiseForm...</h1>
+            ) : (
+              <h1>DisplayFranchiseInfo...</h1>
+            )
+            }
             </div>
           ) : ( 
             <div className="franchise-config">
