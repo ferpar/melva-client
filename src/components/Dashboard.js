@@ -5,6 +5,7 @@ import Spinner from "./spinners/Ripple.js";
 import { slide as Menu } from "react-burger-menu";
 
 import FranchiseForm from "./Dashboard/FranchiseForm.js";
+import IntroMsg from "./Dashboard/IntroMsg.js";
 
 const Dashboard = props => {
   const { franchise } = props.user
@@ -17,6 +18,10 @@ const Dashboard = props => {
   }
   const closeMenu = () => {
     setMenuOpen(false)
+  }
+
+  const handleIsConfiguring = () => {
+    setIsConfiguring(true)
   }
   
   useEffect( () => {
@@ -56,10 +61,7 @@ const Dashboard = props => {
                 franchiseService = {props.franchiseService}
               />
               : (
-                <>
-              <p>Empezemos por introducir los datos de tu franquicia</p>
-              <button onClick={() => setIsConfiguring(true)}>comenzar</button>
-                </>
+                <IntroMsg handleIsConfiguring={handleIsConfiguring}/>
               )}
             </div>
           )

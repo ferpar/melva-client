@@ -80,13 +80,13 @@ class App extends React.Component {
       });
   };
 
-  componentDidMount() {
-    this.getLoggedIn();
+  async componentDidMount() {
+    await this.getLoggedIn();
   }
 
-  componentDidUpdate() {
+  async componentDidUpdate() {
     if(this.state.isLoading) {
-      this.getLoggedIn()
+      await this.getLoggedIn()
     }
   }
 
