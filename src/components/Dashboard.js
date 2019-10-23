@@ -72,7 +72,9 @@ const Dashboard = props => {
                 franchise={franchise}
                 handleIsEditing={handleIsEditing}
               />
-              <Locations/> 
+              <Locations
+                franchise={franchise}
+              /> 
               </>
             )
             }

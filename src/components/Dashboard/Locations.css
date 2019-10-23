@@ -77,3 +77,8 @@
   background-color: rgba(0, 123, 255, 0.2);
   color: var(--primary);
 }
+
+.locations-separator {
+  border: 1px solid black;
+  width: 100%;
+}
