@@ -323,6 +323,7 @@ const CampaignManager = props => {
         onStateChange={(state) => handleStateChange(state)}
       >
           <Link onClick={() => closeMenu()} to="/appointments-book">Citas Pendientes</Link>
+          <Link onClick={() => closeMenu()} to="/dashboard">Panel de Control</Link>
           <button onClick={ async () => {
             await props.handleLogout() //this is important to avoid race between handleLogout and closeMenu
             closeMenu()}
