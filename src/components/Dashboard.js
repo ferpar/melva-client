@@ -8,6 +8,7 @@ import { slide as Menu } from "react-burger-menu";
 import FranchiseForm from "./Dashboard/FranchiseForm.js";
 import IntroMsg from "./Dashboard/IntroMsg.js";
 import FranchiseInfo from "./Dashboard/FranchiseInfo.js";
+import Locations from "./Dashboard/Locations.js";
 
 const Dashboard = props => {
   const { franchise } = props.user
@@ -66,10 +67,13 @@ const Dashboard = props => {
                 handleIsConfiguring={handleIsConfiguring}
               />
             ) : (
+              <>
               <FranchiseInfo
                 franchise={franchise}
                 handleIsEditing={handleIsEditing}
               />
+              <Locations/> 
+              </>
             )
             }
             </div>
