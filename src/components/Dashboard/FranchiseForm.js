@@ -8,7 +8,9 @@ const BaseForm = ({
   values,
   errors,
   touched,
-  isSubmitting
+  isSubmitting,
+  handleIsEditing,
+  handleIsConfiguring
 }) => (
   <div className="franchise-form-container">
     <div className="franchise-form-wrapper">
@@ -32,7 +34,18 @@ const BaseForm = ({
           </div>
 
           <div className="fra-buttons-wrapper">
-            <button className="fra-edit-button" disabled={isSubmitting} type="submit">
+            <button
+              className="cancel-button"
+              onClick={async () => {await handleIsEditing(); await handleIsConfiguring()}}
+              type="button"
+            >
+            Cancelar
+            </button>
+            <button 
+              className="fra-edit-button" 
+              disabled={isSubmitting} 
+              type="submit"
+            >
               Guardar
             </button>
           </div>
@@ -43,11 +56,18 @@ const BaseForm = ({
 )
 
 const FranchiseForm = withFormik({
-  mapPropsToValues() {
+  mapPropsToValues({user}) {
+    if (user.franchise) {
+    return {
+      name: user.franchise.name,
+      smsName: user.franchise.smsName
+    };
+    } else {
     return {
       name: "",
       smsName: ""
-    };
+    }
+    }
   },
   validationSchema: Yup.object().shape({
     name: Yup.string().required("por favor, introduzca nombre de la franquicia"),

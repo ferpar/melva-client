@@ -62,6 +62,8 @@ const Dashboard = props => {
                 user={props.user}
                 handleLogin={props.handleLogin}
                 franchiseService={props.franchiseService}
+                handleIsEditing={handleIsEditing}
+                handleIsConfiguring={handleIsConfiguring}
               />
             ) : (
               <FranchiseInfo
@@ -78,6 +80,8 @@ const Dashboard = props => {
                 user = {props.user}
                 handleLogin = {props.handleLogin}
                 franchiseService = {props.franchiseService}
+                handleIsEditing={handleIsEditing}
+                handleIsConfiguring={handleIsConfiguring}
               />
               : (
                 <IntroMsg handleIsConfiguring={handleIsConfiguring}/>
