@@ -68,17 +68,21 @@
   display: grid;
   grid-template-areas:
     "loc-name"
-    "loc-sms-name"
+    "loc-address"
+    "loc-phone"
+    "loc-email"
+    "loc-url"
     "button"
     ;
   grid-gap: 0.5rem;
 }
 
-@media(min-width: 500px){
+@media(min-width: 710px){
   .locations-form{
     grid-template-areas:
-      "loc-name loc-sms-name"
-      " .    button";
+      "loc-name loc-address"
+      "loc-phone loc-email"
+      "loc-url button";
     }
 }
 
@@ -87,8 +91,23 @@
   max-width: 60vw;
 }
 
-.loc-sms-name {
-  grid-area: loc-sms-name;
+.loc-address {
+  grid-area: loc-address;
+  max-width: 60vw;
+}
+
+.loc-phone {
+  grid-area: loc-phone;
+  max-width: 60vw;
+}
+
+.loc-email {
+  grid-area: loc-email;
+  max-width: 60vw;
+}
+
+.loc-url {
+  grid-area: loc-url;
   max-width: 60vw;
 }
 

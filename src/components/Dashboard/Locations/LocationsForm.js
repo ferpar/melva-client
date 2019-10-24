@@ -4,6 +4,10 @@ import "./LocationsForm.css";
 import { withFormik, Form, Field } from "formik";
 import * as Yup from "yup";
 
+import "react-phone-number-input/style.css";
+import PhoneInput from "react-phone-number-input";
+import smartInput from "react-phone-number-input/smart-input";
+
 const BaseForm = ({
   values,
   errors,
@@ -15,17 +19,61 @@ const BaseForm = ({
     
           <div className="locations-field-wrapper loc-name">
             <label htmlFor="name">nombre</label>
-            <Field name="name" type="text" placeholder="Ej: Clínicas Isidro" />
+            <Field name="name" type="text" placeholder="Ej: Sevilla-1" />
             {touched.name && errors.name && (
               <p className="loc-error-msg">{errors.name}</p>  
             )}
           </div>
 
-          <div className="locations-field-wrapper loc-sms-name">
-            <label htmlFor="smsName">nombre abreviado</label>
-            <Field name="smsName" type="text" placeholder="Ej: Clin.Isidro"/>
-            {touched.smsName && errors.smsName && (
-              <p className="loc-error-msg">{errors.smsName}</p>
+          <div className="locations-field-wrapper loc-address">
+            <label htmlFor="address">dirección</label>
+            <Field name="address" type="text" placeholder="Ej: Av. San Fco Javier 4"/>
+            {touched.address && errors.address && (
+              <p className="loc-error-msg">{errors.address}</p>
+            )}
+          </div>
+
+          <div className="field-wrapper loc-phone">
+            <label htmlFor="phone">teléfono</label>
+            <Field
+              name="phone"
+              render={({
+                field,
+                form: { touched, errors, setFieldValue },
+                ...props
+              }) => (
+                <PhoneInput
+                  className="phone-input"
+                  name="phone"
+                  country="ES"
+                  inputComponent={smartInput} //using smart input to prevent the caret from moving to the end
+                  {...field}
+                  {...props}
+                  onBlur={e => {}}
+                  onChange={value => {
+                    setFieldValue("phone", value);
+                  }}
+                />
+              )}
+            />
+            {touched.phone && errors.phone && (
+              <p className="error-msg">{errors.phone}</p>
+            )}
+          </div>
+
+          <div className="locations-field-wrapper loc-email">
+            <label htmlFor="email">email</label>
+            <Field name="email" type="text" placeholder="Ej: sevilla1@clinica.es"/>
+            {touched.email && errors.email && (
+              <p className="loc-error-msg">{errors.email}</p>
+            )}
+          </div>
+
+          <div className="locations-field-wrapper loc-url">
+            <label htmlFor="url">dirección web</label>
+            <Field name="url" type="text" placeholder="Ej: www.clinica.es"/>
+            {touched.url && errors.url && (
+              <p className="loc-error-msg">{errors.url}</p>
             )}
           </div>
 
@@ -47,18 +95,21 @@ const LocationsForm = withFormik({
   mapPropsToValues({user}) {
     return {
       name: "",
-      smsName: ""
+      address: "",
+      phone: "",
+      email: "",
+      url: ""
     }
   },
   validationSchema: Yup.object().shape({
-    name: Yup.string().required("por favor, introduzca nombre de la franquicia"),
-    "smsName": Yup.string()
-      .min(3, "mínimo 3 caracteres")
-      .max(11, "máximo 11 caracteres")
-      .required("Este nombre encabeza los SMS/mensajes a pacientes") //if possible: improve this explanation
+    name: Yup.string().required("introduzca el nombre de la clínica"),
+    address: Yup.string().required("introduzca dirección de la clínica"),
+    phone: Yup.string(),
+    email: Yup.string(),
+    url: Yup.string()
   }),
   async handleSubmit(values, {props, setSubmitting}) {
-    console.log("form under construction")
+    console.log(values)
   //  const savedFranchise = await props.franchiseService.saveFranchise(values)
   //  .catch(err => console.error("[Handler] error saving Franchise data", err));
   //  console.log(savedFranchise)
