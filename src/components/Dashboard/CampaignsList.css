@@ -71,6 +71,8 @@
   letter-spacing: 1px;
   margin-bottom: 0.25rem;
   max-width: 8rem;
+  text-decoration: none;
+  text-align: center;
 }
 
 .camplist-button:hover {
