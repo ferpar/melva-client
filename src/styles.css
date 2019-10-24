@@ -777,6 +777,11 @@ Note: Beware of modifying this element as it can break the animations - you shou
  padding: 1rem 2rem;
 }
 
+.camp-management-separator {
+  border: 1px solid black;
+  width: 100%;
+}
+
 .recipients-list{
   grid-area: list;
  display: flex;

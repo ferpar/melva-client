@@ -36,6 +36,19 @@ const CampaignManager = props => {
 
   const [campaigns, setCampaigns] = useState([])
 
+  const [locations, setLocations] = 
+    props.user.franchise 
+    ? useState(props.user.franchise.locations) 
+    : useState([])
+
+  const [location, setLocation] = useState("")
+
+  const handleSetLocation = e => {
+    setLocation(e.target.value)
+    console.log(e.target.value)
+    console.log(location)
+  }
+
   const handleMsgChange = e => {
     setMessage(e.target.value);
   }
@@ -409,6 +422,14 @@ const CampaignManager = props => {
             </form>
           </div>
           <div className="campaign-management">
+              <label htmlFor="location-select">clínica</label>
+              <select onChange={e => handleSetLocation(e)} id="location-select" name="location-select">
+                <option value="">seleccionar clínica</option>
+                {locations.map( (location, ind) => (
+                  <option key={ind} value={location.id}>{location.name}</option>
+                ))}
+              </select>
+              <hr className="camp-management-separator"/>
               <div className="campaign-name">
                 <label htmlFor="title">nombre de campaña</label>
                 <input name="title" id="title" type="text" value={title} onChange={(e) => setTitle(e.target.value)}/>
