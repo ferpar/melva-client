@@ -9,6 +9,7 @@ import FranchiseForm from "./Dashboard/FranchiseForm.js";
 import IntroMsg from "./Dashboard/IntroMsg.js";
 import FranchiseInfo from "./Dashboard/FranchiseInfo.js";
 import Locations from "./Dashboard/Locations.js";
+import CampaignsList from "./Dashboard/CampaignsList.js";
 
 const Dashboard = props => {
   const { franchise } = props.user
@@ -76,6 +77,9 @@ const Dashboard = props => {
                 franchise={franchise}
                 franchiseService={props.franchiseService}
               /> 
+              <CampaignsList
+                franchise={franchise}
+              />
               </>
             )
             }

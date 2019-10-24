@@ -119,12 +119,14 @@ const LocationsForm = withFormik({
   async handleSubmit(values, {props, setSubmitting}) {
     console.log(values)
     console.log(props.franchiseService)
-  //  const savedFranchise = await props.franchiseService.saveFranchise(values)
-  //  .catch(err => console.error("[Handler] error saving Franchise data", err));
-  //  console.log(savedFranchise)
-  //  try {
-  //    await props.handleLogin(savedFranchise.data.updatedUser, true, "/dashboard")
-  //  } catch(err) { console.error("[Handler] error handling re-login", err);}
+    const savedLocation = await props.franchiseService.saveLocation(values)
+    .catch(err => console.error("[Handler] HandleSubmit: error saving location data", err))
+    console.log(savedLocation)
+    try {
+      await props.handleAddLocation(savedLocation.data.savedLocation)
+    } catch (err) {
+      console.error("[Handler] HanldeAddLocation: error adding the new location to the local state", err)
+    }
     setSubmitting(false);
   }
 })(BaseForm);
