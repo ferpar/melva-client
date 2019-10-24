@@ -35,7 +35,7 @@ const BaseForm = ({
 
           <div className="fra-buttons-wrapper">
             <button
-              className="cancel-button"
+              className="fra-cancel-button"
               onClick={async () => {await handleIsEditing(); await handleIsConfiguring()}}
               type="button"
             >

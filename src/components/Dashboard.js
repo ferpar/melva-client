@@ -74,6 +74,7 @@ const Dashboard = props => {
               />
               <Locations
                 franchise={franchise}
+                franchiseService={props.franchiseService}
               /> 
               </>
             )

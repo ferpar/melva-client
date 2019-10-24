@@ -17,6 +17,11 @@ class FranchiseService {
     return this.service.post("/franchise-save", values)
           .catch( err => console.error("[FE-Service] Error saving franchise"))
   }
+
+  saveLocation = values => {
+    return this.service.post("/location-save", values)
+          .catch( err => console.error("[FE-Service] Error saving location"))
+  }
 }
 
 export default FranchiseService;

@@ -13,6 +13,7 @@ const BaseForm = ({
   errors,
   touched,
   isSubmitting,
+  handleIsFormOpen
 }) => (
   <div className="locations-form-container">
       <Form className="locations-form">
@@ -78,6 +79,13 @@ const BaseForm = ({
           </div>
 
           <div className="loc-buttons-wrapper">
+            <button
+              className="loc-cancel-button"
+              onClick={async () => {await handleIsFormOpen();}}
+              type="button"
+            >
+            Cancelar
+            </button>
             <button 
               className="loc-edit-button" 
               disabled={isSubmitting} 
@@ -110,13 +118,14 @@ const LocationsForm = withFormik({
   }),
   async handleSubmit(values, {props, setSubmitting}) {
     console.log(values)
+    console.log(props.franchiseService)
   //  const savedFranchise = await props.franchiseService.saveFranchise(values)
   //  .catch(err => console.error("[Handler] error saving Franchise data", err));
   //  console.log(savedFranchise)
   //  try {
   //    await props.handleLogin(savedFranchise.data.updatedUser, true, "/dashboard")
   //  } catch(err) { console.error("[Handler] error handling re-login", err);}
-  //  setSubmitting(false);
+    setSubmitting(false);
   }
 })(BaseForm);
 
