@@ -425,21 +425,40 @@ const CampaignManager = props => {
                 ))}
               </select>
               <hr className="camp-management-separator"/>
-              <div className="campaign-name">
-                <label htmlFor="title">nombre de campaña</label>
-                <input name="title" id="title" type="text" value={title} onChange={(e) => setTitle(e.target.value)}/>
-              </div>
-              <button disabled={isSaving} className="save cp-button" onClick={e => handleSaveCampaign(e)}>{isSaving ? "Guardando..." : "Guardar Campaña"}</button>
-              <hr/>
-              <label htmlFor="campaign-select">cargar campaña</label>
-              <select onChange={e => handleLoadCampaign(e)} id="campaign-select" name="campaign-select">
-                <option value="">seleccionar campaña</option>
-                {campaigns.map( (campaign, ind) => (
-                  <option key={ind} value={campaign._id}>{campaign.title}</option> //its picking the title as value instead of the id because it should be _id !!
-                ))}
-              </select>
-              <hr/>
-              <button className="delete cs-button" onClick={e => handleDelete(e)} >Borrar Campaña</button>
+              { location ? (
+                <>
+                  <div className="campaign-name">
+                    <label htmlFor="title">nombre de campaña</label>
+                    <input name="title" id="title" type="text" value={title} onChange={(e) => setTitle(e.target.value)}/>
+                  </div>
+                  <button disabled={isSaving} className="save cp-button" onClick={e => handleSaveCampaign(e)}>{isSaving ? "Guardando..." : "Guardar Campaña"}</button>
+                  <hr/>
+                  <label htmlFor="campaign-select">cargar campaña</label>
+                  <select onChange={e => handleLoadCampaign(e)} id="campaign-select" name="campaign-select">
+                    <option value="">seleccionar campaña</option>
+                    {campaigns.map( (campaign, ind) => (
+                      <option key={ind} value={campaign._id}>{campaign.title}</option> //its picking the title as value instead of the id because it should be _id !!
+                    ))}
+                  </select>
+                  <hr/>
+                  <button className="delete cs-button" onClick={e => handleDelete(e)} >Borrar Campaña</button>
+                </>
+              ) : (
+                <>
+                  <p> Elige una clínica para continuar </p> 
+                  <br/>
+                  <br/>
+                  <br/>
+                  <br/>
+                  <br/>
+                  <br/>
+                  <br/>
+                  <br/>
+                  <br/>
+                  <br/>
+                </>
+              )
+              }
           </div>
           <div className="recipients-list">
             <div className="list-container">
