@@ -106,7 +106,7 @@ const CampaignManager = props => {
 
   const saveCampaign = async ( newRecipients) => {
     
-    const postData = { title, message, recipients, customGreeting: greeting, customLink }
+    const postData = { title, message, recipients, customGreeting: greeting, customLink, location }
     if (newRecipients) postData.recipients = newRecipients;
 
     await props.campaignService
