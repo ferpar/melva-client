@@ -34,7 +34,7 @@ class CampaignService {
   getById = id => {
     return this.service.get("/get-by-id/" + id)
       .then(result => result)
-      .catch(err => console.error("Error retrieving campaign buy id", err))
+      .catch(err => console.error("Error retrieving campaign by id", err))
   }
 
   removeCampaignUser = values => {

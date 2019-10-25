@@ -35,6 +35,7 @@ const CampaignManager = props => {
   const [customLink, setCustomLink] = useState(false)
 
   const [campaigns, setCampaigns] = useState([])
+  const [selectedCampaignId, setSelectedCampaignId] = useState("")
 
   const [locations, setLocations] = 
     props.user.franchise 
@@ -126,10 +127,10 @@ const CampaignManager = props => {
     }
   }
 
-  const loadCampaign = async (loadTitle) => {
-    if (loadTitle) { 
+  const loadCampaign = async (campaignId) => {
+    if (campaignId) { 
       await props.campaignService
-        .getByTitle(loadTitle)
+        .getById(campaignId)
           .then(async result => {
             const {title, message, customGreeting, customLink, campaignUsers} = result.data;
 
@@ -139,21 +140,16 @@ const CampaignManager = props => {
             await setCustomLink(customLink)
             await setRecipients(campaignUsers)
           })
-    } else {
-      console.log("inadequate campaign title")
-    }
+    } 
   }
 
   const handleLoadCampaign = async e => {
+    const campaignId = e.target.value;
 
-    const campaignTitles = []
-    campaigns.forEach( campaign => {campaignTitles.push(campaign.title)})
-
-    if (campaignTitles.includes(e.target.value)) {
-      await loadCampaign(e.target.value) 
-    } else {
-      await loadCampaign(undefined)
+    if (campaignId) {
+      await loadCampaign(campaignId)
     }
+    setSelectedCampaignId(campaignId)
   }
 
   const deleteCampaign = async () => {
@@ -175,9 +171,8 @@ const CampaignManager = props => {
   }
 
   const refreshCampaigns = async () => {
-    const actualCampaign = title;
     await loadCampaigns()
-    await loadCampaign(title)
+    await loadCampaign(selectedCampaignId)
   }
 
   const handleRefresh = async () => {
@@ -426,7 +421,7 @@ const CampaignManager = props => {
               <select onChange={e => handleSetLocation(e)} id="location-select" name="location-select">
                 <option value="">seleccionar clínica</option>
                 {locations.map( (location, ind) => (
-                  <option key={ind} value={location.id}>{location.name}</option>
+                  <option key={ind} value={location._id}>{location.name}</option>
                 ))}
               </select>
               <hr className="camp-management-separator"/>
@@ -440,7 +435,7 @@ const CampaignManager = props => {
               <select onChange={e => handleLoadCampaign(e)} id="campaign-select" name="campaign-select">
                 <option value="">seleccionar campaña</option>
                 {campaigns.map( (campaign, ind) => (
-                  <option key={ind} value={campaign.id}>{campaign.title}</option>
+                  <option key={ind} value={campaign._id}>{campaign.title}</option> //its picking the title as value instead of the id because it should be _id !!
                 ))}
               </select>
               <hr/>
