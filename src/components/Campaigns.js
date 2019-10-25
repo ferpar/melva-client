@@ -35,6 +35,7 @@ const CampaignManager = props => {
   const [customLink, setCustomLink] = useState(false)
 
   const [campaigns, setCampaigns] = useState([])
+  const [filteredCampaigns, setFilteredCampaigns] = useState([])
   const [selectedCampaignId, setSelectedCampaignId] = useState("")
 
   const [locations, setLocations] = 
@@ -45,9 +46,11 @@ const CampaignManager = props => {
   const [location, setLocation] = useState("")
 
   const handleSetLocation = e => {
-    setLocation(e.target.value)
-    console.log(e.target.value)
-    console.log(location)
+    const selectedLocationId = e.target.value
+    setLocation(selectedLocationId)
+    setFilteredCampaigns(campaigns.filter( campaign => {
+      return campaign.location === selectedLocationId
+    }))
   }
 
   const handleMsgChange = e => {
@@ -436,7 +439,7 @@ const CampaignManager = props => {
                   <label htmlFor="campaign-select">cargar campaña</label>
                   <select onChange={e => handleLoadCampaign(e)} id="campaign-select" name="campaign-select">
                     <option value="">seleccionar campaña</option>
-                    {campaigns.map( (campaign, ind) => (
+                    {filteredCampaigns.map( (campaign, ind) => (
                       <option key={ind} value={campaign._id}>{campaign.title}</option> //its picking the title as value instead of the id because it should be _id !!
                     ))}
                   </select>
