@@ -16,6 +16,7 @@ import CampaignManager from "./Campaigns.js";
 import ProtectedRoute from "./ProtectedRoute";
 import LinkRedirect from "./LinkRedirect.js";
 import Dashboard from "./Dashboard.js";
+import AppointmentManager from "./AppointmentManager.js";
 
 import Spinner from "./spinners/Ripple.js";
 
@@ -177,6 +178,25 @@ class App extends React.Component {
                 authService = {this.authService}
                 appointmentService = {this.appointmentService}
               />}
+          />
+          <ProtectedRoute 
+            path="/appointments-manager"
+            user={this.state.user ? this.state.user : null}
+            loggedIn={this.state.loggedIn} 
+            allowedRole={['Admin']}
+            accessLevel={[level[1], level[2]]}
+            redirectURL={"/login"}
+            component={ props => 
+              <AppointmentManager 
+                router={props}
+                user={user}
+                handleLogin = {this.handleLogin}
+                handleLogout = {this.handleLogout}
+                authService = {this.authService}
+                appointmentService = {this.appointmentService}
+                franchiseService = {this.franchiseService}
+              />
+            }
           />
           <ProtectedRoute 
             path="/dashboard"
