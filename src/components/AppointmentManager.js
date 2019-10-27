@@ -20,7 +20,9 @@ const AppointmentManager = props => {
   const handleSetLocation = e => {
     const selectedLocation = e.target.value
     setLocation(selectedLocation)
-    setFilteredCampaigns(campaigns.filter( campaign => {return campaign.location === selectedLocation}))
+    setFilteredCampaigns(campaigns.filter( campaign => {
+      return campaign.location === selectedLocation
+    }))
   }
 
   const handleSetCampaign = e => {
@@ -67,6 +69,7 @@ const AppointmentManager = props => {
         <Scheduler
           location={location}
           campaign={campaign}
+          appointmentService={props.appointmentService}
         />
         <Calendar/>
       </div>
