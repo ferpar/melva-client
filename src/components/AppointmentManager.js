@@ -69,6 +69,7 @@ const AppointmentManager = props => {
         <Scheduler
           location={location}
           campaign={campaign}
+          franchise={franchise}
           appointmentService={props.appointmentService}
         />
         <Calendar/>

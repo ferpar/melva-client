@@ -14,13 +14,18 @@ const Scheduler = props => {
     <div className="scheduler-container">
       <div className="scheduler-wrapper">
         <h1>Scheduler</h1>
-        { addSingle ? (
+        { props.campaign ? (addSingle ? (
           <AddSingleForm
             handleSetAddSingle={handleSetAddSingle}
             appointmentService={props.appointmentService}
+            location={props.location}
+            campaign={props.campaign}
+            franchise={props.franchise}
           />
         ) : (
           <button onClick={handleSetAddSingle}> Nueva cita </button>
+        )) : (
+          <p>Seleccione clínica y campaña</p>
         )
         }
       </div>
