@@ -42,10 +42,11 @@ const AppointmentManager = props => {
       console.log(appointments.data)
       const eventsToLoad = appointments.data.map( (appointment,ind) => {
         const {time, duration} = appointment
+        const { title } = appointment.campaign
         return {
           start: new Date(moment.tz(time, "Europe/Madrid")),
           end: new Date(moment.tz(time, "Europe/Madrid").add(duration, 'm')),
-          title: "test " + ind
+          title: title
         }
       })
       console.log(eventsToLoad)
