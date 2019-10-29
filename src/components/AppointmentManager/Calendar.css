@@ -29,6 +29,10 @@
   padding-top: 3rem;
 }
 
+.rbc-month-view{
+  max-height: 90%;
+}
+
 .calendar-wrapper{
   align-items: center;
   display: flex;

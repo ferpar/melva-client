@@ -43,6 +43,11 @@ class AppointmentService {
       .catch(err => console.error("Error retrieving pending appointments", err))
   }
 
+  getCampaignAppointments = values => {
+    return this.service.post("/campaign-appointments", values )
+      .catch(err => console.error("[Service] Error retrieving appointments for selected campaign", err))
+  }
+
   sendCampaign = (values) => {
    return this.service.post("/test-multimsg", values) 
     .catch(err => console.error("Error sending campaign messages, service level.", err))

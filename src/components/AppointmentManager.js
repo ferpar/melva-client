@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import moment from "moment-timezone";
 import { Link } from "react-router-dom";
 import "./AppointmentManager/Appointmentmanager.css";
 
@@ -6,17 +7,21 @@ import { slide as Menu } from "react-burger-menu";
 
 import CampaignSelect from "./AppointmentManager/CampaignSelect.js";
 import Scheduler from "./AppointmentManager/Scheduler.js";
-import Calendar from "./AppointmentManager/Calendar.js";
+import MyCalendar from "./AppointmentManager/Calendar.js";
 
 const AppointmentManager = props => {
 
   const franchise = props.user.franchise;
   const { campaigns } = props.user.franchise;
 
+  //----local State
   const [location, setLocation] = useState("")
   const [campaign, setCampaign] = useState("")
   const [filteredCampaigns, setFilteredCampaigns] = useState([])
-
+  const [events, setEvents] = useState([])
+  //--------------
+  
+  //----Hanlders
   const handleSetLocation = e => {
     const selectedLocation = e.target.value
     setLocation(selectedLocation)
@@ -30,6 +35,27 @@ const AppointmentManager = props => {
     setCampaign(selectedCampaign)
   }
 
+  const handleAppointments = async () => {
+    if (campaign) {
+      console.log(campaign)
+      const appointments = await props.appointmentService.getCampaignAppointments({campaign})
+      console.log(appointments.data)
+      const eventsToLoad = appointments.data.map( (appointment,ind) => {
+        const {time, duration} = appointment
+        return {
+          start: new Date(moment.tz(time, "Europe/Madrid")),
+          end: new Date(moment.tz(time, "Europe/Madrid").add(duration, 'm')),
+          title: "test " + ind
+        }
+      })
+      console.log(eventsToLoad)
+      setEvents(eventsToLoad)
+    } else {
+      console.log("no campaign selected")
+    }
+  }
+  //------------
+
   //---Menu
   const [menuOpen, setMenuOpen] = useState(false);
   const handleStateChange = state => {
@@ -39,6 +65,19 @@ const AppointmentManager = props => {
     setMenuOpen(false);
   };
   //-------
+  
+  //---LifeCycle
+  useEffect( () => {
+    async function fetchAppointments() {
+        return await handleAppointments()
+    }
+    let isSubscribed = true;
+    if (isSubscribed) {
+      fetchAppointments();
+    }
+    return () => isSubscribed = false;
+  }, [campaign])
+  //------------
 
   return (
     <>
@@ -72,7 +111,10 @@ const AppointmentManager = props => {
           franchise={franchise}
           appointmentService={props.appointmentService}
         />
-        <Calendar/>
+        <MyCalendar
+          campaign={campaign}
+          events={events}
+        />
       </div>
     </>
   );
