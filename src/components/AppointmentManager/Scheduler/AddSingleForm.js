@@ -50,11 +50,6 @@ const AddSingleForm = props => {
               minDate: new Date( new Date().setDate( new Date().getDate() + 1)),
               altInput: true,
               altFormat: "F j, Y, H:i",
-              disable: [
-                function(date) {
-                  return (date.getDay() === 0 || date.getDay() === 1 || date.getDay() === 6);
-                }
-              ]
             }}
             className="add-single-flatpickr"
             placeholder="pulse aquí..."
