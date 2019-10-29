@@ -24,6 +24,7 @@ const MyCalendar = props => {
       <div className="calendar-wrapper">
         <h1>Calendar</h1>
         <Calendar
+          culture={"es"}
           localizer={localizer}
           events={props.events}
           startAccessor="start"
