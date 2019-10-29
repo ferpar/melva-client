@@ -110,6 +110,7 @@ const AppointmentManager = props => {
           campaign={campaign}
           franchise={franchise}
           appointmentService={props.appointmentService}
+          handleAppointments={handleAppointments}
         />
         <MyCalendar
           campaign={campaign}

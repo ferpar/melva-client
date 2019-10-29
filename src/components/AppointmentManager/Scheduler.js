@@ -21,6 +21,7 @@ const Scheduler = props => {
             location={props.location}
             campaign={props.campaign}
             franchise={props.franchise}
+            handleAppointments={props.handleAppointments}
           />
         ) : (
           <button onClick={handleSetAddSingle}> Nueva cita </button>
