@@ -45,7 +45,8 @@ const Dashboard = props => {
         onStateChange={(state) => handleStateChange(state)}
       >
           <Link onClick={() => closeMenu()} to="/appointments-book">Citas Pendientes</Link>
-          <Link onClick={() => closeMenu()} to="/campaigns">Gestor de campañas</Link>
+          <Link onClick={() => closeMenu()} to="/appointments-manager">Gestor de Citas</Link>
+          <Link onClick={() => closeMenu()} to="/campaigns">Gestor de Campañas</Link>
           <button onClick={ async () => {
             await props.handleLogout() //this is important to avoid race between handleLogout and closeMenu
             closeMenu()}

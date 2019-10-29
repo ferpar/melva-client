@@ -86,7 +86,10 @@ const AppointmentManager = props => {
           Citas Pendientes
         </Link>
         <Link onClick={() => closeMenu()} to="/campaigns">
-          Gestor de campañas
+          Gestor de Campañas
+        </Link>
+        <Link onClick={() => closeMenu()} to="/dashboard">
+          Panel de Control
         </Link>
         <button
           onClick={async () => {

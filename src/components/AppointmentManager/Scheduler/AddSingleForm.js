@@ -28,8 +28,6 @@ const AddSingleForm = props => {
     try {
       if (props.campaign) {
       const sentAppointments = await props.appointmentService.create(appointments)
-      console.log(sentAppointments)
-      console.log(appointments)
       await props.handleAppointments()
       } else {
       console.log("must select a campaign first")
