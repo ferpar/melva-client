@@ -70,17 +70,23 @@ const Dashboard = props => {
               />
             ) : (
               <>
-              <FranchiseInfo
-                franchise={franchise}
-                handleIsEditing={handleIsEditing}
-              />
-              <Locations
-                franchise={franchise}
-                franchiseService={props.franchiseService}
-              /> 
-              <CampaignsList
-                franchise={franchise}
-              />
+              <div className="franchise-info">
+                <FranchiseInfo
+                  franchise={franchise}
+                  handleIsEditing={handleIsEditing}
+                />
+              </div>
+              <div className="locations">
+                <Locations
+                  franchise={franchise}
+                  franchiseService={props.franchiseService}
+                /> 
+              </div>
+              <div className="campaigns-list">
+                <CampaignsList
+                  franchise={franchise}
+                />
+              </div>
               </>
             )
             }

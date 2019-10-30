@@ -25,11 +25,33 @@
 /* Dashboard css */
 
 .franchise-container {
-  display: flex;
-  flex-direction: column;
-  padding: 2rem;
-  align-items: center;
+  display: grid;
+  grid-template-areas: 
+  "franchise"
+  "locations"
+  "campaigns";
+  grid-gap: 2rem;
   margin-top: 3rem;
+  padding: 2rem;
 } 
 
+.franchise-info {
+  grid-area: franchise;
+}
 
+.locations {
+  grid-area: locations;
+}
+
+.campaings-list {
+  grid-area: campaigns;
+}
+
+@media(min-width: 500px) {
+  .franchise-container {
+    grid-template-columns: 1fr 3fr;
+    grid-template-areas: 
+      "franchise locations"
+      "franchise campaigns"
+  }
+}
