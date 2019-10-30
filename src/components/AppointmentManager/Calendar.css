@@ -26,11 +26,14 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-top: 3rem;
 }
 
 .rbc-month-view{
   max-height: 90%;
+}
+
+.rbc-calendar{
+  min-width: 80vw;
 }
 
 .calendar-wrapper{
@@ -42,11 +45,18 @@
   box-shadow: 0px 10px 50px #555;
   background-color: #fff;
   justify-content: center;
+  min-height: 40vh;
+  height: 60vh;
+  width: 100%;
 }
 
 @media(min-width: 500px) {
   .calendar-wrapper{
     padding: 1rem 3rem;
+  }
+
+  .rbc-calendar {
+    width: 80vw;
   }
 }
 

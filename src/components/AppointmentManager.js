@@ -103,23 +103,29 @@ const AppointmentManager = props => {
       </Menu>
 
       <div className="manager-container">
-        <CampaignSelect 
-          franchise={franchise}
-          filteredCampaigns={filteredCampaigns}
-          handleSetLocation={handleSetLocation}
-          handleSetCampaign={handleSetCampaign}
-        />
-        <Scheduler
-          location={location}
-          campaign={campaign}
-          franchise={franchise}
-          appointmentService={props.appointmentService}
-          handleAppointments={handleAppointments}
-        />
-        <MyCalendar
-          campaign={campaign}
-          events={events}
-        />
+        <div className="campaign-select">
+          <CampaignSelect 
+            franchise={franchise}
+            filteredCampaigns={filteredCampaigns}
+            handleSetLocation={handleSetLocation}
+            handleSetCampaign={handleSetCampaign}
+          />
+        </div>
+        <div className="scheduler">
+          <Scheduler
+            location={location}
+            campaign={campaign}
+            franchise={franchise}
+            appointmentService={props.appointmentService}
+            handleAppointments={handleAppointments}
+          />
+        </div>
+        <div className="my-calendar">
+          <MyCalendar
+            campaign={campaign}
+            events={events}
+          />
+        </div>
       </div>
     </>
   );

@@ -25,11 +25,40 @@
 /* Dashboard css */
 
 .manager-container {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-areas:
+  "select" 
+  "scheduler"
+  "calendar";
   padding: 2rem;
-  align-items: center;
   margin-top: 3rem;
+  grid-gap: 2rem;
 } 
 
+.campaign-select {
+  grid-area: select;
+}
 
+.scheduler {
+  grid-area: scheduler;
+}
+
+.my-calendar {
+  grid-area: calendar;
+}
+
+@media(min-width: 500px) {
+  .manager-container {
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-areas:
+    "select scheduler scheduler"
+    "calendar calendar calendar";
+  }
+}
+
+@media(min-width: 900px) {
+  .manager-container {
+    grid-template-columns: 20% auto auto;
+  }
+}
