@@ -9,12 +9,28 @@ import groupByDate from "../helpers/groupByDate.js";
 import {slide as Menu} from "react-burger-menu";
 
 import BookingList from "./AppointmentsBook/BookingList.js";
+import LocationSelector from "./AppointmentsBook/LocationSelector.js";
 
 const AppointmentsBook = props => {
   const [appointments, setAppointments] = useState([])
   const [groupedAppointments, setGroupedAppointments] = useState({})
   const [ isLoading, setIsLoading ] = useState(true)
 
+  const [selectedLocation, setSelectedLocation] = useState("")
+  const [selectedCampaign, setSelectedCampaign] = useState("")
+
+  const handleSelectLocation = locationId => {
+    console.log(locationId)
+    setSelectedLocation(locationId)
+  }
+
+  const handleSelectCampaign = campaignId => {
+      console.log(campaignId)
+      setSelectedCampaign(campaignId)
+  }
+
+
+  //---Menu
   const [menuOpen, setMenuOpen] = useState(false)
 
   const handleStateChange = (state) => {
@@ -24,6 +40,7 @@ const AppointmentsBook = props => {
   const closeMenu = () => {
     setMenuOpen(false)
   }
+  //-------
 
   useEffect(() => {
     let isSubscribed = true;
@@ -61,6 +78,13 @@ const AppointmentsBook = props => {
       </div>
       ) : (
       <div className="appointments-book-main">
+        <LocationSelector 
+          locations={props.user.franchise.locations}
+          handleSelectLocation={handleSelectLocation}
+          handleSelectCampaign={handleSelectCampaign}
+          campaigns={props.user.franchise.campaigns}
+          selectedLocation={selectedLocation}
+        />
         <BookingList
           groupedAppointments = { groupedAppointments }
         />
