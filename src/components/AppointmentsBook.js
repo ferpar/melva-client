@@ -22,11 +22,31 @@ const AppointmentsBook = props => {
   const handleSelectLocation = locationId => {
     console.log(locationId)
     setSelectedLocation(locationId)
+
+    const filteredAppointments = 
+      locationId 
+      ? appointments.filter( appointment => appointment.location === locationId)
+      : appointments
+
+    console.log("handleSelectLocation")
+    setGroupedAppointments(groupByDate([...filteredAppointments]))
   }
 
   const handleSelectCampaign = campaignId => {
-      console.log(campaignId)
-      setSelectedCampaign(campaignId)
+    console.log(campaignId)
+    setSelectedCampaign(campaignId)
+
+    const filteredAppointments = 
+      campaignId
+      ? appointments
+          .filter( appointment => appointment.location === selectedLocation)
+          .filter( appointment => appointment.campaign === campaignId)
+      : appointments
+          .filter( appointment => appointment.location === selectedLocation)
+
+    console.log("handleSelectCampaign")
+    console.log(filteredAppointments)
+    setGroupedAppointments(groupByDate([...filteredAppointments]))
   }
 
 
@@ -48,8 +68,14 @@ const AppointmentsBook = props => {
     .getBooked()
     .then(async result => {
          if (isSubscribed) {
-          await setAppointments([...result.data])
-          setGroupedAppointments(groupByDate([...result.data]))
+           await setAppointments([...result.data])
+       //    if (result.data) {
+       //     //filtering here to show all appointments of the first location by default
+       //      const filteredAppointments = 
+       //       result.data
+       //        .filter(appointment => appointment.location === props.user.franchise.locations[0]._id)
+       //     setGroupedAppointments(groupByDate([...filteredAppointments]))
+       //    }
          }
     })
     .then(() => setIsLoading(false))

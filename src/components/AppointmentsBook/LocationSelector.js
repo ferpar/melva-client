@@ -25,7 +25,7 @@ const LocationSelector = props => {
           <>
           <div 
             className="campaign-tag"
-            onClick={props.handleSelectCampaign("")}
+            onClick={() => props.handleSelectCampaign("")}
           >
             <p>todas</p>
           </div>
