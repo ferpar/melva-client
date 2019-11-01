@@ -267,9 +267,10 @@ const Appointment = props => {
             duration: appointment.duration,
             date: new Date(appointment.time),
             id: appointment._id,
-            bookedFor: appointment.customer
+            bookedFor: appointment.customer,
+            location: appointment.location
           }))
-          .map(({available, date, duration, id, bookedFor}, index) => {
+          .map(({available, date, duration, id, bookedFor, location}, index) => {
             return (
               <div key={index} className="user-appointment">
                 <div className="appointment-details">
@@ -299,10 +300,11 @@ const Appointment = props => {
                   {  
                       expandContact && 
                     <div className="contact-details">
-                      <p className="address">Av. San Francisco Javier, 13 (local)</p>
-                      <p className="address">41005 - Sevilla</p>
-                      <a href="tel:+34954530070">{"\uD83D\uDCDE"} 954 530 070</a>
-                      <a href="mailto:sevilla@clinicatull.com">{"\uD83D\uDCEC"} sevilla@clinicarull.com</a>
+                      <p className="address">{location.address}</p>
+                      <p className="address">{location.zipcode} - {location.city}</p>
+                      { location.phone && <a href={location.phone}>{"\uD83D\uDCDE"} {location.phone}</a> }
+                      { location.email && <a href={`mailto:${location.email}`}>{"\uD83D\uDCEC"} {location.email}</a>} 
+                      { location.url && <a href={`http:\/\/${location.url}`}>{"\uD83C\uDF0D"} {location.url}</a> }
                     </div>
                   }
                 </div>

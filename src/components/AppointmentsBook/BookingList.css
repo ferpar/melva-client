@@ -1,0 +1,81 @@
+:root {
+ /* color scheme 1 */
+  --silver-sand: #BCD8C1;
+  --yankees-blue: #0B3142;
+  --flax: #E9D985;
+  --zomp: #439A86;
+  --sea-blue: #007991;
+ /* color scheme 2 */
+--wilderness-1: #182E59;
+--wilderness-2: #355B8C;
+--wilderness-3: #6387A6;
+--wilderness-4: #F2E1C2;
+--wilderness-5: #A63B14;
+/* Color Theme Swatches in Hex */
+--dentist-1: #535FA6;
+--dentist-2: #85B4F2;
+--dentist-3: #9BCAF2;
+--dentist-4: #594022;
+--dentist-5: #D9B1A3;
+/* bootstrap */
+--danger: #dc3545;
+--primary :#007bff;
+}
+
+.book-list {
+ display: flex;
+ flex-direction: column;
+ background-color: #fff;
+ border-radius: 5px;
+ padding: 2rem;
+ width: 100%;
+}
+
+.book-list-day {
+  margin-top: 1.5rem;
+}
+
+.appointment-info {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+  padding: 1rem;
+  boder-radius: 5px;
+  box-shadow: 2px 2px 2px lightgrey;
+}
+
+.ball {
+  background-color: lightgreen;
+  border-radius: 50%;
+  display: inline-block;
+  min-width: 1rem;
+  min-height: 1rem;
+  align-self: flex-end;
+  position: absolute;
+}
+
+.booking-grid {
+  display: flex;
+  flex-direction: column;
+}
+
+@media(min-width: 500px){
+  .booking-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media(min-width: 900px){
+  .booking-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+@media(min-width: 1200px){
+  .booking-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+}

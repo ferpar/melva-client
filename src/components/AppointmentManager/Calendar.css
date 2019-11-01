@@ -1,0 +1,97 @@
+:root {
+ /* color scheme 1 */
+  --silver-sand: #BCD8C1;
+  --yankees-blue: #0B3142;
+  --flax: #E9D985;
+  --zomp: #439A86;
+  --sea-blue: #007991;
+ /* color scheme 2 */
+--wilderness-1: #182E59;
+--wilderness-2: #355B8C;
+--wilderness-3: #6387A6;
+--wilderness-4: #F2E1C2;
+--wilderness-5: #A63B14;
+/* Color Theme Swatches in Hex */
+--dentist-1: #535FA6;
+--dentist-2: #85B4F2;
+--dentist-3: #9BCAF2;
+--dentist-4: #594022;
+--dentist-5: #D9B1A3;
+/* bootstrap */
+--danger: #dc3545;
+--primary :#007bff;
+}
+
+.calendar-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.rbc-month-view{
+  max-height: 90%;
+}
+
+.rbc-calendar{
+  min-width: 80vw;
+}
+
+.calendar-wrapper{
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 1.5rem;
+  border-radius: 6px;
+  box-shadow: 0px 10px 50px #555;
+  background-color: #fff;
+  justify-content: center;
+  min-height: 40vh;
+  height: 60vh;
+  width: 100%;
+}
+
+@media(min-width: 500px) {
+  .calendar-wrapper{
+    padding: 1rem 3rem;
+  }
+
+  .rbc-calendar {
+    width: 80vw;
+  }
+}
+
+#calendar-title{
+  margin-bottom: 1rem;
+}
+
+.calendar-details{
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+}
+
+.calendar-button{
+  display: inline-block;
+  background-color: var(--primary);
+  color: #fff;
+  border: 2px solid var(--primary);
+  border-radius: 5px;
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.5rem 0;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 0.25rem;
+  max-width: 8rem;
+}
+
+.calendar-button:hover {
+  background-color: rgba(0, 123, 255, 0.2);
+  color: var(--primary);
+}
+
+.calendar-separator {
+  border: 1px solid black;
+  width: 100%;
+}

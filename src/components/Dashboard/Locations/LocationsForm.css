@@ -1,0 +1,184 @@
+:root {
+ /* color scheme 1 */
+  --silver-sand: #BCD8C1;
+  --yankees-blue: #0B3142;
+  --flax: #E9D985;
+  --zomp: #439A86;
+  --sea-blue: #007991;
+ /* color scheme 2 */
+--wilderness-1: #182E59;
+--wilderness-2: #355B8C;
+--wilderness-3: #6387A6;
+--wilderness-4: #F2E1C2;
+--wilderness-5: #A63B14;
+/* Color Theme Swatches in Hex */
+--dentist-1: #535FA6;
+--dentist-2: #85B4F2;
+--dentist-3: #9BCAF2;
+--dentist-4: #594022;
+--dentist-5: #D9B1A3;
+/* bootstrap */
+--danger: #dc3545;
+--primary :#007bff;
+}
+
+
+.locations-form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 3rem;
+}
+
+.locations-form-container input {
+  border: 0;
+  border-bottom: 1px solid #bbb;
+  outline: none;
+  transition: all 0.3s ease-in-out;
+}
+
+.locations-form-container input:hover {
+  border-bottom: 2px solid var(--dentist-1);
+}
+
+.locations-form-container input:focus {
+  border-bottom: 2px solid rgba(81, 203, 238, 1);
+}
+
+.locations-title{
+  margin-bottom: 1rem;
+}
+
+.locations-field-wrapper {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+  min-height: 4rem;
+}
+
+.locations-field-wrapper > input {
+  font-size: 1.4rem;
+}
+
+.locations-field-wrapper > label {
+  font-size: 1.2rem;
+}
+
+.locations-form{
+  display: grid;
+  grid-template-areas:
+    "loc-name"
+    "loc-address"
+    "loc-zipcode"
+    "loc-city"
+    "loc-phone"
+    "loc-email"
+    "loc-url"
+    "button"
+    ;
+  grid-gap: 0.5rem;
+}
+
+@media(min-width: 940px){
+  .locations-form{
+    grid-template-areas:
+      "loc-name loc-address"
+      "loc-zipcode loc-city"
+      "loc-phone loc-email"
+      "loc-url button";
+    }
+}
+
+.loc-name {
+  grid-area: loc-name;
+  max-width: 60vw;
+}
+
+.loc-address {
+  grid-area: loc-address;
+  max-width: 60vw;
+}
+
+.loc-zipcode {
+  grid-area: loc-zipcode;
+  max-width: 60vw;
+}
+
+.loc-city {
+  grid-area: loc-city;
+  max-width: 60vw;
+}
+
+.loc-phone {
+  grid-area: loc-phone;
+  max-width: 60vw;
+}
+
+.loc-email {
+  grid-area: loc-email;
+  max-width: 60vw;
+}
+
+.loc-url {
+  grid-area: loc-url;
+  max-width: 60vw;
+}
+
+.loc-buttons-wrapper{
+  display: flex;
+  grid-area: button;
+  justify-content: space-around;
+}
+
+/* buttons and error messages could be using the non "loc" classes (@styles.css),
+ * for now they've been separated to make this a standalone component */
+
+.loc-edit-button{
+  display: inline-block;
+  background-color: var(--primary);
+  color: #fff;
+  border: 2px solid var(--primary);
+  border-radius: 5px;
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.5rem 0;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 0.25rem;
+  max-width: 6rem;
+}
+
+.loc-edit-button:hover {
+  background-color: rgba(0, 123, 255, 0.2);
+  color: var(--primary);
+}
+
+.loc-cancel-button{
+  display: inline-block;
+  background-color: var(--danger);
+  color: #fff;
+  border: 2px solid var(--danger);
+  border-radius: 5px;
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.5rem 0;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 0.25rem;
+  max-width: 6rem;
+}
+
+.loc-cancel-button:hover {
+  background-color: rgba(220, 53, 69, 0.2);
+  color: var(--danger);
+}
+
+.loc-error-msg {
+  color: var(--danger);
+  font-size: 0.8rem;
+  text-align: right;
+  margin-top: 0.2rem;
+  max-width: 18rem;
+}

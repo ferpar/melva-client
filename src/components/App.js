@@ -4,7 +4,9 @@ import { hot } from "react-hot-loader";
 import AuthService from "../services/auth.js";
 import AppointmentService from "../services/appointments.js";
 import CampaignService from "../services/campaigns.js";
+import FranchiseService from "../services/franchises.js";
 import { Switch, Route, Link, withRouter, Redirect } from "react-router-dom";
+
 import Appointments from "./AppointmentsF";
 import Home from "./Home";
 import UserLogin from "./Login.js";
@@ -13,6 +15,8 @@ import Book from "./AppointmentsBook";
 import CampaignManager from "./Campaigns.js";
 import ProtectedRoute from "./ProtectedRoute";
 import LinkRedirect from "./LinkRedirect.js";
+import Dashboard from "./Dashboard.js";
+import AppointmentManager from "./AppointmentManager.js";
 
 import Spinner from "./spinners/Ripple.js";
 
@@ -32,6 +36,8 @@ class App extends React.Component {
     this.appointmentService = appointmentService;
     let campaignService = new CampaignService();
     this.campaignService = campaignService;
+    let franchiseService = new FranchiseService;
+    this.franchiseService = franchiseService;
 }
 
   handleLogin = (userObj, redirect = false, redirectURL) => {
@@ -75,13 +81,13 @@ class App extends React.Component {
       });
   };
 
-  componentDidMount() {
-    this.getLoggedIn();
+  async componentDidMount() {
+    await this.getLoggedIn();
   }
 
-  componentDidUpdate() {
+  async componentDidUpdate() {
     if(this.state.isLoading) {
-      this.getLoggedIn()
+      await this.getLoggedIn()
     }
   }
 
@@ -172,6 +178,43 @@ class App extends React.Component {
                 authService = {this.authService}
                 appointmentService = {this.appointmentService}
               />}
+          />
+          <ProtectedRoute 
+            path="/appointments-manager"
+            user={this.state.user ? this.state.user : null}
+            loggedIn={this.state.loggedIn} 
+            allowedRole={['Admin']}
+            accessLevel={[level[1], level[2]]}
+            redirectURL={"/login"}
+            component={ props => 
+              <AppointmentManager 
+                router={props}
+                user={user}
+                handleLogin = {this.handleLogin}
+                handleLogout = {this.handleLogout}
+                authService = {this.authService}
+                appointmentService = {this.appointmentService}
+                franchiseService = {this.franchiseService}
+              />
+            }
+          />
+          <ProtectedRoute 
+            path="/dashboard"
+            user={this.state.user ? this.state.user : null}
+            loggedIn={this.state.loggedIn} 
+            allowedRole={['Admin']}
+            accessLevel={[level[2]]}
+            redirectURL={"/login"}
+            component={ props => 
+              <Dashboard 
+                router={props}
+                user={user}
+                handleLogin = {this.handleLogin}
+                handleLogout = {this.handleLogout}
+                authService = {this.authService}
+                franchiseService = {this.franchiseService}
+              />
+            }
           />
           <ProtectedRoute
             path="/campaigns"

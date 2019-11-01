@@ -12,7 +12,7 @@ module.exports = (env) => {
   return merge(baseConfig, {
   mode: "development",
   devServer: {
-    host: '192.168.1.51',
+    host: 'localhost',
     port: 9000,
     historyApiFallback: true
   },

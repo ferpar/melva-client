@@ -1,0 +1,64 @@
+:root {
+ /* color scheme 1 */
+  --silver-sand: #BCD8C1;
+  --yankees-blue: #0B3142;
+  --flax: #E9D985;
+  --zomp: #439A86;
+  --sea-blue: #007991;
+ /* color scheme 2 */
+--wilderness-1: #182E59;
+--wilderness-2: #355B8C;
+--wilderness-3: #6387A6;
+--wilderness-4: #F2E1C2;
+--wilderness-5: #A63B14;
+/* Color Theme Swatches in Hex */
+--dentist-1: #535FA6;
+--dentist-2: #85B4F2;
+--dentist-3: #9BCAF2;
+--dentist-4: #594022;
+--dentist-5: #D9B1A3;
+/* bootstrap */
+--danger: #dc3545;
+--primary :#007bff;
+}
+
+/* Dashboard css */
+
+.manager-container {
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-areas:
+  "select" 
+  "scheduler"
+  "calendar";
+  padding: 2rem;
+  margin-top: 3rem;
+  grid-gap: 2rem;
+} 
+
+.campaign-select {
+  grid-area: select;
+}
+
+.scheduler {
+  grid-area: scheduler;
+}
+
+.my-calendar {
+  grid-area: calendar;
+}
+
+@media(min-width: 500px) {
+  .manager-container {
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-areas:
+    "select scheduler scheduler"
+    "calendar calendar calendar";
+  }
+}
+
+@media(min-width: 900px) {
+  .manager-container {
+    grid-template-columns: 20% auto auto;
+  }
+}

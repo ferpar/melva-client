@@ -35,6 +35,23 @@ const CampaignManager = props => {
   const [customLink, setCustomLink] = useState(false)
 
   const [campaigns, setCampaigns] = useState([])
+  const [filteredCampaigns, setFilteredCampaigns] = useState([])
+  const [selectedCampaignId, setSelectedCampaignId] = useState("")
+
+  const [locations, setLocations] = 
+    props.user.franchise 
+    ? useState(props.user.franchise.locations) 
+    : useState([])
+
+  const [location, setLocation] = useState("")
+
+  const handleSetLocation = e => {
+    const selectedLocationId = e.target.value
+    setLocation(selectedLocationId)
+    setFilteredCampaigns(campaigns.filter( campaign => {
+      return campaign.location === selectedLocationId
+    }))
+  }
 
   const handleMsgChange = e => {
     setMessage(e.target.value);
@@ -92,7 +109,7 @@ const CampaignManager = props => {
 
   const saveCampaign = async ( newRecipients) => {
     
-    const postData = { title, message, recipients, customGreeting: greeting, customLink }
+    const postData = { title, message, recipients, customGreeting: greeting, customLink, location }
     if (newRecipients) postData.recipients = newRecipients;
 
     await props.campaignService
@@ -113,10 +130,10 @@ const CampaignManager = props => {
     }
   }
 
-  const loadCampaign = async (loadTitle) => {
-    if (loadTitle) { 
+  const loadCampaign = async (campaignId) => {
+    if (campaignId) { 
       await props.campaignService
-        .getByTitle(loadTitle)
+        .getById(campaignId)
           .then(async result => {
             const {title, message, customGreeting, customLink, campaignUsers} = result.data;
 
@@ -126,21 +143,16 @@ const CampaignManager = props => {
             await setCustomLink(customLink)
             await setRecipients(campaignUsers)
           })
-    } else {
-      console.log("inadequate campaign title")
-    }
+    } 
   }
 
   const handleLoadCampaign = async e => {
+    const campaignId = e.target.value;
 
-    const campaignTitles = []
-    campaigns.forEach( campaign => {campaignTitles.push(campaign.title)})
-
-    if (campaignTitles.includes(e.target.value)) {
-      await loadCampaign(e.target.value) 
-    } else {
-      await loadCampaign(undefined)
+    if (campaignId) {
+      await loadCampaign(campaignId)
     }
+    setSelectedCampaignId(campaignId)
   }
 
   const deleteCampaign = async () => {
@@ -162,9 +174,8 @@ const CampaignManager = props => {
   }
 
   const refreshCampaigns = async () => {
-    const actualCampaign = title;
     await loadCampaigns()
-    await loadCampaign(title)
+    await loadCampaign(selectedCampaignId)
   }
 
   const handleRefresh = async () => {
@@ -323,6 +334,8 @@ const CampaignManager = props => {
         onStateChange={(state) => handleStateChange(state)}
       >
           <Link onClick={() => closeMenu()} to="/appointments-book">Citas Pendientes</Link>
+          <Link onClick={() => closeMenu()} to="/appointments-manager">Gestor de Citas</Link>
+          <Link onClick={() => closeMenu()} to="/dashboard">Panel de Control</Link>
           <button onClick={ async () => {
             await props.handleLogout() //this is important to avoid race between handleLogout and closeMenu
             closeMenu()}
@@ -408,21 +421,48 @@ const CampaignManager = props => {
             </form>
           </div>
           <div className="campaign-management">
-              <div className="campaign-name">
-                <label htmlFor="title">nombre de campaña</label>
-                <input name="title" id="title" type="text" value={title} onChange={(e) => setTitle(e.target.value)}/>
-              </div>
-              <button disabled={isSaving} className="save cp-button" onClick={e => handleSaveCampaign(e)}>{isSaving ? "Guardando..." : "Guardar Campaña"}</button>
-              <hr/>
-              <label htmlFor="campaign-select">cargar campaña</label>
-              <select onChange={e => handleLoadCampaign(e)} id="campaign-select" name="campaign-select">
-                <option value="">seleccionar campaña</option>
-                {campaigns.map( (campaign, ind) => (
-                  <option key={ind} value={campaign.id}>{campaign.title}</option>
+              <label htmlFor="location-select">clínica</label>
+              <select onChange={e => handleSetLocation(e)} id="location-select" name="location-select">
+                <option value="">seleccionar clínica</option>
+                {locations.map( (location, ind) => (
+                  <option key={ind} value={location._id}>{location.name}</option>
                 ))}
               </select>
-              <hr/>
-              <button className="delete cs-button" onClick={e => handleDelete(e)} >Borrar Campaña</button>
+              <hr className="camp-management-separator"/>
+              { location ? (
+                <>
+                  <div className="campaign-name">
+                    <label htmlFor="title">nombre de campaña</label>
+                    <input name="title" id="title" type="text" value={title} onChange={(e) => setTitle(e.target.value)}/>
+                  </div>
+                  <button disabled={isSaving} className="save cp-button" onClick={e => handleSaveCampaign(e)}>{isSaving ? "Guardando..." : "Guardar Campaña"}</button>
+                  <hr/>
+                  <label htmlFor="campaign-select">cargar campaña</label>
+                  <select onChange={e => handleLoadCampaign(e)} id="campaign-select" name="campaign-select">
+                    <option value="">seleccionar campaña</option>
+                    {filteredCampaigns.map( (campaign, ind) => (
+                      <option key={ind} value={campaign._id}>{campaign.title}</option> //its picking the title as value instead of the id because it should be _id !!
+                    ))}
+                  </select>
+                  <hr/>
+                  <button className="delete cs-button" onClick={e => handleDelete(e)} >Borrar Campaña</button>
+                </>
+              ) : (
+                <>
+                  <p> Elige una clínica para continuar </p> 
+                  <br/>
+                  <br/>
+                  <br/>
+                  <br/>
+                  <br/>
+                  <br/>
+                  <br/>
+                  <br/>
+                  <br/>
+                  <br/>
+                </>
+              )
+              }
           </div>
           <div className="recipients-list">
             <div className="list-container">

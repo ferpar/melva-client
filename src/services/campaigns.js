@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-class AppointmentService {
+class CampaignService {
   constructor() {
     let service = axios.create({
       baseURL: process.env.API_URL + "/campaigns",
@@ -34,7 +34,7 @@ class AppointmentService {
   getById = id => {
     return this.service.get("/get-by-id/" + id)
       .then(result => result)
-      .catch(err => console.error("Error retrieving campaign buy id", err))
+      .catch(err => console.error("Error retrieving campaign by id", err))
   }
 
   removeCampaignUser = values => {
@@ -58,4 +58,4 @@ class AppointmentService {
 }
 
 
-export default AppointmentService;
+export default CampaignService;
