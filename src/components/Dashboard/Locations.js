@@ -7,13 +7,28 @@ const Locations = props => {
 
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [locations, setLocations] = useState(props.franchise.locations)
+  const [locationToEdit, setLocationToEdit] = useState("")
 
   const handleIsFormOpen = () => {
     setIsFormOpen(!isFormOpen)
   }
 
-  const handleAddLocation = location => {
-    setLocations([...locations, location])
+  const handleAddLocation = savedLocation => {
+    setLocations([...locations, savedLocation])
+  }
+
+  const handleLocationToEdit = locationId => {
+    setLocationToEdit(locationId)
+    handleIsFormOpen()
+  }
+
+  const handleUpdateLocation = updatedLocation => {
+    console.log(updatedLocation)
+    const position = locations.findIndex( location => location._id === updatedLocation._id )
+    console.log(position)
+
+    setLocations([...locations.slice(0, position), updatedLocation, ...locations.slice(position+1)])
+    
   }
   
   return (
@@ -22,7 +37,18 @@ const Locations = props => {
        <h1 className="locations-title">Clinicas</h1>
          {locations ? (
          locations.map( (location, ind) => (
-          <p key={ind} >{location.name}</p>
+           <div 
+            className="locations-slug"
+            key={ind}
+           >
+            <p >{location.name}</p>
+            <button
+              className="locations-button"
+              onClick={() => handleLocationToEdit(location._id)} 
+            >
+              Editar
+            </button> 
+           </div>
          )) 
          ) : (<p>No Locations added yet</p>)}
        <hr className="locations-separator"/>
@@ -32,6 +58,10 @@ const Locations = props => {
          handleIsFormOpen={handleIsFormOpen}  
          franchiseService={props.franchiseService}
          handleAddLocation={handleAddLocation}
+         locations={locations}
+         locationToEdit={locationToEdit}
+         handleLocationToEdit={handleLocationToEdit}
+         handleUpdateLocation={handleUpdateLocation}
        /> 
        ) : (
        <button 

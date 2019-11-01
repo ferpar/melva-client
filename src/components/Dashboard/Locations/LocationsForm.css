@@ -69,6 +69,8 @@
   grid-template-areas:
     "loc-name"
     "loc-address"
+    "loc-zipcode"
+    "loc-city"
     "loc-phone"
     "loc-email"
     "loc-url"
@@ -77,10 +79,11 @@
   grid-gap: 0.5rem;
 }
 
-@media(min-width: 710px){
+@media(min-width: 940px){
   .locations-form{
     grid-template-areas:
       "loc-name loc-address"
+      "loc-zipcode loc-city"
       "loc-phone loc-email"
       "loc-url button";
     }
@@ -93,6 +96,16 @@
 
 .loc-address {
   grid-area: loc-address;
+  max-width: 60vw;
+}
+
+.loc-zipcode {
+  grid-area: loc-zipcode;
+  max-width: 60vw;
+}
+
+.loc-city {
+  grid-area: loc-city;
   max-width: 60vw;
 }
 

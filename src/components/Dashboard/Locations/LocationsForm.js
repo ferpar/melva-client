@@ -13,7 +13,8 @@ const BaseForm = ({
   errors,
   touched,
   isSubmitting,
-  handleIsFormOpen
+  handleIsFormOpen,
+  handleLocationToEdit
 }) => (
   <div className="locations-form-container">
       <Form className="locations-form">
@@ -31,6 +32,22 @@ const BaseForm = ({
             <Field name="address" type="text" placeholder="Ej: Av. San Fco Javier 4"/>
             {touched.address && errors.address && (
               <p className="loc-error-msg">{errors.address}</p>
+            )}
+          </div>
+
+          <div className="locations-field-wrapper loc-zipcode">
+            <label htmlFor="zipcode">C.P.</label>
+            <Field name="zipcode" type="text" placeholder="Ej: 21004"/>
+            {touched.zipcode && errors.zipcode && (
+              <p className="loc-error-msg">{errors.zipcode}</p>
+            )}
+          </div>
+
+          <div className="locations-field-wrapper loc-city">
+            <label htmlFor="city">ciudad</label>
+            <Field name="city" type="text" placeholder="Ej: Huelva"/>
+            {touched.city && errors.city && (
+              <p className="loc-error-msg">{errors.city}</p>
             )}
           </div>
 
@@ -81,7 +98,10 @@ const BaseForm = ({
           <div className="loc-buttons-wrapper">
             <button
               className="loc-cancel-button"
-              onClick={async () => {await handleIsFormOpen();}}
+              onClick={async () => {
+                await handleIsFormOpen();
+                await handleLocationToEdit(""); 
+              }}
               type="button"
             >
             Cancelar
@@ -100,32 +120,77 @@ const BaseForm = ({
 )
 
 const LocationsForm = withFormik({
-  mapPropsToValues({user}) {
-    return {
-      name: "",
-      address: "",
-      phone: "",
-      email: "",
-      url: ""
+  mapPropsToValues({locations, locationToEdit}) {
+    if (locationToEdit) {
+      const myLocation = locations.find( location => location._id === locationToEdit)
+
+      const { 
+        name,
+        address,
+        zipcode,
+        city,
+        phone,
+        email,
+        url
+      } = myLocation
+
+      return {
+        name,
+        address,
+        zipcode,
+        city,
+        phone,
+        email,
+        url
+      }
+
+    } else {
+
+      return {
+        name: "",
+        address: "",
+        zipcode: "",
+        city: "",
+        phone: "",
+        email: "",
+        url: ""
+      }
+
     }
   },
   validationSchema: Yup.object().shape({
     name: Yup.string().required("introduzca el nombre de la clínica"),
     address: Yup.string().required("introduzca dirección de la clínica"),
+    zipcode: Yup.string(),
+    city: Yup.string(),
     phone: Yup.string(),
     email: Yup.string(),
     url: Yup.string()
   }),
   async handleSubmit(values, {props, setSubmitting}) {
     console.log(values)
-    console.log(props.franchiseService)
-    const savedLocation = await props.franchiseService.saveLocation(values)
-    .catch(err => console.error("[Handler] HandleSubmit: error saving location data", err))
-    console.log(savedLocation)
-    try {
-      await props.handleAddLocation(savedLocation.data.savedLocation)
-    } catch (err) {
-      console.error("[Handler] HanldeAddLocation: error adding the new location to the local state", err)
+    if (props.locationToEdit) {
+      const updatedLocation = await props.franchiseService.updateLocation({...values, id: props.locationToEdit})
+      .catch( err => console.error("[Handler] HandleSubmit: error updating location data", err))
+      console.log(updatedLocation.data)
+
+      try {
+        await props.handleUpdateLocation(updatedLocation.data.updatedLocation)
+      } catch (err) {
+        console.error("[Handler] HandleUpdateLocation : error updating local state for updated location", err)
+      }
+
+      props.handleIsFormOpen();
+
+    } else {
+      const savedLocation = await props.franchiseService.saveLocation(values)
+      .catch(err => console.error("[Handler] HandleSubmit: error saving location data", err))
+      console.log(savedLocation)
+      try {
+        await props.handleAddLocation(savedLocation.data.savedLocation)
+      } catch (err) {
+        console.error("[Handler] HanldeAddLocation: error adding the new location to the local state", err)
+      }
     }
     setSubmitting(false);
   }

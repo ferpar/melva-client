@@ -57,6 +57,13 @@
   justify-content: left;
 }
 
+.locations-slug{
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
 .locations-button{
   display: inline-block;
   background-color: var(--primary);
