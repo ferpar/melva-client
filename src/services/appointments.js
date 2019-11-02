@@ -23,8 +23,8 @@ class AppointmentService {
       .catch(err => console.error("error getting booking information for the selectethe selected date. Service level.", err))
   }
 
-  get = (dateStr) => {
-    return this.service.get("/get/" + dateStr)
+  getByDate = (values) => {
+    return this.service.post("/get-by-date", values)
       .catch(err => console.error("Error retrieving appointments. Service level.", err))
   }
 

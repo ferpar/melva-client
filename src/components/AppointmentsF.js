@@ -203,10 +203,11 @@ const Appointment = props => {
         month = date.getMonth() + 1,
         day = date.getDate();
       const dateStr = `${year}-${month}-${day}`;
+      const activeCampaign = props.user.activeCampaign;
       if (isSubscribed) {
       setIsLoading(true)
       props.appointmentService
-        .get(dateStr)
+        .getByDate({dateStr, activeCampaign})
         .then(result => setAppointments(result.data))
         .then(() => setIsLoading(false))
         .catch(err => {
