@@ -110,9 +110,11 @@ const AppointmentsBook = props => {
           handleSelectCampaign={handleSelectCampaign}
           campaigns={props.user.franchise.campaigns}
           selectedLocation={selectedLocation}
+          selectedCampaign={selectedCampaign}
         />
         <BookingList
           groupedAppointments = { groupedAppointments }
+          selectedLocation = { selectedLocation }
         />
       </div>
       )}
