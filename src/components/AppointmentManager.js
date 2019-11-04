@@ -5,6 +5,9 @@ import "./AppointmentManager/Appointmentmanager.css";
 
 import { slide as Menu } from "react-burger-menu";
 
+import { toast } from "react-toastify";
+toast.configure();
+
 import CampaignSelect from "./AppointmentManager/CampaignSelect.js";
 import Scheduler from "./AppointmentManager/Scheduler.js";
 import MyCalendar from "./AppointmentManager/Calendar.js";
@@ -21,7 +24,26 @@ const AppointmentManager = props => {
   const [events, setEvents] = useState([])
   //--------------
   
-  //----Hanlders
+  // TOASTIFY METHOD
+  const notifyCreate = (appointment) => {
+    const notifyDateTime = new Date(appointment.time)
+    toast(
+         "✔️  Cita Creada para el " 
+          + notifyDateTime.toLocaleDateString("es-ES", {
+                      weekday: "long",
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric"
+                    })
+          + ", a las:" 
+          + notifyDateTime.toLocaleTimeString("es-ES", {
+                      hour: "2-digit",
+                      minute: "2-digit"
+                    })
+    )};
+  //--------------
+  
+  //----Handlers
   const handleSetLocation = e => {
     const selectedLocation = e.target.value
     setLocation(selectedLocation)
@@ -118,6 +140,7 @@ const AppointmentManager = props => {
             franchise={franchise}
             appointmentService={props.appointmentService}
             handleAppointments={handleAppointments}
+            notifyCreate={notifyCreate}
           />
         </div>
         <div className="my-calendar">
