@@ -63,12 +63,13 @@ const AppointmentManager = props => {
       const appointments = await props.appointmentService.getCampaignAppointments({campaign})
       console.log(appointments.data)
       const eventsToLoad = appointments.data.map( (appointment,ind) => {
-        const {time, duration} = appointment
+        const {time, duration, customer} = appointment
         const { title } = appointment.campaign
         return {
           start: new Date(moment.tz(time, "Europe/Madrid")),
           end: new Date(moment.tz(time, "Europe/Madrid").add(duration, 'm')),
-          title: title
+          title: title,
+          customer: customer ? customer.name : null
         }
       })
       console.log(eventsToLoad)

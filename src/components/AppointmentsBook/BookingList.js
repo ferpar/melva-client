@@ -7,7 +7,7 @@ const BookingList = props => {
     
         <div className="book-list">
           <h1>Citas pendientes</h1> 
-          { props.groupedAppointments.length > 0 
+          { Object.keys(props.groupedAppointments).length > 0
               ? (
           <div className="booking-grid">
             { Object.keys(props.groupedAppointments)

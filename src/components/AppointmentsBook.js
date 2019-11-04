@@ -69,6 +69,7 @@ const AppointmentsBook = props => {
     .then(async result => {
          if (isSubscribed) {
            await setAppointments([...result.data])
+       //The following commented code is meant to the first appointments by default:
        //    if (result.data) {
        //     //filtering here to show all appointments of the first location by default
        //      const filteredAppointments = 

@@ -6,6 +6,14 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import moment from "moment-timezone"
 
 const localizer = momentLocalizer(moment)      
+
+const CustomEvent = ({event}) => (
+  <span
+   onClick ={ () => console.log("clicked!")}
+  > 
+    {event.title} {event.customer && "B!"} 
+  </span>
+)
       
 const MyCalendar = props => {
 
@@ -19,6 +27,7 @@ const MyCalendar = props => {
 
   const [events, useEvents] = useState(initialEvents)
 
+
   return (
     <div className="calendar-container">
       <div className="calendar-wrapper">
@@ -29,6 +38,12 @@ const MyCalendar = props => {
           events={props.events}
           startAccessor="start"
           endAccessor="end"
+          popup={true}
+          onDoubleClickEvent={event => console.log(event.customer)}
+          step={15}
+          components={{
+            event: CustomEvent
+          }}
         />
       </div>
     </div>
