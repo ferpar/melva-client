@@ -4,6 +4,7 @@ import axios from "axios";
 import Flatpickr from "react-flatpickr";
 import { Spanish } from "flatpickr/dist/l10n/es.js";
 import "flatpickr/dist/themes/material_green.css";
+import moment from "moment-timezone";
 
 import {slide as Menu} from "react-burger-menu";
 import Spinner from "./spinners/Ripple.js";
@@ -31,6 +32,7 @@ const Appointment = props => {
   const [isLoading, setIsLoading] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false)
   const [expandContact, setExpandContact] = useState(false);
+  const [availableDates, setAvailableDates] = useState([]);
 
   //Modali Hooks (for modals)
   const [confirmModal, toggleConfirmModal] = useModali({
@@ -222,18 +224,26 @@ const Appointment = props => {
   useEffect( () => { //LOAD USER APPOINTMENTS ON MOUNT and consent MODAL
     let isSubscribed = true;
       if (isSubscribed) {
-        props.appointmentService
-          .getByUser(props.user._id)
-          .then((result) => {
-              setUserAppointments([...result.data])
+        const loadup = async () => {
+          await props.appointmentService
+            .getByUser(props.user._id)
+            .then((result) => {
+                setUserAppointments([...result.data])
+            })
+          .then(() => {
+            if (props.user.consent === null){
+            toggleConsentModal()
+            } else if (props.user.consent === false) {
+              props.handleLogout()
+            }
           })
-        .then(() => {
-          if (props.user.consent === null){
-          toggleConsentModal()
-          } else if (props.user.consent === false) {
-            props.handleLogout()
-          }
-        })
+
+          const activeCampaign = props.user.activeCampaign;
+          const newAvailableDates = await props.appointmentService
+            .getDates({activeCampaign})
+          setAvailableDates([...newAvailableDates.data.dates]) 
+        }
+        loadup();
       }
     return () => isSubscribed = false;
   }, [])
@@ -351,22 +361,18 @@ const Appointment = props => {
               { !date && <p> Seleccionar fecha: </p>}
             </div>
             <Flatpickr
-          options={{ 
-            dateFormat: 'd-m-Y',
-            disableMobile: true,
-            locale: Spanish,
-            minDate: new Date( new Date().setDate( new Date().getDate() + 1)),
-            altInput: true,
-            altFormat: "F j, Y",
-            disable: [
-              function(date) {
-                return (date.getDay() === 0 || date.getDay() === 1 || date.getDay() === 6);
-              }
-            ]
-          }}
-          className="appointments-flatpickr"
-          placeholder="pulse aquí..."
-          onChange={e => dateChangeHandler(e)}
+              options={{ 
+                dateFormat: 'd-m-Y',
+                disableMobile: true,
+                locale: Spanish,
+                minDate: new Date( new Date().setDate( new Date().getDate() + 1)),
+                altInput: true,
+                altFormat: "F j, Y",
+                enable: [ ...availableDates.map( dateStr => new Date(moment.tz(dateStr,"Europe/Madrid").format())) ]
+              }}
+              className="appointments-flatpickr"
+              placeholder="pulse aquí..."
+              onChange={e => dateChangeHandler(e)}
             />
             <h2 className="appointments-date">
             {date &&

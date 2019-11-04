@@ -20,27 +20,32 @@ class AppointmentService {
   
   getSingle = (id) => {
     return this.service.get("/get-single/" + id)
-      .catch(err => console.error("error getting booking information for the selectethe selected date. Service level.", err))
+      .catch(err => console.error("[Service] error getting booking information for the selectethe selected date. Service level.", err))
+  }
+
+  getDates = (values) => {
+    return this.service.post("/get-dates", values)
+      .catch(err => console.error("[Service] Error getting available appointment dates", err))
   }
 
   getByDate = (values) => {
     return this.service.post("/get-by-date", values)
-      .catch(err => console.error("Error retrieving appointments. Service level.", err))
+      .catch(err => console.error("[Service] Error retrieving appointments. Service level.", err))
   }
 
   getByUser = (userId) => {
     return this.service.get("/get-by-user/" + userId)
-      .catch(err => console.error("Error retrieving appointments for this user. Service level.", err))
+      .catch(err => console.error("[Service] Error retrieving appointments for this user. Service level.", err))
   }
 
   book = (values) => {
    return this.service.post("/book", values) 
-    .catch(err => console.error("Error attempting to book, service level.", err))
+    .catch(err => console.error("[Service] Error attempting to book, service level.", err))
   }
 
   getBooked = () => {
     return this.service.get("/booked")
-      .catch(err => console.error("Error retrieving pending appointments", err))
+      .catch(err => console.error("[Service] Error retrieving pending appointments", err))
   }
 
   getCampaignAppointments = values => {
@@ -50,7 +55,7 @@ class AppointmentService {
 
   sendCampaign = (values) => {
    return this.service.post("/test-multimsg", values) 
-    .catch(err => console.error("Error sending campaign messages, service level.", err))
+    .catch(err => console.error("[Service] Error sending campaign messages, service level.", err))
   }
 }
 
