@@ -22,6 +22,7 @@ const AppointmentManager = props => {
   const [campaign, setCampaign] = useState("")
   const [filteredCampaigns, setFilteredCampaigns] = useState([])
   const [events, setEvents] = useState([])
+  const [removeSwitch, setRemoveSwitch] = useState(false)
   //--------------
   
   // TOASTIFY METHOD
@@ -57,19 +58,34 @@ const AppointmentManager = props => {
     setCampaign(selectedCampaign)
   }
 
+  const handleRemoveAppointment = (event) => {
+
+    console.log(event.appointmentId)
+    console.log(event.campaignId)
+    console.log(event.patientId)
+  }
+
   const handleAppointments = async () => {
     if (campaign) {
       console.log(campaign)
       const appointments = await props.appointmentService.getCampaignAppointments({campaign})
       console.log(appointments.data)
       const eventsToLoad = appointments.data.map( (appointment,ind) => {
-        const {time, duration, customer} = appointment
+        const {time, duration, customer, _id} = appointment
         const { title } = appointment.campaign
         return {
           start: new Date(moment.tz(time, "Europe/Madrid")),
           end: new Date(moment.tz(time, "Europe/Madrid").add(duration, 'm')),
           title: title,
-          customer: customer ? customer.name : null
+          customer: customer ? customer.name : null,
+          removeActive: removeSwitch,
+          handleRemoveAppointment: () => handleRemoveAppointment(
+            {
+              patientId: customer ? customer._id : null,
+              appointmentId: _id, 
+              campaignId: appointment.campaign._id,
+            }
+          )
         }
       })
       console.log(eventsToLoad)
@@ -77,6 +93,10 @@ const AppointmentManager = props => {
     } else {
       console.log("no campaign selected")
     }
+  }
+
+  const handleRemoveSwitch = () => {
+    setRemoveSwitch(!removeSwitch)
   }
   //------------
 
@@ -100,7 +120,7 @@ const AppointmentManager = props => {
       fetchAppointments();
     }
     return () => isSubscribed = false;
-  }, [campaign])
+  }, [campaign, removeSwitch])
   //------------
 
   return (
@@ -142,6 +162,8 @@ const AppointmentManager = props => {
             appointmentService={props.appointmentService}
             handleAppointments={handleAppointments}
             notifyCreate={notifyCreate}
+            removeSwitch={removeSwitch}
+            handleRemoveSwitch={handleRemoveSwitch}
           />
         </div>
         <div className="my-calendar">

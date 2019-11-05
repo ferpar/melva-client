@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./Scheduler.css";
 
+import Switch from "react-ios-switch";
 import AddSingleForm from "./Scheduler/AddSingleForm.js";
 
 const Scheduler = props => {
@@ -14,7 +15,9 @@ const Scheduler = props => {
     <div className="scheduler-container">
       <div className="scheduler-wrapper">
         <h1>Scheduler</h1>
-        { props.campaign ? (addSingle ? (
+        { props.campaign ? (
+          <>
+          {addSingle ? (
           <AddSingleForm
             handleSetAddSingle={handleSetAddSingle}
             appointmentService={props.appointmentService}
@@ -26,7 +29,18 @@ const Scheduler = props => {
           />
         ) : (
           <button onClick={handleSetAddSingle}> Nueva cita </button>
-        )) : (
+        )}
+          <div className="remove-switch">
+            <Switch 
+              className="switch-control"
+              checked={props.removeSwitch}
+              onChange={props.handleRemoveSwitch}
+              onColor="#dc3545"
+            />
+            {props.removeSwitch ? <p>Borrado activado</p> : <p>Borrado desactivado</p> }
+          </div>
+          </>
+        ) : (
           <p>Seleccione clínica y campaña</p>
         )
         }
