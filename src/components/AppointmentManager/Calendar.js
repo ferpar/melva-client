@@ -14,6 +14,17 @@ const CustomEvent = ({event}) => (
     {event.title} {event.customer && "B!"} 
   </span>
 )
+
+const CustomEventWrapper =  ({event, children}) => {
+  console.log(children)
+    const style = {
+      borderRadius: "5px"
+    }
+    return <div 
+      className = {event.customer && "is-booked" }
+      style={style}
+      >{children}</div>
+  }
       
 const MyCalendar = props => {
 
@@ -40,9 +51,11 @@ const MyCalendar = props => {
           endAccessor="end"
           popup={true}
           onDoubleClickEvent={event => console.log(event.customer)}
-          step={15}
+          step={10}
+          timeslots={6}
           components={{
-            event: CustomEvent
+            event: CustomEvent,
+            eventWrapper: CustomEventWrapper
           }}
         />
       </div>

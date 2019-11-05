@@ -95,3 +95,8 @@
   border: 1px solid black;
   width: 100%;
 }
+
+/* Used important because otherwise I would have had to modify react-big-calendar's internal EventCell component (i.e.: making my own version of react-big-calendar) */
+.is-booked > * {
+  background-color: green !important;
+}
