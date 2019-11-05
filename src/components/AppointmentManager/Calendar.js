@@ -21,7 +21,7 @@ const CustomEventWrapper =  ({event, children}) => {
       borderRadius: "5px"
     }
     return <div 
-      className = {event.customer && "is-booked" }
+      className = {event.customer && "is-booked" } //to change color via css
       style={style}
       >{children}</div>
   }
