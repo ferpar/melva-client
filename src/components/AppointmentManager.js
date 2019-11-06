@@ -8,6 +8,8 @@ import { slide as Menu } from "react-burger-menu";
 import { toast } from "react-toastify";
 toast.configure();
 
+import Modali, { useModali } from "modali";
+
 import CampaignSelect from "./AppointmentManager/CampaignSelect.js";
 import Scheduler from "./AppointmentManager/Scheduler.js";
 import MyCalendar from "./AppointmentManager/Calendar.js";
@@ -23,6 +25,7 @@ const AppointmentManager = props => {
   const [filteredCampaigns, setFilteredCampaigns] = useState([])
   const [events, setEvents] = useState([])
   const [removeSwitch, setRemoveSwitch] = useState(false)
+  const [appointmentInfo, setAppointmentInfo] = useState({})
   //--------------
   
   // TOASTIFY METHOD
@@ -44,6 +47,34 @@ const AppointmentManager = props => {
     )};
   //--------------
   
+  //Modali Hooks
+  const [confirmModal, toggleConfirmModal] = useModali({
+    animated: true,
+    centered: true,
+    buttons: [
+      <Modali.Button
+        label="Volver"
+        isStyleCancel
+        onClick={() => toggleConfirmModal()}
+      />,
+      <Modali.Button
+        label="Confirmar"
+        isStyleDefault
+        onClick={async () => {
+          console.log("removed Appointment")
+          handleForceRemoveSingleAppointment({
+            appointmentId: appointmentInfo.appointmentId,
+                campaignId: appointmentInfo.campaignId,
+                patientId: appointmentInfo.patientId})
+          toggleConfirmModal();
+        }}
+      />
+    ],
+    title: "Borrar Cita"
+  })
+
+  //--------------
+  
   //----Handlers
   const handleSetLocation = e => {
     const selectedLocation = e.target.value
@@ -58,18 +89,48 @@ const AppointmentManager = props => {
     setCampaign(selectedCampaign)
   }
 
-  const handleRemoveAppointment = (event) => {
+  const handleRemoveSingleAppointment = async (event) => {
 
-    console.log(event.appointmentId)
-    console.log(event.campaignId)
-    console.log(event.patientId)
+    const {appointmentId, campaignId, patientId, patient} = event
+    let forceRemoveOption = false
+
+    setAppointmentInfo ({
+      appointmentId, campaignId, patientId, patient
+    }) //saving info for the case of force removing
+
+    if (patientId) {
+      toggleConfirmModal()  
+    } else {
+      const removedAppointment = await props.appointmentService.remove(
+        {
+          appointmentsToRemove : [
+            {appointmentId, campaignId, patientId}
+          ],
+            forceRemove: forceRemoveOption
+        }
+      )
+    }
+    await handleAppointments()
+  }
+
+  const handleForceRemoveSingleAppointment = async (appointmentInfo) => {
+    const {appointmentId, campaignId, patientId} = appointmentInfo;
+    let forceRemoveOption = true
+
+    const removedAppointment = await props.appointmentService.remove(
+      {
+        appointmentsToRemove: [
+          {appointmentId, campaignId, patientId}
+        ],
+        forceRemove: forceRemoveOption
+      }
+    )
+    await handleAppointments()
   }
 
   const handleAppointments = async () => {
     if (campaign) {
-      console.log(campaign)
       const appointments = await props.appointmentService.getCampaignAppointments({campaign})
-      console.log(appointments.data)
       const eventsToLoad = appointments.data.map( (appointment,ind) => {
         const {time, duration, customer, _id} = appointment
         const { title } = appointment.campaign
@@ -79,16 +140,16 @@ const AppointmentManager = props => {
           title: title,
           customer: customer ? customer.name : null,
           removeActive: removeSwitch,
-          handleRemoveAppointment: () => handleRemoveAppointment(
+          handleRemoveAppointment: () => handleRemoveSingleAppointment(
             {
               patientId: customer ? customer._id : null,
               appointmentId: _id, 
               campaignId: appointment.campaign._id,
+              patient: customer ? customer : null,
             }
           )
         }
       })
-      console.log(eventsToLoad)
       setEvents(eventsToLoad)
     } else {
       console.log("no campaign selected")
@@ -173,6 +234,23 @@ const AppointmentManager = props => {
           />
         </div>
       </div>
+      <Modali.Modal {...confirmModal}>
+        <div className="modal-text">
+          <p>
+            La cita está reservada por: 
+          </p>
+          <br/>
+          <p>
+            <strong>{ Object.keys(appointmentInfo).length > 0 && (appointmentInfo.patient.name + " " +  appointmentInfo.patient.surname)}</strong>
+            <br/>
+            teléfono: <strong>{Object.keys(appointmentInfo).length > 0 && appointmentInfo.patient.phone}</strong>
+          </p>
+          <br/>
+          <p>
+            Desea aún así eliminarla ?
+          </p>
+        </div>
+      </Modali.Modal>
     </>
   );
 };

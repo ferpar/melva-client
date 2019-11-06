@@ -17,6 +17,11 @@ class AppointmentService {
     return this.service.post("/create", appointments)
       .catch( err => console.error("[Service] Error creating appointments", err))
   }
+
+  remove = (values) => {
+    return this.service.post("/remove", values)
+      .catch( err => console.error("[FE-Service] Error removing appointments", err))
+  }
   
   getSingle = (id) => {
     return this.service.get("/get-single/" + id)
