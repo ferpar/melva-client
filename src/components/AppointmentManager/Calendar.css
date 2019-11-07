@@ -26,6 +26,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 100%;
 }
 
 .rbc-month-view{
@@ -46,7 +47,7 @@
   background-color: #fff;
   justify-content: center;
   min-height: 40vh;
-  height: 60vh;
+  height: inherit;
   width: 100%;
 }
 
