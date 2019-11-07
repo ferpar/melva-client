@@ -52,7 +52,7 @@
 @media(min-width: 500px) {
   .manager-container {
     grid-template-columns: 1fr 2fr 1fr;
-    grid-template-rows: 20% auto;
+    grid-template-rows: 1fr auto;
     grid-template-areas:
     "select scheduler scheduler"
     "calendar calendar calendar";
