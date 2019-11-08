@@ -22,7 +22,7 @@
 --primary :#007bff;
 }
 
-.generator-container {
+.generator-wrapper {
   display: flex;
   justify-content: space-around;
   padding: 1rem 0;
