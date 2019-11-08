@@ -3,12 +3,18 @@ import "./Scheduler.css";
 
 import Switch from "react-ios-switch";
 import AddSingleForm from "./Scheduler/AddSingleForm.js";
+import Generator from "./Scheduler/Generator.js";
 
 const Scheduler = props => {
   const [addSingle, setAddSingle] = useState(false)
+  const [generator, setGenerator] = useState(false)
 
   const handleSetAddSingle = () => {
     setAddSingle(!addSingle)
+  }
+
+  const handleSetGenerator = () => {
+    setGenerator(!generator)
   }
 
   return (
@@ -27,9 +33,17 @@ const Scheduler = props => {
             handleAppointments={props.handleAppointments}
             notifyCreate={props.notifyCreate}
           />
-        ) : (
-          <button onClick={handleSetAddSingle}> Nueva cita </button>
-        )}
+          ) : (
+            <button onClick={handleSetAddSingle}> Nueva cita </button>
+          )}
+
+          { generator ? (
+            <Generator />
+          ) : (
+            <button onClick={handleSetGenerator}> Generar Horario </button>
+          )
+
+          }
           <div className="remove-switch">
             <Switch 
               className="switch-control"
