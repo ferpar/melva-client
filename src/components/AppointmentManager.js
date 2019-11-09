@@ -241,9 +241,9 @@ const AppointmentManager = props => {
           </p>
           <br/>
           <p>
-            <strong>{ Object.keys(appointmentInfo).length > 0 && (appointmentInfo.patient.name + " " +  appointmentInfo.patient.surname)}</strong>
+            <strong>{ (Object.keys(appointmentInfo).length) > 0 && ( appointmentInfo.patinet && appointmentInfo.patient.name + " " +  appointmentInfo.patient.surname)}</strong>
             <br/>
-            teléfono: <strong>{Object.keys(appointmentInfo).length > 0 && appointmentInfo.patient.phone}</strong>
+            teléfono: <strong>{(Object.keys(appointmentInfo).length > 0) && appointmentInfo.patient && appointmentInfo.patient.phone}</strong>
           </p>
           <br/>
           <p>

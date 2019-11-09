@@ -1,5 +1,6 @@
 import React, { useState, useReducer, useEffect } from "react";
 import "./Generator/Generator.css";
+import moment from "moment-timezone";
 
 import DayHeader from "./Generator/DayHeader/DayHeader.js"
 import DayList from "./Generator/DayList/DayList.js"
@@ -96,6 +97,58 @@ const Generator = props => {
 
   }
 
+  const toMinutes = (time) => {
+    return parseInt(time.slice(0,2))*60 + parseInt(time.slice(3))
+  }
+
+  const toTimeCoords = (minutes) => {
+    return {hours: parseInt(minutes/60), minutes: minutes%60}
+  }
+
+  const handleGenerateAppointments = async () => {
+
+    const startsObject = {}
+    schedule.forEach( weekDay => {
+      startsObject[weekDay.day] = []
+      weekDay.ranges.forEach( range => {
+        const appointmentNumber = 
+          (toMinutes(range.end) - toMinutes(range.start))/multiDuration
+        for (let i=0; i<appointmentNumber; i++){
+          startsObject[weekDay.day].push(toTimeCoords(toMinutes(range.start)+i*multiDuration))
+        }
+      })  
+    })
+    const days = moment(dateTo).diff(moment(dateFrom), 'days')
+    const daysArray = []
+    const appointmentsArray = []
+    for(let i=0; i<=days; i++) {
+      let momentDate = moment(dateFrom).add(i,'days')
+      let dayAppointments = []
+      startsObject[momentDate.day()].forEach(timepair => {
+        dayAppointments.push(momentDate.hours(timepair.hours).minutes(timepair.minutes).format())
+        appointmentsArray.push(
+          {
+            time: new Date(momentDate.hours(timepair.hours).minutes(timepair.minutes).format()),
+            duration: multiDuration,
+            location: props.location,
+            campaign: props.campaign,
+            franchise: props.franchise._id
+          }
+        )
+      } )
+      daysArray.push([momentDate.day(), dayAppointments])
+    }
+    console.log(daysArray)
+    console.log(appointmentsArray)
+
+    try {
+      const sentAppointments = await props.appointmentService.create(appointmentsArray)
+      await props.handleAppointments()
+    } catch (err) {
+      console.error("[Handler] Error creating appointments", err)
+    }
+  }
+
   useEffect( () => {
     console.log(schedule)
   } , [schedule])
@@ -176,7 +229,7 @@ const Generator = props => {
         isEditingRanges && (
           <>
             <div className="add-multi-duration">
-              <label htmlfor="multi-duration">duración</label>
+              <label htmlFor="multi-duration">duración</label>
               <input 
                 type="text"
                 id="multi-duration"
@@ -197,7 +250,7 @@ const Generator = props => {
             
           />
            <button
-            onClick={() => console.log(schedule)}
+            onClick={handleGenerateAppointments}
             >
               Generar Citas
            </button>

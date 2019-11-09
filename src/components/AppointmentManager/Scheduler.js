@@ -39,7 +39,12 @@ const Scheduler = props => {
 
           { generator ? (
             <Generator 
+              appointmentService={props.appointmentService}
+              location={props.location}
+              campaign={props.campaign}
+              franchise={props.franchise}
               handleGenerator={handleSetGenerator}
+              handleAppointments={props.handleAppointments}
             />
           ) : (
             <button onClick={handleSetGenerator}> Generar Horario </button>

@@ -59,7 +59,7 @@ const AddSingleForm = props => {
             placeholder="pulse aquí..."
             onChange={e => dateChangeHandler(e)}
         />
-        <label htlmfor="duration"></label>
+        <label htlmFor="duration"></label>
         <div className="add-single-duration">
           <input 
             type="text" 
