@@ -19,6 +19,14 @@ const Generator = props => {
   const [rangeMin, setMinRange] = useState("08:00")
   const [rangeMax, setMaxRange] = useState("12:00")
 
+  const [dateFrom, setDateFrom] = useState(null)
+  const [dateTo, setDateTo] = useState(null)
+
+  const handleDateChange = e => {
+    setDateFrom(e[0]);
+    setDateTo(e[1]);
+  }
+
   const initialState = [
     { day: 1, checked: false, initial: "L", ranges: [] },
     { day: 2, checked: false, initial: "M", ranges: [] },
@@ -92,10 +100,17 @@ const Generator = props => {
 
   return (
     <div className="generator-container">
+      { !isEditingRanges &&
+      <button
+        onClick={props.handleGenerator}
+      >
+      Volver
+      </button>
+      }
       <button onClick={ handleEditingRanges }
       > 
       { isEditingRanges ?
-        ("Cancelar") :
+        ("Volver") :
         ("Editar Horario") 
       }
       </button>
@@ -157,11 +172,24 @@ const Generator = props => {
       </div>
       {
         isEditingRanges && (
-         <button
-          onClick={() => console.log(schedule)}
-          >
-            Generar Citas
-         </button>
+          <>
+           <Flatpickr
+            options={{ 
+              locale: Spanish,
+                mode: "range",
+                minDate: "today"
+            }}
+            className="appointments-flatpickr"
+            placeholder="desde hasta..."
+            onChange={ e => handleDateChange(e)}
+            
+          />
+           <button
+            onClick={() => console.log(schedule)}
+            >
+              Generar Citas
+           </button>
+          </>
         )
       }
     </div>

@@ -38,7 +38,9 @@ const Scheduler = props => {
           )}
 
           { generator ? (
-            <Generator />
+            <Generator 
+              handleGenerator={handleSetGenerator}
+            />
           ) : (
             <button onClick={handleSetGenerator}> Generar Horario </button>
           )
