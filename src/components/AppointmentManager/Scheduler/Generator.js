@@ -22,6 +22,8 @@ const Generator = props => {
   const [dateFrom, setDateFrom] = useState(null)
   const [dateTo, setDateTo] = useState(null)
 
+  const [multiDuration, setMultiDuration] = useState("15")
+
   const handleDateChange = e => {
     setDateFrom(e[0]);
     setDateTo(e[1]);
@@ -173,6 +175,16 @@ const Generator = props => {
       {
         isEditingRanges && (
           <>
+            <div className="add-multi-duration">
+              <label htmlfor="multi-duration">duración</label>
+              <input 
+                type="text"
+                id="multi-duration"
+                name="multi-duration"
+                value={multiDuration}
+                onChange={e=> setMultiDuration(e.target.value)}
+              />
+            </div>
            <Flatpickr
             options={{ 
               locale: Spanish,
