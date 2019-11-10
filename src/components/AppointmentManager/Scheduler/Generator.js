@@ -41,27 +41,36 @@ const Generator = props => {
   ]
   const [schedule, dispatch] = useReducer((state, action) => {
     const index = state.findIndex( row => row.day === action.day)
-    console.log(index)
     switch (action.type) {
       case 'add':
-      //  state[index].ranges.push(action.range)
-      //  state[index].ranges.sort((a,b) => a.start - b.start)
-      return [
-        ...state.slice(0, index),
-        {
-          ...state[index], 
-          ranges: 
-            [...state[index].ranges, action.range]
-            .sort((a,b) => parseInt(
-                a.start.slice(0,2) + a.start.slice(3)
-              ) - parseInt(
-                b.start.slice(0,2) + b.start.slice(3)
+        return [
+          ...state.slice(0, index),
+          {
+            ...state[index], 
+            ranges: 
+              [...state[index].ranges, action.range]
+              .sort((a,b) => parseInt(
+                  a.start.slice(0,2) + a.start.slice(3)
+                ) - parseInt(
+                  b.start.slice(0,2) + b.start.slice(3)
+                )
               )
-            )
-        },
-        ...state.slice(index + 1)
-      ]
-        return state
+          },
+          ...state.slice(index + 1)
+        ]
+      case 'remove':
+        return [
+          ...state.slice(0, index),
+          {
+            ...state[index],
+            ranges:
+              [
+                ...state[index].ranges.slice(0, action.ind),
+                ...state[index].ranges.slice(action.ind +1)
+              ]
+          },
+          ...state.slice(index + 1)
+        ]
       case 'checkbox':
         return [
           ...state.slice(0,index),
@@ -93,8 +102,12 @@ const Generator = props => {
     })
   }
 
-  const removeRange = (day, ind) => {
-
+  const handleRemoveRange = (day, ind) => {
+    dispatch({
+      type:"remove",
+      day,
+      ind
+    })
   }
 
   const toMinutes = (time) => {
@@ -148,10 +161,6 @@ const Generator = props => {
       console.error("[Handler] Error creating appointments", err)
     }
   }
-
-  useEffect( () => {
-    console.log(schedule)
-  } , [schedule])
 
   return (
     <div className="generator-container">
@@ -220,6 +229,8 @@ const Generator = props => {
             <DayList
               className = "daylist"
               ranges = {day.ranges}
+              day={day.day}
+              handleRemoveRange={handleRemoveRange}
             />
           </div>
         )) 

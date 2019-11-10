@@ -5,7 +5,12 @@ const DayList = props => (
   <div className="ranges-container">
   <hr className="daylist-separator" />
   { props.ranges.map( (range, ind) => (
-      <p key={ind}>{range.start}{" - "}{range.end}</p>
+    <div key={ind}>
+      <p>{range.start}{" - "}{range.end}</p>
+      <button
+        onClick={() => props.handleRemoveRange(props.day, ind)}
+      >-</button>
+    </div>
     ))  
   }
   </div>
