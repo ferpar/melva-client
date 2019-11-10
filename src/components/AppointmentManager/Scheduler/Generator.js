@@ -254,6 +254,11 @@ const Generator = props => {
             >
               Generar Citas
            </button>
+           <button
+            onClick={props.toggleConfirmCleanUpModal}
+            >
+              Borrar Citas
+           </button>
           </>
         )
       }

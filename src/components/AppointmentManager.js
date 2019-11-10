@@ -73,6 +73,27 @@ const AppointmentManager = props => {
     title: "Borrar Cita"
   })
 
+  const [confirmCleanUpModal, toggleConfirmCleanUpModal] = useModali({
+    animated: true,
+    centered: true,
+    buttons: [
+      <Modali.Button
+        label="Volver"
+        isStyleCancel
+        onClick={() => toggleConfirmCleanUpModal()}
+      />,
+      <Modali.Button
+        label="Confirmar"
+        isStyleDefault
+        onClick={async () => {
+          console.log("removing Appointments")
+          handleCleanUpAppointments();
+          toggleConfirmCleanUpModal();
+        }}
+      />
+    ],
+    title: "Borrar Cita"
+  })
   //--------------
   
   //----Handlers
@@ -113,6 +134,20 @@ const AppointmentManager = props => {
     await handleAppointments()
   }
 
+  const handleCleanUpAppointments = async () => {
+    const appointmentsToRemove = 
+      events.map( event => event.dbInfo)
+    const forceRemoveOption = false
+
+    const removedAppointments = await props.appointmentService.remove(
+      {
+        appointmentsToRemove,
+        forceRemove: forceRemoveOption
+      }
+    )
+    await handleAppointments()
+  }
+
   const handleForceRemoveSingleAppointment = async (appointmentInfo) => {
     const {appointmentId, campaignId, patientId} = appointmentInfo;
     let forceRemoveOption = true
@@ -140,6 +175,11 @@ const AppointmentManager = props => {
           title: title,
           customer: customer ? customer.name : null,
           removeActive: removeSwitch,
+          dbInfo: {
+              patientId: customer ? customer._id : null,
+              appointmentId: _id, 
+              campaignId: appointment.campaign._id,
+            },
           handleRemoveAppointment: () => handleRemoveSingleAppointment(
             {
               patientId: customer ? customer._id : null,
@@ -225,6 +265,7 @@ const AppointmentManager = props => {
             notifyCreate={notifyCreate}
             removeSwitch={removeSwitch}
             handleRemoveSwitch={handleRemoveSwitch}
+            toggleConfirmCleanUpModal={toggleConfirmCleanUpModal}
           />
         </div>
         <div className="my-calendar">
@@ -248,6 +289,17 @@ const AppointmentManager = props => {
           <br/>
           <p>
             Desea aún así eliminarla ?
+          </p>
+        </div>
+      </Modali.Modal>
+      <Modali.Modal {...confirmCleanUpModal}>
+        <div className="modal-text">
+          <p>
+            Va a proceder a <strong>eliminar</strong> todas las <strong>citas no reservadas</strong> del calendario
+          </p>
+          <br/>
+          <p>
+            Desea continuar ?
           </p>
         </div>
       </Modali.Modal>

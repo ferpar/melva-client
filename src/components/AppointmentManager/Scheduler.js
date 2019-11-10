@@ -45,6 +45,7 @@ const Scheduler = props => {
               franchise={props.franchise}
               handleGenerator={handleSetGenerator}
               handleAppointments={props.handleAppointments}
+              toggleConfirmCleanUpModal={props.toggleConfirmCleanUpModal}
             />
           ) : (
             <button onClick={handleSetGenerator}> Generar Horario </button>
