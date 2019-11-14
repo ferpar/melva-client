@@ -109,16 +109,24 @@ const EmployeesForm = withFormik({
     passwordConfirmation: Yup.string()
   }),
   async handleSubmit(values, {props, setSubmitting}) {
-    const newUser = {
-      ...values, 
-      franchise: props.franchise._id, //adding franchise
-    }
-    delete newUser.passwordConfirmation; //to avoid sending it to the BE
-    console.log(newUser)
+    if (props.employeeToEdit) {
+      console.log("edit employee")
+    } else {
 
-    const savedUser = await props.authService.signup(newUser)
-    .catch(err => console.error("[Handler] Error saving new User", err))
-    console.log(savedUser.data)
+      const newUser = {
+        ...values, 
+        franchise: props.franchise._id, //adding franchise
+      }
+
+      if (newUser.passwordConfirmation) delete newUser.passwordConfirmation; 
+
+      const savedUser = await props.authService.signup(newUser)
+      .catch(err => console.error("[Handler] Error saving new User", err))
+
+      await props.handleAddEmployee(savedUser.data)
+      .catch(err => console.error("[Handler] Error adding employee to the local state", err))
+
+    }
 
   }
 })(BaseForm);

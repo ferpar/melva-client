@@ -38,7 +38,7 @@ const Employees = props => {
             className="employees-slug"
             key={ind}
            >
-            <p >{employee.name}</p>
+            <p >{employee.username}</p>
             <button
               className="employees-button"
               onClick={() => handleEmployeeToEdit(employee._id)} 
