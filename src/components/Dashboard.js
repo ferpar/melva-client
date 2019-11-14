@@ -10,6 +10,7 @@ import IntroMsg from "./Dashboard/IntroMsg.js";
 import FranchiseInfo from "./Dashboard/FranchiseInfo.js";
 import Locations from "./Dashboard/Locations.js";
 import CampaignsList from "./Dashboard/CampaignsList.js";
+import Employees from "./Dashboard/Employees.js";
 
 const Dashboard = props => {
   const { franchise } = props.user
@@ -85,6 +86,12 @@ const Dashboard = props => {
               <div className="campaigns-list">
                 <CampaignsList
                   franchise={franchise}
+                />
+              </div>
+              <div className="employees">
+                <Employees
+                  franchise={franchise}
+                  authService={props.authService}
                 />
               </div>
               </>

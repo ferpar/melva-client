@@ -13,30 +13,14 @@ class AuthService {
     this.service = service;
   }
 
-  entrance = values => {
-    //this is the joint signup/login for guests
-    return this.service
-      .post("/login-signup-guest", values)
-      .then(result => {
-        return result;
-      })
-      .catch(err =>
-        console.error(
-          "there was an error posting your info: service level",
-          err
-        )
-      );
-  };
-
   loggedin = () => {
     return this.service
       .get("/loggedin")
-      .then(result => result)
       .catch(err => {
         if (err.response.status === 403) {
           console.log(err.response.data.message);
         } else {
-          console.error("error checking if logged in: service level", err);
+          console.error("[Service] error checking if logged in", err);
         }
       });
   };
@@ -44,39 +28,24 @@ class AuthService {
   logout = () => {
     return this.service
       .get("/logout")
-      .then(result => result)
       .catch(err =>
-        console.error("error attempting to logout: service level", err)
+        console.error("[Service] error attempting to logout", err)
       );
   };
 
-  guestLogin = values => {
+  signup = values => {
     return this.service
-      .post("/login-guest", values)
-      .then(result => result)
-      .catch(err =>
-        console.error(
-          "there was an error logging in as a guest. Service level error.",
-          err
-        )
-      );
-  };
-
-  guestSignup = values => {
-    return this.service
-      .post("/signup-guest", values)
-      .then(result => result)
-      .catch(err =>
-        console.error("there was an error during sign-up. Service level.", err)
-      );
+      .post("/signup", values)
+      .catch( err => 
+        console.error("[Service] Error signing user up", err)
+      )
   };
 
   userLogin = values => {
     return this.service
       .post("/login", values)
-      .then(result => result)
       .catch(err => {
-        console.error("Error during login. Service level", err)
+        console.error("[Service] Error during login.", err)
         return err
       });
   };
@@ -84,27 +53,24 @@ class AuthService {
   userEdit = values => {
     return this.service
       .post("/edit", values)
-      .then(result => result)
       .catch(err =>
-        console.error("Error during profile edit. Service level", err)
+        console.error("[Service] Error during profile edit.", err)
       );
   };
 
   linkLogin = values => {
     return this.service
       .post("/link-login", values)
-      .then(result => result)
       .catch(err =>
-        console.error("Error during link-login. Service level", err)
+        console.error("[Service] Error during link-login.", err)
       );
   };
 
   consent = values => {
     return this.service
       .post("/consent", values)
-      .then(result => result)
       .catch( err =>
-          console.error("Error sending consent value", err)
+          console.error("[Service] Error sending consent value", err)
       );
   };
 }

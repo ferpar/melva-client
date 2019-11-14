@@ -1,0 +1,184 @@
+:root {
+ /* color scheme 1 */
+  --silver-sand: #BCD8C1;
+  --yankees-blue: #0B3142;
+  --flax: #E9D985;
+  --zomp: #439A86;
+  --sea-blue: #007991;
+ /* color scheme 2 */
+--wilderness-1: #182E59;
+--wilderness-2: #355B8C;
+--wilderness-3: #6387A6;
+--wilderness-4: #F2E1C2;
+--wilderness-5: #A63B14;
+/* Color Theme Swatches in Hex */
+--dentist-1: #535FA6;
+--dentist-2: #85B4F2;
+--dentist-3: #9BCAF2;
+--dentist-4: #594022;
+--dentist-5: #D9B1A3;
+/* bootstrap */
+--danger: #dc3545;
+--primary :#007bff;
+}
+
+
+.employees-form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 3rem;
+}
+
+.employees-form-container input {
+  border: 0;
+  border-bottom: 1px solid #bbb;
+  outline: none;
+  transition: all 0.3s ease-in-out;
+}
+
+.employees-form-container input:hover {
+  border-bottom: 2px solid var(--dentist-1);
+}
+
+.employees-form-container input:focus {
+  border-bottom: 2px solid rgba(81, 203, 238, 1);
+}
+
+.employees-title{
+  margin-bottom: 1rem;
+}
+
+.employees-field-wrapper {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+  min-height: 4rem;
+}
+
+.employees-field-wrapper > input {
+  font-size: 1.4rem;
+}
+
+.employees-field-wrapper > label {
+  font-size: 1.2rem;
+}
+
+.employees-form{
+  display: grid;
+  grid-template-areas:
+    "emp-name"
+    "emp-address"
+    "emp-zipcode"
+    "emp-city"
+    "emp-phone"
+    "emp-email"
+    "emp-url"
+    "button"
+    ;
+  grid-gap: 0.5rem;
+}
+
+@media(min-width: 940px){
+  .employees-form{
+    grid-template-areas:
+      "emp-name emp-address"
+      "emp-zipcode emp-city"
+      "emp-phone emp-email"
+      "emp-url button";
+    }
+}
+
+.emp-name {
+  grid-area: emp-name;
+  max-width: 60vw;
+}
+
+.emp-address {
+  grid-area: emp-address;
+  max-width: 60vw;
+}
+
+.emp-zipcode {
+  grid-area: emp-zipcode;
+  max-width: 60vw;
+}
+
+.emp-city {
+  grid-area: emp-city;
+  max-width: 60vw;
+}
+
+.emp-phone {
+  grid-area: emp-phone;
+  max-width: 60vw;
+}
+
+.emp-email {
+  grid-area: emp-email;
+  max-width: 60vw;
+}
+
+.emp-url {
+  grid-area: emp-url;
+  max-width: 60vw;
+}
+
+.emp-buttons-wrapper{
+  display: flex;
+  grid-area: button;
+  justify-content: space-around;
+}
+
+/* buttons and error messages could be using the non "emp" classes (@styles.css),
+ * for now they've been separated to make this a standalone component */
+
+.emp-edit-button{
+  display: inline-block;
+  background-color: var(--primary);
+  color: #fff;
+  border: 2px solid var(--primary);
+  border-radius: 5px;
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.5rem 0;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 0.25rem;
+  max-width: 6rem;
+}
+
+.emp-edit-button:hover {
+  background-color: rgba(0, 123, 255, 0.2);
+  color: var(--primary);
+}
+
+.emp-cancel-button{
+  display: inline-block;
+  background-color: var(--danger);
+  color: #fff;
+  border: 2px solid var(--danger);
+  border-radius: 5px;
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.5rem 0;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 0.25rem;
+  max-width: 6rem;
+}
+
+.emp-cancel-button:hover {
+  background-color: rgba(220, 53, 69, 0.2);
+  color: var(--danger);
+}
+
+.emp-error-msg {
+  color: var(--danger);
+  font-size: 0.8rem;
+  text-align: right;
+  margin-top: 0.2rem;
+  max-width: 18rem;
+}
