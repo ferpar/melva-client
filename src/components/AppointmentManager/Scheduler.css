@@ -52,6 +52,14 @@
   margin-bottom: 1rem;
 }
 
+.scheduler-controls{
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+}
+
 .scheduler-details{
   display: flex;
   flex-direction: column;

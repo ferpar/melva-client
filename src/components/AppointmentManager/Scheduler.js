@@ -20,10 +20,24 @@ const Scheduler = props => {
   return (
     <div className="scheduler-container">
       <div className="scheduler-wrapper">
-        <h1>Scheduler</h1>
         { props.campaign ? (
           <>
-          {addSingle ? (
+          {(!addSingle && !generator) &&
+            <div className="scheduler-controls"> 
+              <button onClick={handleSetAddSingle}> Nueva cita </button>
+              <button onClick={handleSetGenerator}> Generar Horario </button>
+              <div className="remove-switch">
+                <Switch 
+                  className="switch-control"
+                  checked={props.removeSwitch}
+                  onChange={props.handleRemoveSwitch}
+                  onColor="#dc3545"
+                />
+                {props.removeSwitch ? <p>Borrado activado</p> : <p>Borrado desactivado</p> }
+              </div>
+            </ div>
+          }
+          {addSingle && (
           <AddSingleForm
             handleSetAddSingle={handleSetAddSingle}
             appointmentService={props.appointmentService}
@@ -33,11 +47,8 @@ const Scheduler = props => {
             handleAppointments={props.handleAppointments}
             notifyCreate={props.notifyCreate}
           />
-          ) : (
-            <button onClick={handleSetAddSingle}> Nueva cita </button>
           )}
-
-          { generator ? (
+          { generator && (
             <Generator 
               appointmentService={props.appointmentService}
               location={props.location}
@@ -47,20 +58,7 @@ const Scheduler = props => {
               handleAppointments={props.handleAppointments}
               toggleConfirmCleanUpModal={props.toggleConfirmCleanUpModal}
             />
-          ) : (
-            <button onClick={handleSetGenerator}> Generar Horario </button>
-          )
-
-          }
-          <div className="remove-switch">
-            <Switch 
-              className="switch-control"
-              checked={props.removeSwitch}
-              onChange={props.handleRemoveSwitch}
-              onColor="#dc3545"
-            />
-            {props.removeSwitch ? <p>Borrado activado</p> : <p>Borrado desactivado</p> }
-          </div>
+          )}
           </>
         ) : (
           <p>Seleccione clínica y campaña</p>
