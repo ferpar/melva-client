@@ -35,7 +35,6 @@ const Dashboard = props => {
   }
 
   useEffect( () => {
-    console.log(props.user)
     setIsLoading(false)
   }, [])
 

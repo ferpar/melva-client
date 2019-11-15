@@ -73,6 +73,14 @@ class AuthService {
           console.error("[Service] Error sending consent value", err)
       );
   };
+
+  removeUser = values => {
+    return this.service
+      .post("/remove", values)
+      .catch( err => 
+        console.error("[Service] Error removing user", err)
+      );
+  };
 }
 
 

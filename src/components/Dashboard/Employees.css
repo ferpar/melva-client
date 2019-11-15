@@ -89,3 +89,34 @@
   border: 1px solid black;
   width: 100%;
 }
+
+.employees-cancel-button{
+  display: inline-block;
+  background-color: var(--danger);
+  color: #fff;
+  border: 2px solid var(--danger);
+  border-radius: 5px;
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.5rem 0;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 0.25rem;
+  max-width: 6rem;
+}
+
+.employees-cancel-button:hover {
+  background-color: rgba(220, 53, 69, 0.2);
+  color: var(--danger);
+}
+
+.employees-cancel-button:first-child {
+  margin-right: 1rem;
+}
+
+.employees-button-group {
+  display: flex;
+  justify-content: flex-end;
+  flex-grow: 1;
+}
