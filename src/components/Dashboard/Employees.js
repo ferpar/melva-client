@@ -54,6 +54,7 @@ const Employees = props => {
               Borrar
             </button>
             <button
+              style={{"display": "none"}}
               className="employees-button"
               onClick={() => handleEmployeeToEdit(employee._id)} 
             >

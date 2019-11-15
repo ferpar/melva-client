@@ -111,9 +111,11 @@
   color: var(--danger);
 }
 
+/*
 .employees-cancel-button:first-child {
   margin-right: 1rem;
 }
+*/
 
 .employees-button-group {
   display: flex;
