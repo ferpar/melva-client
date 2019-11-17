@@ -28,7 +28,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding-top: 3rem;
+  width: 100%;
 }
 
 .add-single-form-container input {
@@ -57,15 +57,8 @@
   min-height: 4rem;
 }
 
-.add-single-field-wrapper > input {
-  font-size: 1.4rem;
-}
-
-.add-single-field-wrapper > label {
-  font-size: 1.2rem;
-}
-
 .add-single-form{
+  width: 100%;
   display: grid;
   grid-template-areas:
     "add-single-flatpickr"
@@ -75,15 +68,25 @@
   grid-gap: 0.5rem;
 }
 
-@media(min-width: 710px){
+@media(min-width: 750px){
   .add-single-form{
     grid-template-areas:
-      "add-single-flatpickr add-single-duration"
-      ". button";
+      "add-single-flatpickr button"
+      "add-single-duration button";
     }
 }
 
+@media(min-width: 960px){
+  .add-single-form{
+    grid-template-areas:
+      "add-single-flatpickr add-single-duration button";
+    grid-template-columns: "1fr 1fr 1fr";
+  }
+}
+
 .add-single-flatpickr {
+  display: flex;
+  flex-direction: column;
   grid-area: add-single-flatpickr;
   text-align: center;
   font-size: 1.2rem;
@@ -97,29 +100,40 @@
 
 .add-single-duration {
   display: flex;
+  flex-direction: column;
+  font-size: 1.2rem;
   grid-area: add-single-duration;
-  max-width: 60vw;
+  justify-content: center;
+  width: 100%;
 }
 
-.add-single-phone {
-  grid-area: add-single-phone;
-  max-width: 60vw;
-}
-
-.add-single-email {
-  grid-area: add-single-email;
-  max-width: 60vw;
-}
-
-.add-single-url {
-  grid-area: add-single-url;
-  max-width: 60vw;
+.add-single-datetime {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .add-single-buttons-wrapper{
   display: flex;
+  align-items: center;
   grid-area: button;
   justify-content: space-around;
+}
+
+@media(min-width: 750px) {
+  .add-single-buttons-wrapper {
+    flex-direction: column;
+  }
+}
+
+.add-single-input-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.add-single-duration-input{
+  width: 50%;
+  font-size: 1.2rem;
 }
 
 /* buttons and error messages could be using the non "add-single" classes (@styles.css),

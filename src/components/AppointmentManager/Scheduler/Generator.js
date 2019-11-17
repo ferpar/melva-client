@@ -236,9 +236,7 @@ const Generator = props => {
         )) 
       }
       </div>
-      {
-        isEditingRanges && (
-          <>
+          <div className="generator-controls">
             <div className="add-multi-duration">
               <label htmlFor="multi-duration">duración</label>
               <input 
@@ -270,9 +268,7 @@ const Generator = props => {
             >
               Borrar Citas
            </button>
-          </>
-        )
-      }
+          </div>
     </div>
   )
 }

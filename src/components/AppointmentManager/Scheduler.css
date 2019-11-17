@@ -42,7 +42,7 @@
   height: 100%;
 }
 
-@media(min-width: 500px) {
+@media(min-width: 960px) {
   .scheduler-wrapper{
     padding: 1rem 3rem;
   }

@@ -43,48 +43,53 @@ const AddSingleForm = props => {
 
   return (
     <div className="add-single-form-container">
-      <h1 className="add-single-title">Add Single Component</h1>
       <div className="add-single-form">
-        <Flatpickr
-            options={{ 
-              dateFormat: 'd-m-Y',
-              disableMobile: true,
-              enableTime: true,
-              locale: Spanish,
-              minDate: new Date( new Date().setDate( new Date().getDate() + 1)),
-              altInput: true,
-              altFormat: "F j, Y, H:i",
-            }}
-            className="add-single-flatpickr"
-            placeholder="pulse aquí..."
-            onChange={e => dateChangeHandler(e)}
-        />
-        <label htlmFor="duration"></label>
-        <div className="add-single-duration">
-          <input 
-            type="text" 
-            id="duration" 
-            name="duration"
-            value={duration}
-            onChange={e => setDuration(e.target.value)}
+        <div className="add-single-datetime">
+          <label htmlFor="flatpickr">Fecha y hora</label>
+          <Flatpickr
+              options={{ 
+                dateFormat: 'd-m-Y',
+                disableMobile: true,
+                enableTime: true,
+                locale: Spanish,
+                minDate: new Date( new Date().setDate( new Date().getDate() + 1)),
+                altInput: true,
+                altFormat: "F j, Y, H:i",
+              }}
+              className="add-single-flatpickr"
+              placeholder="pulse aquí..."
+              onChange={e => dateChangeHandler(e)}
           />
-          <p>minutes</p>
+        </div>
+        <div className="add-single-duration">
+          <label htmlFor="duration">duración</label>
+          <div className="add-single-input-wrapper">
+            <input 
+              className="add-single-duration-input"
+              type="text" 
+              id="duration" 
+              name="duration"
+              value={duration}
+              onChange={e => setDuration(e.target.value)}
+            />
+            <p>minutos</p>
+          </div>
+        </div>
+        <div className="add-single-buttons-wrapper">
+          <button className="add-single-cancel-button" 
+            onClick={props.handleSetAddSingle}
+          >
+            Cancelar
+          </button>
+          <button 
+            className="add-single-button"
+            onClick={handleSubmit}
+          >
+            Añadir
+          </button>
         </div>
       </div>
       
-      <div className="add-single-buttons-wrapper">
-        <button className="add-single-cancel-button" 
-          onClick={props.handleSetAddSingle}
-        >
-          Cancelar
-        </button>
-        <button 
-          className="add-single-button"
-          onClick={handleSubmit}
-        >
-          Añadir
-        </button>
-      </div>
     </div>
   )
 }
