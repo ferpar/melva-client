@@ -22,6 +22,10 @@
 --primary :#007bff;
 }
 
+.generator-container{
+  width: 100%;
+}
+
 .generator-wrapper {
   display: flex;
   justify-content: space-around;
