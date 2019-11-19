@@ -23,7 +23,7 @@ const Generator = props => {
   const [dateFrom, setDateFrom] = useState(null)
   const [dateTo, setDateTo] = useState(null)
 
-  const [multiDuration, setMultiDuration] = useState("15")
+  const [multiDuration, setMultiDuration] = useState("30")
 
   const handleDateChange = e => {
     setDateFrom(e[0]);
