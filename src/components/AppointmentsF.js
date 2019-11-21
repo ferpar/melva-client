@@ -33,6 +33,7 @@ const Appointment = props => {
   const [menuOpen, setMenuOpen] = useState(false)
   const [expandContact, setExpandContact] = useState(false);
   const [availableDates, setAvailableDates] = useState([]);
+  const [activeCampaign, setActiveCampaign] = useState(props.user.activeCampaign)
 
   //Modali Hooks (for modals)
   const [confirmModal, toggleConfirmModal] = useModali({
@@ -205,7 +206,6 @@ const Appointment = props => {
         month = date.getMonth() + 1,
         day = date.getDate();
       const dateStr = `${year}-${month}-${day}`;
-      const activeCampaign = props.user.activeCampaign;
       if (isSubscribed) {
       setIsLoading(true)
       props.appointmentService
@@ -238,7 +238,6 @@ const Appointment = props => {
             }
           })
 
-          const activeCampaign = props.user.activeCampaign;
           const newAvailableDates = await props.appointmentService
             .getDates({activeCampaign})
           setAvailableDates([...newAvailableDates.data.dates]) 
