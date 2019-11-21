@@ -8,6 +8,7 @@ import moment from "moment-timezone";
 
 import {slide as Menu} from "react-burger-menu";
 import Spinner from "./spinners/Ripple.js";
+import CampaignSelector from "./AppointmentsF/CampaignSelector.js";
 
 import { toast } from "react-toastify";
 toast.configure();
@@ -34,6 +35,9 @@ const Appointment = props => {
   const [expandContact, setExpandContact] = useState(false);
   const [availableDates, setAvailableDates] = useState([]);
   const [activeCampaign, setActiveCampaign] = useState(props.user.activeCampaign)
+  const [availableCampaigns, setAvailableCampaigns] = 
+    useState(props.user.campaignUsers.map( 
+      campaignUser => campaignUser.campaignId ))
 
   //Modali Hooks (for modals)
   const [confirmModal, toggleConfirmModal] = useModali({
@@ -149,6 +153,10 @@ const Appointment = props => {
     setDate(e[0]);
   };
 
+  const changeActiveCampaignHandler = campaignId => {
+    setActiveCampaign(campaignId)
+  }
+
     // for the menu
   const handleStateChange = (state) => {
     setMenuOpen(state.isOpen)  
@@ -160,7 +168,6 @@ const Appointment = props => {
 
   const bookDate = (id, available) => {
     const userId = props.user._id;
-    const activeCampaign = props.user.activeCampaign
     const postData = { id, userId, available, activeCampaign };
     const slotIndex = appointments.findIndex(
       appointment => appointment._id === id
@@ -241,11 +248,15 @@ const Appointment = props => {
           const newAvailableDates = await props.appointmentService
             .getDates({activeCampaign})
           setAvailableDates([...newAvailableDates.data.dates]) 
+
+          setAppointments([]) //emptying to prevent confusion on campaign switch
+          setDate(null)       //resetting date as well
+
         }
         loadup();
       }
     return () => isSubscribed = false;
-  }, [])
+  }, [activeCampaign])
   
 
   //RETURN (render)
@@ -263,6 +274,12 @@ const Appointment = props => {
         }>Desconectar</button>
     </Menu>
     <div className="appointments-main">
+    { (availableCampaigns.length > 1) &&
+        <CampaignSelector
+          availableCampaigns={availableCampaigns}
+          changeActiveCampaignHandler={changeActiveCampaignHandler}
+        />
+    }
     { (userAppointments
         .filter(appointment => //filtering overdue appointments 
           new Date(appointment.time).getTime() > new Date().getTime()) 
