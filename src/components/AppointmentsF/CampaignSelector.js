@@ -4,11 +4,13 @@ import "./CampaignSelector.css";
 const CampaignSelector = props => (
   <div className="campaign-selector-container">
     <h2>Cita para:</h2>
+    <div className="selections-container">
     {
       props.availableCampaigns && props.availableCampaigns.map(
         (campaign, idx) => {
           return (
           <p 
+            className="campaign-button"
             key={idx}
             onClick={() => {
               console.log("clicked!")
@@ -26,6 +28,7 @@ const CampaignSelector = props => (
         }
       ) 
     }
+    </div>
   </div>
 )
 

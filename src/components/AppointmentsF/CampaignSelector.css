@@ -25,15 +25,29 @@
 .campaign-selector-container {
   border-radius: 5px;
   background-color: #fff;
-  display: grid;
-  grid-gap: 1rem;
-  grid-template-areas: 
-    "title"
-    "flatpickr"
-    "date"
-  ;
+  display: flex;
+  flex-direction: column;
   padding: 1rem;
   width: 100%;
   max-width: 40rem;
   margin-bottom: 1rem;
+}
+
+.selections-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.campaign-button {
+  margin-top: 1rem;
+  border-radius: 5px;
+  background-color: #eee;
+  padding: 0.5rem 1rem;
+  width: 100%;
+  text-align: center;
+}
+
+.campaign-button:hover, .campaign-button:active {
+  background-color: #ddd;
 }
