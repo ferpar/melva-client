@@ -36,7 +36,9 @@ const Appointment = props => {
   const [availableDates, setAvailableDates] = useState([]);
   const [activeCampaign, setActiveCampaign] = useState(props.user.activeCampaign)
   const [availableCampaigns, setAvailableCampaigns] = 
-    useState(props.user.campaignUsers.map( 
+    useState(props.user.campaignUsers
+      .filter( campaignUser => campaignUser.smsStatus != "not-sent")
+      .map( 
       campaignUser => campaignUser.campaignId ))
   const [isSelectorOpen, setIsSelectorOpen] = useState(true)
 
