@@ -29,10 +29,12 @@ const CampaignManager = props => {
 
   // == Main Form ==
   const [title, setTitle] = useState("")
+  const [shortDescription, setShortDescription] =useState("")
   const [message, setMessage] = useState("")
   const [showGSM, setShowGSM] = useState(false)
   const [greeting, setGreeting] = useState(false)
   const [customLink, setCustomLink] = useState(false)
+  const [isActive, setIsActive] = useState(true)
 
   const [campaigns, setCampaigns] = useState([])
   const [filteredCampaigns, setFilteredCampaigns] = useState([])
@@ -68,6 +70,10 @@ const CampaignManager = props => {
 
   const handleLinkChange = e => {
     setCustomLink(e.target.checked)
+  }
+
+  const handleIsActive = e => {
+    setIsActive(!e.target.checked) 
   }
 
   const launchCampaign = async () => {
@@ -109,7 +115,7 @@ const CampaignManager = props => {
 
   const saveCampaign = async ( newRecipients) => {
     
-    const postData = { title, message, recipients, customGreeting: greeting, customLink, location }
+    const postData = { title, message, shortDescription, recipients, customGreeting: greeting, customLink, location, isActive }
     if (newRecipients) postData.recipients = newRecipients;
 
     await props.campaignService
@@ -135,10 +141,12 @@ const CampaignManager = props => {
       await props.campaignService
         .getById(campaignId)
           .then(async result => {
-            const {title, message, customGreeting, customLink, campaignUsers} = result.data;
+            const {title, message, shortDescription = "", customGreeting, customLink, campaignUsers, isActive = true} = result.data;
 
             await setTitle(title)
             await setMessage(message)
+            await setShortDescription(shortDescription)
+            await setIsActive(isActive)
             await setGreeting(customGreeting)
             await setCustomLink(customLink)
             await setRecipients(campaignUsers)
@@ -435,6 +443,14 @@ const CampaignManager = props => {
                     <label htmlFor="title">nombre de campaña</label>
                     <input name="title" id="title" type="text" value={title} onChange={(e) => setTitle(e.target.value)}/>
                   </div>
+                <div className="campaign-description">
+                    <label htmlFor="short-description">nombre público</label>
+                    <input name="short-description" id="short-description" type="text" value={shortDescription} onChange={(e) => setShortDescription(e.target.value)}/>
+                </div>
+                <div className="campaign-status">
+                    <input type="checkbox" id="isactive" name="isactive" checked={!isActive} onChange={e => handleIsActive(e)}/>
+                    <label htmlFor="isactive">Campaña terminada</label>
+                </div>
                   <button disabled={isSaving} className="save cp-button" onClick={e => handleSaveCampaign(e)}>{isSaving ? "Guardando..." : "Guardar Campaña"}</button>
                   <hr/>
                   <label htmlFor="campaign-select">cargar campaña</label>

@@ -9,7 +9,9 @@ const CampaignSelector = props => (
       <h2 className="cs-header">Cita para:</h2>
       <div className="selections-container">
       {
-        props.availableCampaigns && props.availableCampaigns.map(
+        props.availableCampaigns && props.availableCampaigns
+        .filter(campaign =>  campaign && campaign.isActive)
+        .map(
           (campaign, idx) => {
             return (
             <p 

@@ -668,6 +668,11 @@ Note: Beware of modifying this element as it can break the animations - you shou
  padding: 2rem;
 }
 
+.campaign-name, .campaign-description {
+  display: flex;
+  flex-direction: column;
+}
+
 .textarea-container {
   display: grid;
   grid-template-areas:
