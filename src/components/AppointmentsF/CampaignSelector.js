@@ -3,10 +3,44 @@ import "./CampaignSelector.css";
 
 const CampaignSelector = props => (
   <div className="campaign-selector-container">
-    <h2>Cita para:</h2>
+  { props.isSelectorOpen ? 
+    (
+    <>
+      <h2 className="cs-header">Cita para:</h2>
+      <div className="selections-container">
+      {
+        props.availableCampaigns && props.availableCampaigns.map(
+          (campaign, idx) => {
+            return (
+            <p 
+              className="campaign-button"
+              key={idx}
+              onClick={() => {
+                console.log("clicked!")
+                console.log(campaign._id)
+                props.changeActiveCampaignHandler(campaign._id)
+                props.handleIsSelectorOpen()
+                } 
+              } 
+            >
+              {campaign && (
+              campaign.shortDescription 
+              ? campaign.shortDescription
+              : campaign.title)}
+            </p>
+            )
+          }
+        ) 
+      }
+      </div>
+    </>
+    ) : (
+
     <div className="selections-container">
     {
-      props.availableCampaigns && props.availableCampaigns.map(
+      props.availableCampaigns && props.availableCampaigns
+      .filter(campaign => campaign._id === props.activeCampaign)
+      .map(
         (campaign, idx) => {
           return (
           <p 
@@ -15,7 +49,7 @@ const CampaignSelector = props => (
             onClick={() => {
               console.log("clicked!")
               console.log(campaign._id)
-              props.changeActiveCampaignHandler(campaign._id)
+              props.handleIsSelectorOpen()
               } 
             } 
           >
@@ -29,6 +63,9 @@ const CampaignSelector = props => (
       ) 
     }
     </div>
+       
+    )
+  }
   </div>
 )
 

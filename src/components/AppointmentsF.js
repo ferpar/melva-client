@@ -38,6 +38,7 @@ const Appointment = props => {
   const [availableCampaigns, setAvailableCampaigns] = 
     useState(props.user.campaignUsers.map( 
       campaignUser => campaignUser.campaignId ))
+  const [isSelectorOpen, setIsSelectorOpen] = useState(true)
 
   //Modali Hooks (for modals)
   const [confirmModal, toggleConfirmModal] = useModali({
@@ -155,6 +156,10 @@ const Appointment = props => {
 
   const changeActiveCampaignHandler = campaignId => {
     setActiveCampaign(campaignId)
+  }
+
+  const handleIsSelectorOpen = () => {
+    setIsSelectorOpen(!isSelectorOpen)
   }
 
     // for the menu
@@ -277,7 +282,10 @@ const Appointment = props => {
     { (availableCampaigns.length > 1) &&
         <CampaignSelector
           availableCampaigns={availableCampaigns}
+          activeCampaign={activeCampaign}
           changeActiveCampaignHandler={changeActiveCampaignHandler}
+          handleIsSelectorOpen={handleIsSelectorOpen}
+          isSelectorOpen={isSelectorOpen}
         />
     }
     { (userAppointments

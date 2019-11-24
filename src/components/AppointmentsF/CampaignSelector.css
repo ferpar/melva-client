@@ -33,6 +33,10 @@
   margin-bottom: 1rem;
 }
 
+.cs-header{
+  margin-bottom: 1rem;
+}
+
 .selections-container {
   display: flex;
   flex-direction: column;
@@ -46,6 +50,10 @@
   padding: 0.5rem 1rem;
   width: 100%;
   text-align: center;
+}
+
+.campaign-button:first-child {
+  margin-top: 0;
 }
 
 .campaign-button:hover, .campaign-button:active {
