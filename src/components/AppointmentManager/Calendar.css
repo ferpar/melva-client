@@ -37,6 +37,10 @@
   min-width: 80vw;
 }
 
+.rbc-time-slot{
+  min-height: 1rem;
+}
+
 .calendar-wrapper{
   align-items: center;
   display: flex;
