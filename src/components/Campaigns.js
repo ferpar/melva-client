@@ -178,6 +178,7 @@ const CampaignManager = props => {
       .remove({id})
         .then( async () => {
           await setTitle("")
+          await setShortDescription("")
           await setMessage("")
           await setGreeting(false)
           await setRecipients([])
