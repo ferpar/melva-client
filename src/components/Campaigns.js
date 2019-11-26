@@ -80,7 +80,16 @@ const CampaignManager = props => {
 
     setIsSending(true)
 
-    const postData = { msgbody: message, recipients: recipients.filter(recipient => (recipient.selected && recipient.smsStatus==="not-sent")), addGreeting: greeting, addLink: customLink}
+    const postData = { 
+      msgbody: message, 
+      recipients: recipients
+                  .filter(recipient => 
+                    (recipient.selected && recipient.smsStatus==="not-sent")
+                  ), 
+      addGreeting: greeting, 
+      addLink: customLink,
+      smsName: props.user.franchise.smsName
+    }
 
     await props.appointmentService
       .sendCampaign(postData)
