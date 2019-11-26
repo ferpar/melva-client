@@ -394,7 +394,9 @@ const Appointment = props => {
                 minDate: new Date( new Date().setDate( new Date().getDate() + 1)),
                 altInput: true,
                 altFormat: "F j, Y",
-                enable: [ ...availableDates.map( dateStr => new Date(moment.tz(dateStr,"Europe/Madrid").format())) ]
+                enable: availableDates.length > 0 
+                  ? [ ...availableDates.map( dateStr => new Date(moment.tz(dateStr,"Europe/Madrid").format())) ]
+                  : ["2018-4-01"]
               }}
               className="appointments-flatpickr"
               placeholder="pulse aquí..."
