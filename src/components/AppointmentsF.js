@@ -385,6 +385,7 @@ const Appointment = props => {
               <img className="top-logo" src={logo_rull} alt="logo"/>
               <h2>Nueva Cita</h2>
               { !date && <p> Seleccionar fecha: </p>}
+      {console.log(availableDates)}
             </div>
             <Flatpickr
               options={{ 
@@ -394,6 +395,7 @@ const Appointment = props => {
                 minDate: new Date( new Date().setDate( new Date().getDate() + 1)),
                 altInput: true,
                 altFormat: "F j, Y",
+                minDate: "01.12.2019",
                 enable: availableDates.length > 0 
                   ? [ ...availableDates.map( dateStr => new Date(moment.tz(dateStr,"Europe/Madrid").format())) ]
                   : ["2018-4-01"]
