@@ -385,7 +385,6 @@ const Appointment = props => {
               <img className="top-logo" src={logo_rull} alt="logo"/>
               <h2>Nueva Cita</h2>
               { !date && <p> Seleccionar fecha: </p>}
-      {console.log(availableDates)}
             </div>
             <Flatpickr
               options={{ 
