@@ -206,6 +206,8 @@ const CampaignManager = props => {
   const [recipients, setRecipients] = useState([])
   const [customer, setCustomer] = useState({userId: {name: "", surname: "", phone: ""}})
   const [removeSwitch, setRemoveSwitch] = useState(false)
+  const [multiSelect, setMultiSelect] = useState(false)
+  const [selectArray, setSelectArray] = useState([])
 
   const handleAddCustomer = async e => {
     e.preventDefault();
@@ -231,6 +233,42 @@ const CampaignManager = props => {
       const selected = prevRecipients[i].selected ? false : true  
       return [...prevRecipients.slice(0,i), {...prevRecipients[i], selected},...prevRecipients.slice(i+1)]
     })
+  }
+
+  const handleMultiSelect = async id => {
+    if (multiSelect) {
+      let iterableRecipients = recipients.filter(recipient => {
+                  switch (filter) {
+                    case "all":
+                      return recipient;
+                    case "not-sent":
+                      return recipient.smsStatus==="not-sent";
+                    case "enqueued":
+                      return recipient.smsStatus==="enqueued";
+                    case "delivered":
+                      return recipient.smsStatus==="delivered";
+                    case "failed":
+                      return recipient.smsStatus==="failed";
+                    case "clicked":
+                      return recipient.linkClicked;
+                    case "booked":
+                      return recipient.appointmentBooked;
+                    default:
+                      return recipient;
+                  }
+            })
+      if (selectArray.length !=1) {
+        handleSelectCustomer(id) 
+        setSelectArray([id]) 
+      } else if (selectArray.length === 1) {
+        const start = iterableRecipients.findIndex(recipient => recipient._id === selectArray[0])
+        const end = iterableRecipients.findIndex(recipient => recipient._id === id)
+        for (let i=start+1; i<=end; i++) {
+            handleSelectCustomer(iterableRecipients[i]._id)
+        }
+        setSelectArray([...selectArray, id])
+      }
+    }
   }
 
   const handleCustomerChange = e => {
@@ -546,6 +584,15 @@ const CampaignManager = props => {
                       />
                       { removeSwitch ? <p> Borrado activado </p> : <p> Borrado inactivo </p>}
                     </div>
+                    <div className="multiselect-switch">
+                      <Switch 
+                        className = "multiselect-switch-control"
+                        checked = {multiSelect}
+                        onChange={checked => setMultiSelect(!multiSelect)}
+                        onColor = "#dc3545"
+                      />
+                      { multiSelect ? <p> Selección simple </p> : <p> Selección múltiple </p>}
+                    </div>
                 </div>
                 <div><p>filter by:</p>
                   <button onClick={() => setFilter("all")}>all</button>
@@ -587,7 +634,7 @@ const CampaignManager = props => {
                             ? "customer-list-item selected new-customer" : "customer-list-item selected") : (
                            (new Date() - new Date(recipient.updated_at) <= 3600*1000*12) ?  "customer-list-item new-customer" : "customer-list-item")}>
                       <div 
-                        onClick={() => handleSelectCustomer(recipient._id)} 
+                        onClick={multiSelect ? () => handleMultiSelect(recipient._id) : () => handleSelectCustomer(recipient._id)} 
                         className="customer-fields">
                         <p>{recipient.userId.name}</p>
                         <p>{recipient.userId.surname}</p>

@@ -802,19 +802,19 @@ Note: Beware of modifying this element as it can break the animations - you shou
   align-items: center;
 }
 
-.remove-switch {
+.remove-switch, .multiselect-switch {
   display: flex;
   flex-direction: row;
   align-items: center;
   margin-left: 1rem;
 }
 
-.remove-switch > p {
+.remove-switch > p, .multiselect-switch > p {
   margin-left: 0.5rem;
   flex-shrink: 2;
 }
 
-.switch-control {
+.switch-control, .multiselect-switch-control {
   flex-shrink:0;
 }
 
