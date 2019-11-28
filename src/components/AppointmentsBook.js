@@ -49,6 +49,25 @@ const AppointmentsBook = props => {
     setGroupedAppointments(groupByDate([...filteredAppointments]))
   }
 
+  const handleRefresh = async () => {
+    if (selectedLocation) {
+    const newList = await props.appointmentService.getBooked()
+    
+    setAppointments([...newList.data]) 
+
+    const filteredAppointments = 
+      selectedCampaign
+      ? [...newList.data]
+          .filter( appointment => appointment.location === selectedLocation)
+          .filter( appointment => appointment.campaign === selectedCampaign)
+      : [...newList.data]
+          .filter( appointment => appointment.location === selectedLocation)
+
+    setGroupedAppointments(groupByDate([...filteredAppointments]))
+    } else {
+      console.log("No location selected")
+    }
+  }
 
   //---Menu
   const [menuOpen, setMenuOpen] = useState(false)
@@ -81,6 +100,8 @@ const AppointmentsBook = props => {
     })
     .then(() => setIsLoading(false))
     .catch(err => console.error("Error during appointment retrieval", err))
+
+    return () => isSubscribed = false;
   }, [])
 
   return (
@@ -105,6 +126,7 @@ const AppointmentsBook = props => {
       </div>
       ) : (
       <div className="appointments-book-main">
+        <button onClick={handleRefresh}>Refresh</button>
         <LocationSelector 
           locations={props.user.franchise.locations}
           handleSelectLocation={handleSelectLocation}
