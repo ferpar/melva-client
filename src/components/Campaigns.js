@@ -84,7 +84,7 @@ const CampaignManager = props => {
       msgbody: message, 
       recipients: recipients
                   .filter(recipient => 
-                    (recipient.selected && recipient.smsStatus==="not-sent")
+                    (recipient.selected && ( recipient.smsStatus==="not-sent" || recipient.smsStatus===null))
                   ), 
       addGreeting: greeting, 
       addLink: customLink,
@@ -402,7 +402,7 @@ const CampaignManager = props => {
       <Modali.Modal {...confirmModal}>
         <div className="modal-text">
           <p>
-            Confirme el envío de {recipients.filter(recipient => (recipient.selected && recipient.smsStatus==="not-sent")).length} mensajes con el siguiente mensaje:
+            Confirme el envío de {recipients.filter(recipient => (recipient.selected && (recipient.smsStatus==="not-sent" || recipient.smsStatus===null))).length} mensajes con el siguiente mensaje:
           </p>
           <p>
             {"<<"}{greeting ? ( customLink ? translateToGSM("Hola (NOMBRE), " + message + " https://dentt.info/xxxxxxxxx") 
@@ -429,7 +429,7 @@ const CampaignManager = props => {
             innerMessage={
               "Envíando " + 
               recipients.filter(recipient => (
-                recipient.selected && recipient.smsStatus==="not-sent")).length + 
+                recipient.selected && (recipient.smsStatus==="not-sent" || recipient.smsStatus===null))).length + 
                 " mensajes. \n Esto tomará un segundo por mensaje..."
             }
           />
