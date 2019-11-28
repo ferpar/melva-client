@@ -656,6 +656,7 @@ const CampaignManager = props => {
                             {" "}
                             {(new Date() - new Date(recipient.updated_at) <= 3600*1000*12)
                               && <span className="ball"></span>}
+                            {(recipient.userId.phone[3] != "6" || recipient.userId.phone.length != 12) && (<span className="ball" style={{"backgroundColor": "red"}}></span>)}
                                 
                         </p>
                       </div>
