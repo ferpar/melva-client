@@ -102,7 +102,10 @@ const CampaignManager = props => {
           }
           await setRecipients(tempRecipients)
         })
-        .then( () => setIsSending(false))
+        .then( async () => {
+          await clearSelection();
+          setIsSending(false)
+        })
         .catch( err => console.error('error sending the messages', err))
   }
 
@@ -269,6 +272,15 @@ const CampaignManager = props => {
         setSelectArray([...selectArray, id])
       }
     }
+  }
+
+  const clearSelection = () => {
+    const clearedRecipients = recipients.map( recipient => {
+      recipient.selected = false;
+      return recipient
+    }) 
+
+    setRecipients(clearedRecipients)
   }
 
   const handleCustomerChange = e => {
