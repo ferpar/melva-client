@@ -76,6 +76,14 @@ const CampaignManager = props => {
     setIsActive(!e.target.checked) 
   }
 
+  const clearSelection = (recipientsToClear) => {
+    const clearedRecipients = recipientsToClear.map( recipient => {
+      recipient.selected = false;
+      return recipient
+    }) 
+    return clearedRecipients
+  }
+
   const launchCampaign = async () => {
 
     setIsSending(true)
@@ -100,12 +108,9 @@ const CampaignManager = props => {
             const j = await recipients.findIndex( recipient => recipient.userId.phone === smsArray[i].entity.to)
             tempRecipients = await [...tempRecipients.slice(0,j), {...tempRecipients[j], smsId: smsArray[i].entity.id, smsStatus: smsArray[i].entity.status}, ...tempRecipients.slice(j+1)]
           }
-          await setRecipients(tempRecipients)
+          await setRecipients(clearSelection(tempRecipients))
         })
-        .then( async () => {
-          await clearSelection();
-          setIsSending(false)
-        })
+        .then( () => setIsSending(false))
         .catch( err => console.error('error sending the messages', err))
   }
 
@@ -272,15 +277,6 @@ const CampaignManager = props => {
         setSelectArray([...selectArray, id])
       }
     }
-  }
-
-  const clearSelection = () => {
-    const clearedRecipients = recipients.map( recipient => {
-      recipient.selected = false;
-      return recipient
-    }) 
-
-    setRecipients(clearedRecipients)
   }
 
   const handleCustomerChange = e => {
