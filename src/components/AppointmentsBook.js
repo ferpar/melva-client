@@ -88,7 +88,7 @@ const AppointmentsBook = props => {
     .then(async result => {
          if (isSubscribed) {
            await setAppointments([...result.data])
-       //The following commented code is meant to the first appointments by default:
+       //The following commented code is meant to show the first appointments by default:
        //    if (result.data) {
        //     //filtering here to show all appointments of the first location by default
        //      const filteredAppointments = 
@@ -103,6 +103,22 @@ const AppointmentsBook = props => {
 
     return () => isSubscribed = false;
   }, [])
+
+  useEffect(() => { //Here the autorefresh is controlled
+
+    let timedInterval = null
+    const timedRefresh = () => {
+      console.log("refreshing list")
+      handleRefresh() 
+      timedInterval = setTimeout( () => {
+        timedRefresh()
+      } , 30000)
+    }
+
+    timedRefresh()
+
+    return () => clearTimeout(timedInterval)
+  }, [selectedLocation, selectedCampaign])
 
   return (
    
