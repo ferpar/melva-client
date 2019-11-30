@@ -142,7 +142,6 @@ const AppointmentsBook = props => {
       </div>
       ) : (
       <div className="appointments-book-main">
-        <button onClick={handleRefresh}>Refresh</button>
         <LocationSelector 
           locations={props.user.franchise.locations}
           handleSelectLocation={handleSelectLocation}
