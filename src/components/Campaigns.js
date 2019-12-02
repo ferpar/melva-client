@@ -111,7 +111,10 @@ const CampaignManager = props => {
           await setRecipients(clearSelection(tempRecipients))
         })
         .then( () => setIsSending(false))
-        .catch( err => console.error('error sending the messages', err))
+        .catch( err => {
+          setIsSending(false)
+          console.error('error sending the messages', err)
+        })
   }
 
   const handleSubmit = e => {
@@ -324,8 +327,8 @@ const CampaignManager = props => {
         label="Confirmar"
         isStyleDefault
         onClick={async () => {
-          await launchCampaign()
           toggleConfirmModal();
+          await launchCampaign()
         }}
       />
     ],
