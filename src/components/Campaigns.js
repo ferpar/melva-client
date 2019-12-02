@@ -112,7 +112,7 @@ const CampaignManager = props => {
         })
         .then( () => setIsSending(false))
         .catch( err => {
-          setIsSending(false)
+          //setIsSending(false)
           console.error('error sending the messages', err)
         })
   }
