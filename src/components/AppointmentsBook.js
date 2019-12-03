@@ -153,6 +153,8 @@ const AppointmentsBook = props => {
         <BookingList
           groupedAppointments = { groupedAppointments }
           selectedLocation = { selectedLocation }
+          campaigns={props.user.franchise.campaigns}
+          selectedCampaign={selectedCampaign}
         />
       </div>
       )}

@@ -26,13 +26,21 @@ const BookingList = props => {
                 available: appointment.customer === null,
                 id: appointment._id,
                 bookedFor: appointment.customer,
-                updated: new Date(appointment.updated_at)
+                updated: new Date(appointment.updated_at),
+                campaignId: appointment.campaign
                 })
                 )
                 .sort((a,b) => a.date.getMinutes()- b.date.getMinutes())
                 .sort( (a,b) => a.date.getHours() - b.date.getHours())
-                .map(({ date, available, id, bookedFor, updated }, index) => (
+                .map(({ date, available, id, bookedFor, updated, campaignId }, index) => (
                   <div className="appointment-info" key={index}>
+                    {!props.selectedCampaign && //showing campaign of each when "all" is selected
+                        (<p> 
+                          { props.campaigns
+                            .find( campaign => 
+                              campaign._id === campaignId).title }
+                          </p>)
+                    }
                     <p>{bookedFor.name + " " + bookedFor.surname}</p>
                     <p>hora:  {date.toLocaleTimeString("es-Es", 
                       {
