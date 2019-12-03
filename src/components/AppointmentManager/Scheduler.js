@@ -35,6 +35,11 @@ const Scheduler = props => {
                 />
                 {props.removeSwitch ? <p>Borrado activado</p> : <p>Borrado desactivado</p> }
               </div>
+              <button
+               onClick={props.toggleConfirmCleanUpModal}
+               >
+                 Borrar Citas Disponibles
+              </button>
             </ div>
           }
           {addSingle && (
@@ -56,7 +61,6 @@ const Scheduler = props => {
               franchise={props.franchise}
               handleGenerator={handleSetGenerator}
               handleAppointments={props.handleAppointments}
-              toggleConfirmCleanUpModal={props.toggleConfirmCleanUpModal}
             />
           )}
           </>

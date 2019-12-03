@@ -307,11 +307,6 @@ const Generator = props => {
                 <p className="period-headsup">Elige un periodo</p>
                 )
               }
-              <button
-               onClick={props.toggleConfirmCleanUpModal}
-               >
-                 Borrar Citas Disponibles
-              </button>
             </div>
           )
       }
