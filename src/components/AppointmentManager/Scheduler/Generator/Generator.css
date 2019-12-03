@@ -26,7 +26,12 @@
   width: 100%;
 }
 
-.generator-wrapper {
+.generator-intervals {
+  display: flex;
+  justify-content: space-around;
+}
+
+.generator-schedule {
   display: flex;
   justify-content: space-around;
   padding: 1rem 0;
@@ -44,12 +49,85 @@
   height: 3rem;
 }
 
+.generator-headsup{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem 0;
+}
+
+.interval-picker {
+  display: flex;
+}
+
+.interval-picker > p {
+  color: #666;
+  font-size: 1.2rem;
+  margin-right: 0.5rem;
+}
+
+.interval-picker > input {
+  margin-right: 0.5rem;
+}
+
 .generator-controls{
   display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+}
+
+.generator-flatpickr{
+  grid-area: flatpickr;
+  text-align: center;
+  font-size: 1.2rem;
+  width: 6rem;
+}
+
+.generator-flatpickr::placeholder{
+  color: #FF4200;
+}
+
+.range-flatpickr {
+  grid-area: flatpickr;
+  text-align: center;
+  font-size: 1.2rem;
+  min-width: 14rem;
+}
+
+.generator-flatpickr::placeholder{
+  color: #FF4200;
+}
+
+#multi-duration {
+  font-size: 1.2rem;
+  width: 4rem;
+  text-align: center;
+  margin-left: 0.5rem;
+}
+
+#multi-duration-label {
+  font-size: 1.2rem;
+}
+
+.period-picker {
+  display: flex;
+}
+
+.period-picker > p {
+  color: #666;
+  font-size: 1.2rem;
+  margin-right: 0.5rem;
+}
+
+.period-headsup {
+  font-size: 1.2rem;
 }
 
 @media(min-width: 500px) {
   .generator-slug {
     min-width: 3rem;
+  }
+  .generator-flatpickr, .range-flatpickr {
+    max-height: 2rem;
   }
 }

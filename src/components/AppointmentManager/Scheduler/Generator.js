@@ -164,111 +164,157 @@ const Generator = props => {
 
   return (
     <div className="generator-container">
-      { !isEditingRanges &&
-      <button
-        onClick={props.handleGenerator}
-      >
-      Volver
-      </button>
-      }
-      <button onClick={ handleEditingRanges }
-      > 
-      { isEditingRanges ?
-        ("Volver") :
-        ("Editar Horario") 
-      }
-      </button>
-      { isEditingRanges && 
-        <>
-          <Flatpickr
-            options={{ 
-              locale: Spanish,
-              noCalendar:true,
-              enableTime:true,
-              dateFormat:"H:i",
-              defaultDate:"08:00"
-            }}
-            className="appointments-flatpickr"
-            placeholder="pulse aquí..."
-            onChange={e => setMinRange(e[0].toLocaleTimeString("es-ES", {hour: "2-digit", minute: "2-digit"}))}
-          />
-          <Flatpickr
-            options={{ 
-              locale: Spanish,
-              noCalendar:true,
-              enableTime:true,
-              dateFormat:"H:i",
-              defaultDate:"12:00"
-            }}
-            className="appointments-flatpickr"
-            placeholder="y aquí..."
-            onChange={e => setMaxRange(e[0].toLocaleTimeString("es-ES", {hour: "2-digit", minute: "2-digit"}))}
-          />
-          <button
-            onClick={() => handleAddRange(rangeMin, rangeMax)}
-          >
-            Añadir Horas
-          </button>
-        </>
-      }
-      <div className="generator-wrapper">
-      { schedule.map( (day, ind) => (
-          <div 
-            className="generator-slug"
-            key={ind}
-          >
-            <DayHeader 
-              className = "dayhead"
-              initial = {day.initial}
-              day = {day.day}
-              isEditingRanges = {isEditingRanges}
-              handleChecked = {handleChecked}
-              checked = {day.checked}
-              schedule = {schedule}
+      <div className="generator-intervals">
+        { !isEditingRanges &&
+        <button
+          onClick={props.handleGenerator}
+        >
+        Volver
+        </button>
+        }
+        <button onClick={ handleEditingRanges }
+        > 
+        { isEditingRanges ?
+          ("Volver") :
+          ("Definir Horario") 
+        }
+        </button>
+        { isEditingRanges && 
+          <div className="interval-picker">
+            <p>De</p>
+            <Flatpickr
+              options={{ 
+                locale: Spanish,
+                noCalendar:true,
+                enableTime:true,
+                dateFormat:"H:i",
+                defaultDate:"08:00"
+              }}
+              className="generator-flatpickr"
+              placeholder="pulse aquí..."
+              onChange={e => setMinRange(e[0].toLocaleTimeString("es-ES", {hour: "2-digit", minute: "2-digit"}))}
             />
-            <DayList
-              className = "daylist"
-              ranges = {day.ranges}
-              day={day.day}
-              handleRemoveRange={handleRemoveRange}
+            <p>a</p>
+            <Flatpickr
+              options={{ 
+                locale: Spanish,
+                noCalendar:true,
+                enableTime:true,
+                dateFormat:"H:i",
+                defaultDate:"12:00"
+              }}
+              className="generator-flatpickr"
+              placeholder="y aquí..."
+              onChange={e => setMaxRange(e[0].toLocaleTimeString("es-ES", {hour: "2-digit", minute: "2-digit"}))}
             />
+          { schedule
+              .map( day => day.checked )
+              .reduce( (ac, cu) => { 
+                if (cu===true) {
+                  ac=true
+                }
+                return ac
+              }, false)
+            ?
+            (
+              <button
+              onClick={() => handleAddRange(rangeMin, rangeMax)}
+            >
+              Añadir Intervalo
+            </button>
+            )
+            : (
+             <p> Elige días </p>  
+            )
+          }
           </div>
-        )) 
-      }
+        }
       </div>
-          <div className="generator-controls">
-            <div className="add-multi-duration">
-              <label htmlFor="multi-duration">duración</label>
-              <input 
-                type="text"
-                id="multi-duration"
-                name="multi-duration"
-                value={multiDuration}
-                onChange={e=> setMultiDuration(e.target.value)}
+      <div className="generator-schedule">
+
+        { schedule.map( (day, ind) => (
+            <div 
+              className="generator-slug"
+              key={ind}
+            >
+              <DayHeader 
+                className = "dayhead"
+                initial = {day.initial}
+                day = {day.day}
+                isEditingRanges = {isEditingRanges}
+                handleChecked = {handleChecked}
+                checked = {day.checked}
+                schedule = {schedule}
+              />
+              <DayList
+                className = "daylist"
+                ranges = {day.ranges}
+                day={day.day}
+                handleRemoveRange={handleRemoveRange}
               />
             </div>
-           <Flatpickr
-            options={{ 
-              locale: Spanish,
-                mode: "range",
-                minDate: "today"
-            }}
-            className="appointments-flatpickr"
-            placeholder="desde hasta..."
-            onChange={ e => handleDateChange(e)}
-            
-          />
-           <button
-            onClick={handleGenerateAppointments}
-            >
-              Generar Citas
-           </button>
-           <button
-            onClick={props.toggleConfirmCleanUpModal}
-            >
-              Borrar Citas
-           </button>
-          </div>
+          )) 
+        }
+      </div>
+      { schedule
+          .map( day => day.ranges)
+          .reduce( (ac,cu) => ac.concat(...cu), [])
+          .length === 0
+          ? (
+            <div className="generator-headsup">
+              <p> Añade Intervalos al Horario </p>
+            </div>
+          )
+          : (
+            <div className="generator-controls">
+              <div className="add-multi-duration">
+                <label 
+                  id="multi-duration-label" 
+                  htmlFor="multi-duration"
+                >
+                  Duración cita (min)
+                </label>
+                <input 
+                  type="text"
+                  id="multi-duration"
+                  name="multi-duration"
+                  value={multiDuration}
+                  onChange={e=> setMultiDuration(e.target.value)}
+                />
+              </div>
+              <div className="period-picker">
+               <p>Periodo</p>
+               <Flatpickr
+                options={{ 
+                  locale: Spanish,
+                    mode: "range",
+                    minDate: "today"
+                }}
+                className="range-flatpickr"
+                placeholder="desde hasta..."
+                onChange={ e => handleDateChange(e)}
+                
+              / >
+              </div>
+              { (dateTo && dateFrom) 
+                ? (
+              <button
+               onClick={handleGenerateAppointments}
+               >
+                 Generar Citas
+              </button>
+                ) : (
+                <p className="period-headsup">Elige un periodo</p>
+                )
+              }
+              <button
+               onClick={props.toggleConfirmCleanUpModal}
+               >
+                 Borrar Citas Disponibles
+              </button>
+            </div>
+          )
+      }
     </div>
   )
 }
