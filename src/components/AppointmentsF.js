@@ -290,13 +290,17 @@ const Appointment = props => {
           isSelectorOpen={isSelectorOpen}
         />
     }
-    { (userAppointments
+    { ((!isSelectorOpen && userAppointments
+        .filter(appointment => //only count appointments of the selected / active campaign
+          appointment.campaign === activeCampaign)
         .filter(appointment => //filtering overdue appointments 
           new Date(appointment.time).getTime() > new Date().getTime()) 
-        .length > 0) &&
+        .length > 0)) &&
       <div className="user-appointments-container">
         <h1 className="user-appointments-title" >¡Enhorabuena!</h1>
         {userAppointments
+          .filter(appointment => //only count appointments of the selected / active campaign
+          appointment.campaign === activeCampaign)
           .filter(appointment => //filtering overdue appointments
             new Date(appointment.time).getTime() > new Date().getTime()) 
           .map(appointment => ({
@@ -376,10 +380,12 @@ const Appointment = props => {
         </div>
     }
     {
-      (userAppointments
+      ((!isSelectorOpen && userAppointments
+        .filter(appointment => //only count appointments of the selected / active campaign
+          appointment.campaign === activeCampaign)
         .filter(appointment => //filtering overdue appointments 
           new Date(appointment.time).getTime() > new Date().getTime()) 
-        .length <= 0) &&
+        .length <= 0)) &&
         <div className="top-container">
             <div className="appointments-title">
               <img className="top-logo" src={logo_rull} alt="logo"/>
@@ -419,6 +425,8 @@ const Appointment = props => {
     }
         { (appointments.length > 0) ?
           (userAppointments
+        .filter(appointment => //only count appointments of the selected / active campaign
+          appointment.campaign === activeCampaign)
         .filter(appointment => //filtering old dates 
           new Date(appointment.time).getTime() > new Date().getTime()) 
         .length <= 0) &&
