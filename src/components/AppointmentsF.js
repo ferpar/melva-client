@@ -290,7 +290,7 @@ const Appointment = props => {
           isSelectorOpen={isSelectorOpen}
         />
     }
-    { ((!isSelectorOpen && userAppointments
+    { (((!isSelectorOpen || availableCampaigns.length <= 1) && userAppointments
         .filter(appointment => //only count appointments of the selected / active campaign
           appointment.campaign === activeCampaign)
         .filter(appointment => //filtering overdue appointments 
