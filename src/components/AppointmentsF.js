@@ -281,7 +281,9 @@ const Appointment = props => {
         }>Desconectar</button>
     </Menu>
     <div className="appointments-main">
-    { (availableCampaigns.length > 1) &&
+    { (availableCampaigns
+        .filter( campaign => campaign.isActive )
+        .length > 1) &&
         <CampaignSelector
           availableCampaigns={availableCampaigns}
           activeCampaign={activeCampaign}
@@ -290,7 +292,12 @@ const Appointment = props => {
           isSelectorOpen={isSelectorOpen}
         />
     }
-    { (((!isSelectorOpen || availableCampaigns.length <= 1) && userAppointments
+    { (( (!isSelectorOpen || 
+      availableCampaigns
+        .filter(campaign => campaign.isActive)
+        .length <= 1
+    ) 
+      && userAppointments
         .filter(appointment => //only count appointments of the selected / active campaign
           appointment.campaign === activeCampaign)
         .filter(appointment => //filtering overdue appointments 
@@ -380,7 +387,11 @@ const Appointment = props => {
         </div>
     }
     {
-      (((!isSelectorOpen || availableCampaigns.length <= 1) && userAppointments
+      (( (!isSelectorOpen || 
+        availableCampaigns
+          .filter(campaign => campaign.isActive)
+          .length <= 1) 
+        && userAppointments
         .filter(appointment => //only count appointments of the selected / active campaign
           appointment.campaign === activeCampaign)
         .filter(appointment => //filtering overdue appointments 
