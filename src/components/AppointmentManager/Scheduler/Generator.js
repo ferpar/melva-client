@@ -81,7 +81,7 @@ const Generator = props => {
     }
   }, initialState)
 
-  const handleChecked = (e, day) => {
+  const handleChecked = (day) => {
     dispatch({
       type: "checkbox", day: day
     })
@@ -168,17 +168,26 @@ const Generator = props => {
         { !isEditingRanges &&
         <button
           onClick={props.handleGenerator}
+          className="generator-back-button"
         >
-        Volver
+          {"\u27a5"}
         </button>
         }
-        <button onClick={ handleEditingRanges }
-        > 
         { isEditingRanges ?
-          ("Volver") :
-          ("Definir Horario") 
-        }
+        <button 
+          onClick={ handleEditingRanges }
+          className="generator-back-button" 
+        > 
+          {"\u27a5"}
         </button>
+            :
+        <button 
+          onClick={ handleEditingRanges }
+          className="generator-button"
+        > 
+          Definir Intervalos
+        </button>
+        }
         { isEditingRanges && 
           <div className="interval-picker">
             <p>De</p>
@@ -218,13 +227,14 @@ const Generator = props => {
             ?
             (
               <button
-              onClick={() => handleAddRange(rangeMin, rangeMax)}
-            >
-              Añadir Intervalo
-            </button>
+                onClick={() => handleAddRange(rangeMin, rangeMax)}
+                className="generator-button"
+              >
+                Añadir Intervalo
+              </button>
             )
             : (
-             <p> Elige días </p>  
+             <p className="day-headsup"> Elige días </p>  
             )
           }
           </div>
@@ -299,7 +309,8 @@ const Generator = props => {
               { (dateTo && dateFrom) 
                 ? (
               <button
-               onClick={handleGenerateAppointments}
+                onClick={handleGenerateAppointments}
+                className="generator-button" 
                >
                  Generar Citas
               </button>

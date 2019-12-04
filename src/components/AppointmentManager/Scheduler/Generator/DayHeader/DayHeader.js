@@ -4,18 +4,33 @@ import "./DayHeader.css";
 const DayHeader = props => {
 
   return (
-    <div className="day-header">
-      { props.isEditingRanges &&
-        <input 
-          onChange={(e) => {props.handleChecked(e, props.day)
-          }}
-          type="checkbox"
-          checked = {props.checked}
-        />
+    <>
+      { props.isEditingRanges ?
+        (
+        <div className="day-header">
+            <input 
+              onChange={() => props.handleChecked( props.day)
+              }
+              type="checkbox"
+              checked = {props.checked}
+            />
+          <p
+            onClick={() => props.handleChecked( props.day)}
+          >
+            {props.initial}
+          </p>
+          
+        </div>
+        ) : (
+        <div className="day-header">
+          <p>
+            {props.initial}
+          </p>
+
+          </div>
+        )
       }
-      
-      <p>{props.initial}</p>
-    </div>
+    </>
   )
 }
 

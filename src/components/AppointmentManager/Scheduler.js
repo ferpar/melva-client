@@ -24,8 +24,18 @@ const Scheduler = props => {
           <>
           {(!addSingle && !generator) &&
             <div className="scheduler-controls"> 
-              <button onClick={handleSetAddSingle}> Nueva cita </button>
-              <button onClick={handleSetGenerator}> Generar Horario </button>
+              <button 
+                onClick={handleSetAddSingle}
+                className="scheduler-button"
+              > 
+                Nueva cita 
+              </button>
+              <button 
+                onClick={handleSetGenerator}
+                className="scheduler-button"
+              > 
+                Generar Horario 
+              </button>
               <div className="remove-switch">
                 <Switch 
                   className="switch-control"
@@ -36,7 +46,8 @@ const Scheduler = props => {
                 {props.removeSwitch ? <p>Borrado activado</p> : <p>Borrado desactivado</p> }
               </div>
               <button
-               onClick={props.toggleConfirmCleanUpModal}
+                onClick={props.toggleConfirmCleanUpModal}
+                className="scheduler-cancel-button"
                >
                  Borrar Citas Disponibles
               </button>
