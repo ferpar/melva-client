@@ -14,6 +14,7 @@ import { toast } from "react-toastify";
 toast.configure();
 
 import Modali, { useModali } from "modali";
+import * as inner from "./AppointmentsF/Modali/inner.js";
 
 import twoDigits from "../helpers/twodigit.js";
 
@@ -491,71 +492,19 @@ const Appointment = props => {
             : isLoading && <Spinner />
         }
       <Modali.Modal {...confirmModal}>
-        <div className="modal-text">
-          <p>
-            Desea reservar cita para el{" "}
-            {bookInfo.date &&
-              bookInfo.date.toLocaleDateString("es-ES", {
-                weekday: "long",
-                year: "numeric",
-                month: "long",
-                day: "numeric"
-              })}{" "}
-            a las {bookInfo.hour && bookInfo.hour}?
-          </p>
-        </div>
+        <inner.confirmModal bookInfo={bookInfo}/>
       </Modali.Modal>
       <Modali.Modal {...cancelModal}>
-        <div className="modal-text">
-          <p>
-            Desea cancelar su cita prevista para el{" "}
-            {bookInfo.date &&
-              bookInfo.date.toLocaleDateString("es-ES", {
-                weekday: "long",
-                year: "numeric",
-                month: "long",
-                day: "numeric"
-              })}{" "}
-            a las {bookInfo.hour && bookInfo.hour}?
-          </p>
-        </div>
+        <inner.cancelModal bookInfo={bookInfo}/>
       </Modali.Modal>
       <Modali.Modal {...unavailableModal}>
-        <div className="modal-text">
-          <p>
-            La cita para el{" "}
-            {bookInfo.date &&
-              bookInfo.date.toLocaleDateString("es-ES", {
-                weekday: "long",
-                year: "numeric",
-                month: "long",
-                day: "numeric"
-              })}{" "}
-            a las {bookInfo.hour && bookInfo.hour} no está disponible.
-          </p>
-        </div>
+        <inner.unavailableModal bookInfo={bookInfo}/>
       </Modali.Modal>
       <Modali.Modal {...consentModal}>
-        <div className="modal-text">
-          <p>
-          <em> ¡ Hola {props.user.name} ! </em>
-          </p>
-          <br/>
-          <p>
-            {"Como paciente de la \"Clínica Rull\" queremos mejorar tu experiencia con nosotros ofreciéndote servicios de cita online, recordatorios e información que sea de tu interés."}
-          </p>
-          <br/>
-          <p>
-            {"Puedes modificar/borrar tus datos en la sección <Mi Perfil>. Por favor, marca la opcion deseada a continuación:"}
-          </p>
-        </div>
+        <inner.consentModal username={props.user.name}/>
       </Modali.Modal>
       <Modali.Modal {...confirmRemoveModal}>
-        <div className="modal-text">
-          <p>
-            {"Si confirma esta acción se borrarán sus datos y no se le enviarán más mensajes."}
-          </p>
-        </div>
+        <inner.confirmRemoveModal/>
       </Modali.Modal>
     </div>
   </>
