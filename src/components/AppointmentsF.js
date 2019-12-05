@@ -28,6 +28,7 @@ const Appointment = props => {
   const [bookInfo, setBookInfo] = useState({ id: null, available: false });
   const [userAppointments, setUserAppointments] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false)
   const [expandContact, setExpandContact] = useState(false);
   const [availableDates, setAvailableDates] = useState([]);
@@ -210,7 +211,7 @@ const Appointment = props => {
     );
 
   // EFFECT HOOK(S)
-  useEffect(() => {  //ON DATE CHANGE
+  useEffect(() => {  //ON DATE CHANGE loads available appointments
     let isSubscribed = true;
     if (date !== null) {
       const year = date.getFullYear(),
@@ -232,7 +233,7 @@ const Appointment = props => {
     return () => isSubscribed = false;
   }, [date]);
 
-  useEffect( () => { //LOAD USER APPOINTMENTS ON MOUNT and consent MODAL
+  useEffect( () => { //LOAD USER APPOINTMENTS ON MOUNT/CAMPAIGN_CHANGE and consent MODAL
     let isSubscribed = true;
       if (isSubscribed) {
         const loadup = async () => {
@@ -242,6 +243,7 @@ const Appointment = props => {
                 setUserAppointments([...result.data])
             })
           .then(() => {
+            setIsMounted(true)
             if (props.user.consent === null){
             toggleConsentModal()
             } else if (props.user.consent === false) {
@@ -277,101 +279,109 @@ const Appointment = props => {
           closeMenu()}
         }>Desconectar</button>
     </Menu>
-    <div className="appointments-main">
-    { (
-      availableCampaigns
-        .filter( campaign => campaign.isActive )
-        .length > 1
-    ) 
-      &&
-        <CampaignSelector
-          availableCampaigns={availableCampaigns}
-          activeCampaign={activeCampaign}
-          changeActiveCampaignHandler={changeActiveCampaignHandler}
-          handleIsSelectorOpen={handleIsSelectorOpen}
-          isSelectorOpen={isSelectorOpen}
-        />
+    { isMounted ?
+      (
+        <div className="appointments-main">
+          { (
+            availableCampaigns
+              .filter( campaign => campaign.isActive )
+              .length > 1
+            ) 
+            &&
+              <CampaignSelector
+                availableCampaigns={availableCampaigns}
+                activeCampaign={activeCampaign}
+                changeActiveCampaignHandler={changeActiveCampaignHandler}
+                handleIsSelectorOpen={handleIsSelectorOpen}
+                isSelectorOpen={isSelectorOpen}
+              />
+          }
+          { ( 
+              (!isSelectorOpen || 
+              availableCampaigns
+                .filter(campaign => campaign.isActive)
+                .length <= 1) 
+              && 
+              userAppointments
+                .filter(appointment => //only count appointments of the selected / active campaign
+                  appointment.campaign === activeCampaign)
+                .filter(appointment => //filtering overdue appointments 
+                  new Date(appointment.time).getTime() > new Date().getTime()) 
+                .length > 0
+              ) 
+              &&
+              <DisplayBooked 
+                userAppointments={userAppointments}
+                activeCampaign={activeCampaign}
+                expandContact={expandContact}
+                setExpandContact={setExpandContact}
+                setBookInfo={setBookInfo}
+                toggleCancelModal={toggleCancelModal}
+                handleLogout={props.handleLogout}
+              />
+          }
+          {
+            ( 
+              (!isSelectorOpen || 
+              availableCampaigns
+                .filter(campaign => campaign.isActive)
+                .length <= 1) 
+              && 
+              userAppointments
+              .filter(appointment => //only count appointments of the selected / active campaign
+                appointment.campaign === activeCampaign)
+              .filter(appointment => //filtering overdue appointments 
+                new Date(appointment.time).getTime() > new Date().getTime()) 
+              .length <= 0
+            ) 
+              &&
+              <DatePickr 
+                date = {date}
+                availableDates={availableDates}
+                dateChangeHandler={dateChangeHandler}
+                appointments={appointments}
+              />
+          }
+          { (appointments.length > 0) ?
+            (userAppointments
+          .filter(appointment => //only count appointments of the selected / active campaign
+            appointment.campaign === activeCampaign)
+          .filter(appointment => //filtering overdue appointments
+            new Date(appointment.time).getTime() > new Date().getTime()) 
+          .length <= 0) &&
+              <AppointmentGrid 
+                appointments={appointments}
+                user={props.user}
+                setBookInfo={setBookInfo}
+                toggleCancelModal={toggleCancelModal}
+                toggleConfirmModal={toggleConfirmModal}
+                toggleUnavailableModal={toggleUnavailableModal}
+                date={date}
+              />
+              : isLoading && <Spinner />
+          }
+          <Modali.Modal {...confirmModal}>
+            <inner.confirmModal bookInfo={bookInfo}/>
+          </Modali.Modal>
+          <Modali.Modal {...cancelModal}>
+            <inner.cancelModal bookInfo={bookInfo}/>
+          </Modali.Modal>
+          <Modali.Modal {...unavailableModal}>
+            <inner.unavailableModal bookInfo={bookInfo}/>
+          </Modali.Modal>
+          <Modali.Modal {...consentModal}>
+            <inner.consentModal username={props.user.name}/>
+          </Modali.Modal>
+          <Modali.Modal {...confirmRemoveModal}>
+            <inner.confirmRemoveModal/>
+          </Modali.Modal>
+        </div>
+      ) : (
+        <div className="appointments-main">
+          <Spinner /> 
+        </div>
+      )
     }
-    { ( 
-      (!isSelectorOpen || 
-      availableCampaigns
-        .filter(campaign => campaign.isActive)
-        .length <= 1) 
-      && 
-      userAppointments
-        .filter(appointment => //only count appointments of the selected / active campaign
-          appointment.campaign === activeCampaign)
-        .filter(appointment => //filtering overdue appointments 
-          new Date(appointment.time).getTime() > new Date().getTime()) 
-        .length > 0
-      ) 
-        &&
-        <DisplayBooked 
-          userAppointments={userAppointments}
-          activeCampaign={activeCampaign}
-          expandContact={expandContact}
-          setExpandContact={setExpandContact}
-          setBookInfo={setBookInfo}
-          toggleCancelModal={toggleCancelModal}
-          handleLogout={props.handleLogout}
-        />
-    }
-    {
-      ( 
-        (!isSelectorOpen || 
-        availableCampaigns
-          .filter(campaign => campaign.isActive)
-          .length <= 1) 
-        && 
-        userAppointments
-        .filter(appointment => //only count appointments of the selected / active campaign
-          appointment.campaign === activeCampaign)
-        .filter(appointment => //filtering overdue appointments 
-          new Date(appointment.time).getTime() > new Date().getTime()) 
-        .length <= 0
-      ) 
-        &&
-        <DatePickr 
-          date = {date}
-          availableDates={availableDates}
-          dateChangeHandler={dateChangeHandler}
-          appointments={appointments}
-        />
-    }
-        { (appointments.length > 0) ?
-          (userAppointments
-        .filter(appointment => //only count appointments of the selected / active campaign
-          appointment.campaign === activeCampaign)
-        .filter(appointment => //filtering overdue appointments
-          new Date(appointment.time).getTime() > new Date().getTime()) 
-        .length <= 0) &&
-            <AppointmentGrid 
-              appointments={appointments}
-              user={props.user}
-              setBookInfo={setBookInfo}
-              toggleCancelModal={toggleCancelModal}
-              toggleConfirmModal={toggleConfirmModal}
-              toggleUnavailableModal={toggleUnavailableModal}
-              date={date}
-            />
-            : isLoading && <Spinner />
-        }
-      <Modali.Modal {...confirmModal}>
-        <inner.confirmModal bookInfo={bookInfo}/>
-      </Modali.Modal>
-      <Modali.Modal {...cancelModal}>
-        <inner.cancelModal bookInfo={bookInfo}/>
-      </Modali.Modal>
-      <Modali.Modal {...unavailableModal}>
-        <inner.unavailableModal bookInfo={bookInfo}/>
-      </Modali.Modal>
-      <Modali.Modal {...consentModal}>
-        <inner.consentModal username={props.user.name}/>
-      </Modali.Modal>
-      <Modali.Modal {...confirmRemoveModal}>
-        <inner.confirmRemoveModal/>
-      </Modali.Modal>
-    </div>
   </>
   );
 };
