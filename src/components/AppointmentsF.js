@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
-import axios from "axios";
-import Flatpickr from "react-flatpickr";
-import { Spanish } from "flatpickr/dist/l10n/es.js";
-import "flatpickr/dist/themes/material_green.css";
-import moment from "moment-timezone";
 
 import {slide as Menu} from "react-burger-menu";
 import Spinner from "./spinners/Ripple.js";
 import CampaignSelector from "./AppointmentsF/CampaignSelector.js";
+import DisplayBooked from "./AppointmentsF/DisplayBooked.js";
+import DatePickr from "./AppointmentsF/DatePickr.js";
+import AppointmentGrid from "./AppointmentsF/AppointmentGrid.js";
 
 import { toast } from "react-toastify";
 toast.configure();
@@ -17,8 +15,6 @@ import Modali, { useModali } from "modali";
 import * as inner from "./AppointmentsF/Modali/inner.js";
 
 import twoDigits from "../helpers/twodigit.js";
-
-import logo_rull from "../assets/logo_rull.png";
 
 const Appointment = props => {
 
@@ -282,9 +278,12 @@ const Appointment = props => {
         }>Desconectar</button>
     </Menu>
     <div className="appointments-main">
-    { (availableCampaigns
+    { (
+      availableCampaigns
         .filter( campaign => campaign.isActive )
-        .length > 1) &&
+        .length > 1
+    ) 
+      &&
         <CampaignSelector
           availableCampaigns={availableCampaigns}
           activeCampaign={activeCampaign}
@@ -293,213 +292,68 @@ const Appointment = props => {
           isSelectorOpen={isSelectorOpen}
         />
     }
-    { (( (!isSelectorOpen || 
+    { ( 
+      (!isSelectorOpen || 
       availableCampaigns
         .filter(campaign => campaign.isActive)
-        .length <= 1
-    ) 
-      && userAppointments
+        .length <= 1) 
+      && 
+      userAppointments
         .filter(appointment => //only count appointments of the selected / active campaign
           appointment.campaign === activeCampaign)
         .filter(appointment => //filtering overdue appointments 
           new Date(appointment.time).getTime() > new Date().getTime()) 
-        .length > 0)) &&
-      <div className="user-appointments-container">
-        <h1 className="user-appointments-title" >¡Enhorabuena!</h1>
-        {userAppointments
-          .filter(appointment => //only count appointments of the selected / active campaign
-          appointment.campaign === activeCampaign)
-          .filter(appointment => //filtering overdue appointments
-            new Date(appointment.time).getTime() > new Date().getTime()) 
-          .map(appointment => ({
-            available: false,
-            duration: appointment.duration,
-            date: new Date(appointment.time),
-            id: appointment._id,
-            bookedFor: appointment.customer,
-            location: appointment.location
-          }))
-          .map(({available, date, duration, id, bookedFor, location}, index) => {
-            return (
-              <div key={index} className="user-appointment">
-                <div className="appointment-details">
-                  <h2>Cita Reservada</h2>
-                  <p>
-                  {"Para el "}
-                  {date &&
-                    date.toLocaleDateString("es-ES", {
-                      weekday: "long",
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric"
-                    })}
-                  </p>
-                  <p>
-                  {"A las "}
-                  {date &&
-                    date.toLocaleTimeString("es-ES", {
-                      hour: "2-digit",
-                      minute: "2-digit"
-                    }) 
-                  }
-                  </p>
-                  <p>En Clínica Rull - Sevilla</p>
-                  <p>Duración: {duration} min</p>
-                  <p className="expand-contact" onClick={()=>setExpandContact(!expandContact)}>datos de contacto {expandContact ? "\u25b2" : "\u25bc"}</p>
-                  {  
-                      expandContact && 
-                    <div className="contact-details">
-                      <p className="address">{location.address}</p>
-                      <p className="address">{location.zipcode} - {location.city}</p>
-                      { location.phone && <a href={location.phone}>{"\uD83D\uDCDE"} {location.phone}</a> }
-                      { location.email && <a href={`mailto:${location.email}`}>{"\uD83D\uDCEC"} {location.email}</a>} 
-                      { location.url && <a href={`http:\/\/${location.url}`}>{"\uD83C\uDF0D"} {location.url}</a> }
-                    </div>
-                  }
-                </div>
-                <button
-                  onClick = { 
-                      () => { 
-                            setBookInfo({
-                              id,
-                              available,
-                              hour:
-                                date.getHours() + ":" + twoDigits(date.getMinutes()),
-                              date
-                            });
-                            toggleCancelModal();
-                      }
-                    }
-                  className="cancel-user-appointment"
-                >
-                  Cancelar Cita
-                </button>
-              </div>
-            )
-          }
-        )}
-
-          <button 
-            className="exit-button" 
-            onClick={props.handleLogout}
-          >
-            Terminar y Salir
-          </button>
-        </div>
+        .length > 0
+      ) 
+        &&
+        <DisplayBooked 
+          userAppointments={userAppointments}
+          activeCampaign={activeCampaign}
+          expandContact={expandContact}
+          setExpandContact={setExpandContact}
+          setBookInfo={setBookInfo}
+          toggleCancelModal={toggleCancelModal}
+          handleLogout={props.handleLogout}
+        />
     }
     {
-      (( (!isSelectorOpen || 
+      ( 
+        (!isSelectorOpen || 
         availableCampaigns
           .filter(campaign => campaign.isActive)
           .length <= 1) 
-        && userAppointments
+        && 
+        userAppointments
         .filter(appointment => //only count appointments of the selected / active campaign
           appointment.campaign === activeCampaign)
         .filter(appointment => //filtering overdue appointments 
           new Date(appointment.time).getTime() > new Date().getTime()) 
-        .length <= 0)) &&
-        <div className="top-container">
-            <div className="appointments-title">
-              <img className="top-logo" src={logo_rull} alt="logo"/>
-              <h2>Nueva Cita</h2>
-              { !date && <p> Seleccionar fecha: </p>}
-            </div>
-            <Flatpickr
-              options={{ 
-                dateFormat: 'd-m-Y',
-                disableMobile: true,
-                locale: Spanish,
-                minDate: new Date( new Date().setDate( new Date().getDate() + 1)),
-                altInput: true,
-                altFormat: "F j, Y",
-                enable: availableDates.length > 0 
-                  ? [ ...availableDates.map( dateStr => new Date(moment.tz(dateStr,"Europe/Madrid").format())) ]
-                  : ["2018-4-01"]
-              }}
-              className="appointments-flatpickr"
-              placeholder="pulse aquí..."
-              onChange={e => dateChangeHandler(e)}
-            />
-            <h2 className="appointments-date">
-            {date &&
-              date.toLocaleDateString("es-ES", {
-                weekday: "long",
-                year: "numeric",
-                month: "long",
-                day: "numeric"
-              })}
-            {(appointments.length > 0 && date) ? 
-                <p>Por favor, seleccione una hora</p>
-            :   date && <p>No hay citas previstas para este día, por favor, escoja otro</p>
-            }
-            </h2>
-        </div>
+        .length <= 0
+      ) 
+        &&
+        <DatePickr 
+          date = {date}
+          availableDates={availableDates}
+          dateChangeHandler={dateChangeHandler}
+          appointments={appointments}
+        />
     }
         { (appointments.length > 0) ?
           (userAppointments
         .filter(appointment => //only count appointments of the selected / active campaign
           appointment.campaign === activeCampaign)
-        .filter(appointment => //filtering old dates 
+        .filter(appointment => //filtering overdue appointments
           new Date(appointment.time).getTime() > new Date().getTime()) 
         .length <= 0) &&
-          <div className="appointments-grid">
-            {appointments
-            .map(appointment => ({
-              date: new Date(appointment.time),
-              available: appointment.customer === null,
-              id: appointment._id,
-              bookedFor: appointment.customer
-            }))            
-              .sort((a,b) => a.date.getMinutes()- b.date.getMinutes())
-              .sort((a,b) => a.date.getHours()-b.date.getHours())
-            .map(({ date, available, id, bookedFor }, index) => (
-              <button
-                className={
-                  (props.user._id === bookedFor || !bookedFor ) ? (
-                  available ? "appointment-item available" : "appointment-item"
-                  ) : "appointment-item unavailable"
-                }
-                idx={id}
-                key={index}
-                onClick={() => {
-                  if (available || props.user._id === bookedFor) {
-                    if (available) {
-                      setBookInfo({
-                        id,
-                        available,
-                        hour:
-                          date.getHours() + ":" + twoDigits(date.getMinutes()),
-                        date
-                      });
-                      toggleConfirmModal();
-                    } else {
-                      setBookInfo({
-                        id,
-                        available,
-                        hour:
-                          date.getHours() + ":" + twoDigits(date.getMinutes()),
-                        date
-                      });
-                      toggleCancelModal();
-                    }
-                  } else {
-                    setBookInfo({
-                      id,
-                      available,
-                      hour:
-                        date.getHours() + ":" + twoDigits(date.getMinutes()),
-                      date
-                    });
-                    toggleUnavailableModal();
-                  }
-                }}
-              >
-                {date.getHours()}
-                {":"}
-                {twoDigits(date.getMinutes())}
-              </button>
-            ))}
-          </div>
+            <AppointmentGrid 
+              appointments={appointments}
+              user={props.user}
+              setBookInfo={setBookInfo}
+              toggleCancelModal={toggleCancelModal}
+              toggleConfirmModal={toggleConfirmModal}
+              toggleUnavailableModal={toggleUnavailableModal}
+              date={date}
+            />
             : isLoading && <Spinner />
         }
       <Modali.Modal {...confirmModal}>
