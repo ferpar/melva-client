@@ -3,11 +3,13 @@ import { Link } from 'react-router-dom';
 
 import {slide as Menu} from "react-burger-menu";
 import Spinner from "./spinners/Ripple.js";
-import "react-phone-number-input/style.css";
-import PhoneInput from "react-phone-number-input";
-import Switch from "react-ios-switch";
+
+import RecipientList from "./Campaigns/RecipientList.js";
+import SideMenu from "./Campaigns/SideMenu.js";
+import CampaignMessage from "./Campaigns/CampaignMessage.js" ;
 
 import Modali, { useModali } from "modali";
+import * as inner from "./Campaigns/Modali/inner.js";
 
 import { toast } from "react-toastify";
 toast.configure();
@@ -27,15 +29,15 @@ const CampaignManager = props => {
 
   // ====
 
-  // == Main Form ==
+  // == Main Form & SideMenu ==
   const [title, setTitle] = useState("")
   const [shortDescription, setShortDescription] =useState("")
   const [message, setMessage] = useState("")
   const [showGSM, setShowGSM] = useState(false)
   const [greeting, setGreeting] = useState(false)
   const [customLink, setCustomLink] = useState(false)
-  const [isActive, setIsActive] = useState(true)
 
+  const [isActive, setIsActive] = useState(true)
   const [campaigns, setCampaigns] = useState([])
   const [filteredCampaigns, setFilteredCampaigns] = useState([])
   const [selectedCampaignId, setSelectedCampaignId] = useState("")
@@ -411,26 +413,18 @@ const CampaignManager = props => {
           </button>
       </Menu>
       <Modali.Modal {...confirmModal}>
-        <div className="modal-text">
-          <p>
-            Confirme el envío de {recipients.filter(recipient => (recipient.selected && (recipient.smsStatus==="not-sent" || recipient.smsStatus===null))).length} mensajes con el siguiente mensaje:
-          </p>
-          <p>
-            {"<<"}{greeting ? ( customLink ? translateToGSM("Hola (NOMBRE), " + message + " https://dentt.info/xxxxxxxxx") 
-              : translateToGSM("Hola (NOMBRE), " + message) ) : 
-                ( customLink ? translateToGSM(message + " https://dentt.info/xxxxxxxxx") : translateToGSM(message) )}{">>"}
-          </p>
-        </div>
+        <inner.confirmModal 
+          recipients = {recipients}
+          message = {message}
+          greeting = {greeting}
+          customLink = {customLink}
+          translateToGSM = {translateToGSM}
+        />
       </Modali.Modal>
       <Modali.Modal {...deleteModal}>
-        <div className="modal-text">
-          <p>
-            Confirme el BORRADO PERMANENTE de la siguiente campaña:
-          </p>
-          <p>
-            {"<<"}{title}{">>"}
-          </p>
-        </div>
+        <inner.deleteModal
+          title = {title}
+        />
       </Modali.Modal>
       {
       isSending 
@@ -447,244 +441,52 @@ const CampaignManager = props => {
         </div>
         :
         <div className="campaigns-main">
-          <div className="campaigns-message">
-            <h1>Campañas</h1>
-            <form>
-              <div className="textarea-container">
-                <textarea className="main-textarea" onChange={e => handleMsgChange(e)} placeholder="Introduzca contenido del SMS..." value={message}/>
-
-                <div className="info-options">
-                  <div className="greeting-checkbox">
-                    <input type="checkbox" id="greeting" name="greeting" checked={greeting} onChange={e => handleGreetingChange(e)}/>
-                    <label htmlFor="greeting">Saludo personalizado</label>
-                    <input type="checkbox" id="link" name="link" checked={customLink} onChange={e => handleLinkChange(e)}/>
-                    <label htmlFor="link">Enlace personalizado</label>
-                  </div>
-                  <p className="character-counter">{ greeting ? 
-                    (customLink ? message.length + 27 + 29 : message.length + 27) :
-                    (customLink ? message.length + 29: message.length)}
-                    /160 caracteres
-                  </p>
-                  <div className="errors"></div>
-                </div>
-                { 
-                  showGSM && 
-                  <textarea 
-                    className="translated-textarea" 
-                    readOnly 
-                    value={greeting ? 
-                      ( customLink ? 
-                          translateToGSM("Hola (NOMBRE), " + 
-                          message + " https://dentt.info/xxxxxxxxx") : 
-                        translateToGSM("Hola (NOMBRE), " + message))
-                      : ( customLink ? translateToGSM(message + 
-                        " https://dentt.info/xxxxxxxxx") : 
-                        translateToGSM(message) )}/> }
-                <div className="campaign-buttons">
-                  <button className="expand cp-button" onClick={e => handleClickGSM(e)}>{ showGSM ? "Ocultar" : "Vista Previa"} </button>
-                  <button className="submit cs-button" onClick={e => handleSubmit(e)} type="submit">Enviar mensajes</button>
-                </div>
-              </div>
-            </form>
-          </div>
-          <div className="campaign-management">
-              <label htmlFor="location-select">clínica</label>
-              <select onChange={e => handleSetLocation(e)} id="location-select" name="location-select">
-                <option value="">seleccionar clínica</option>
-                {locations.map( (location, ind) => (
-                  <option key={ind} value={location._id}>{location.name}</option>
-                ))}
-              </select>
-              <hr className="camp-management-separator"/>
-              { location ? (
-                <>
-                  <div className="campaign-name">
-                    <label htmlFor="title">nombre de campaña</label>
-                    <input name="title" id="title" type="text" value={title} onChange={(e) => setTitle(e.target.value)}/>
-                  </div>
-                <div className="campaign-description">
-                    <label htmlFor="short-description">nombre público</label>
-                    <input name="short-description" id="short-description" type="text" value={shortDescription} onChange={(e) => setShortDescription(e.target.value)}/>
-                </div>
-                <div className="campaign-status">
-                    <input type="checkbox" id="isactive" name="isactive" checked={!isActive} onChange={e => handleIsActive(e)}/>
-                    <label htmlFor="isactive">Campaña terminada</label>
-                </div>
-                  <button disabled={isSaving} className="save cp-button" onClick={e => handleSaveCampaign(e)}>{isSaving ? "Guardando..." : "Guardar Campaña"}</button>
-                  <hr/>
-                  <label htmlFor="campaign-select">cargar campaña</label>
-                  <select onChange={e => handleLoadCampaign(e)} id="campaign-select" name="campaign-select">
-                    <option value="">seleccionar campaña</option>
-                    {filteredCampaigns.map( (campaign, ind) => (
-                      <option key={ind} value={campaign._id}>{campaign.title}</option> //its picking the title as value instead of the id because it should be _id !!
-                    ))}
-                  </select>
-                  <hr/>
-                  <button className="delete cs-button" onClick={e => handleDelete(e)} >Borrar Campaña</button>
-                </>
-              ) : (
-                <>
-                  <p> Elige una clínica para continuar </p> 
-                  <br/>
-                  <br/>
-                  <br/>
-                  <br/>
-                  <br/>
-                  <br/>
-                  <br/>
-                  <br/>
-                  <br/>
-                  <br/>
-                </>
-              )
-              }
-          </div>
-          <div className="recipients-list">
-            <div className="list-container">
-              <form className="add-recipients-form">
-              
-                <div className="input-array">
-                  <div className="input-line">
-                    <label htmlFor="name">nombre</label>
-                    <input className="add-name" name="name" onChange={e => handleCustomerChange(e)} id="name" placeholder=" max. 20 caracteres" type="text" value={customer.name}/>
-                  </div>
-                  <div className="input-line">
-                    <label htmlFor="surname">apellidos</label>
-                    <input className="add-surname" name="surname" onChange={e => handleCustomerChange(e)} id="surname" type="text" value={customer.surname}/>
-                  </div>
-                  <div className="input-line">
-                    
-                    <PhoneInput
-                      className="add-phone"
-                      name="phone"
-                      id="phone"
-                      country="ES"
-                      onChange={value => { 
-                        setCustomer(prevCustomer => ({...prevCustomer, userId: { ...prevCustomer.userId, phone : value}}))
-                        }
-                      }
-                      placeholder="tel. 6xx xx xx xx"
-                      value={customer.phone}
-                    />
-                  </div>
-                  <button className="cp-button" onClick={e => handleAddCustomer(e)} >Añadir</button>
-                  <p>
-                    List size: {recipients.length}, 
-                    Sent: { recipients.filter( recipient => (recipient.smsStatus === "enqueued" || recipient.smsStatus === "delivered")).length},
-                    Enqueued: {recipients.filter( recipient => recipient.smsStatus === "enqueued" ).length},
-                    Delivered: {recipients.filter( recipient => recipient.smsStatus === "delivered").length}, 
-                    Failed: {recipients.filter( recipient => recipient.smsStatus === "failed").length}, 
-                    Clicked on: {recipients.filter( recipient => recipient.linkClicked).length},
-                    Booked: {recipients.filter( recipient => recipient.appointmentBooked).length}
-                  </p>
-                </div>
-                <div className="import-container">
-                  <label className="csv-import-button" htmlFor="csv-import">Importar desde .csv</label>
-                  <input accept=".csv" id="csv-import" name="csv-import" type="file" onChange={e => handleCSVImport(e)}/>
-                </div>
-              </form>
-              <div className="customers-container"> 
-                <div className="customers-controls">
-                    <button onClick={() => handleRefresh()} >Recargar</button>
-                    <div className="remove-switch">
-                      <Switch 
-                        className = "switch-control"
-                        checked = {removeSwitch}
-                        onChange={checked => setRemoveSwitch(!removeSwitch)}
-                        onColor = "#dc3545"
-                      />
-                      { removeSwitch ? <p> Borrado activado </p> : <p> Borrado inactivo </p>}
-                    </div>
-                    <div className="multiselect-switch">
-                      <Switch 
-                        className = "multiselect-switch-control"
-                        checked = {multiSelect}
-                        onChange={checked => setMultiSelect(!multiSelect)}
-                        onColor = "#dc3545"
-                      />
-                      { multiSelect ? <p> Selección simple </p> : <p> Selección múltiple </p>}
-                    </div>
-                </div>
-                <div><p>filter by:</p>
-                  <button onClick={() => setFilter("all")}>all</button>
-                  <button onClick={() => setFilter("not-sent")}>not-sent</button>
-                  <button onClick={() => setFilter("enqueued")}>enqueued</button>
-                  <button onClick={() => setFilter("delivered")}>delivered</button>
-                  <button onClick={() => setFilter("failed")}>failed</button>
-                  <button onClick={() => setFilter("clicked")}>clicked on</button>
-                  <button onClick={() => setFilter("booked")}>Appointment Booked</button>
-                </div>
-                <ul className="customers-list">
-                  {recipients
-                    .filter(recipient => {
-                      switch (filter) {
-                        case "all":
-                          return recipient;
-                        case "not-sent":
-                          return recipient.smsStatus==="not-sent";
-                        case "enqueued":
-                          return recipient.smsStatus==="enqueued";
-                        case "delivered":
-                          return recipient.smsStatus==="delivered";
-                        case "failed":
-                          return recipient.smsStatus==="failed";
-                        case "clicked":
-                          return recipient.linkClicked;
-                        case "booked":
-                          return recipient.appointmentBooked;
-                        default:
-                          return recipient;
-                      }
-                    })
-                    .map( (recipient,i) => (
-                    <li 
-                      key={i} 
-                      className = {
-                        recipient.selected ? (
-                          (new Date() - new Date(recipient.updated_at) <= 3600*1000*12) 
-                            ? "customer-list-item selected new-customer" : "customer-list-item selected") : (
-                           (new Date() - new Date(recipient.updated_at) <= 3600*1000*12) ?  "customer-list-item new-customer" : "customer-list-item")}>
-                      <div 
-                        onClick={multiSelect ? () => handleMultiSelect(recipient._id) : () => handleSelectCustomer(recipient._id)} 
-                        className="customer-fields">
-                        <p>{recipient.userId.name}</p>
-                        <p>{recipient.userId.surname}</p>
-                        <p>
-                            {recipient.userId.phone}  {" "} 
-                            {recipient.smsStatus === "not-sent" ?
-                                <span style={{color: "grey"}}>N</span> : 
-                                (recipient.smsStatus === "enqueued" ? 
-                                  <span style={{color: "blue"}}>E</span> :
-                                  (recipient.smsStatus === "delivered" ?
-                                    <span style={{color: "green"}}>D</span> :
-                                    (recipient.smsStatus === "failed" ?
-                                    <span style={{color: "red"}}>F</span> :
-                                   <span style={{color: "red"}}>-</span>)))}
-                            {" "}
-                            {recipient.linkClicked && <span style={{color: "orange"}}>C</span>}
-                            {" "}
-                            {recipient.appointmentBooked && <span style={{color: "red"}}>B!</span>}
-                            {" "}
-                            {(new Date() - new Date(recipient.updated_at) <= 3600*1000*12)
-                              && <span className="ball"></span>}
-                            {(recipient.userId.phone[3] != "6" || recipient.userId.phone.length != 12) && (<span className="ball" style={{"backgroundColor": "red"}}></span>)}
-                                
-                        </p>
-                      </div>
-                      <button 
-                        className="remove-customer" 
-                        disabled={!removeSwitch}
-                        onClick={e => handleRemoveCustomer(e, i)}
-                      >
-                          -
-                      </button>
-                    </li>
-                  ))
-                  }
-                </ul>
-              </div>
-            </div>
-          </div>
+          <CampaignMessage 
+            message = {message}
+            handleMsgChange = {handleMsgChange}
+            greeting = {greeting}
+            handleGreetingChange = {handleGreetingChange}
+            customLink = {customLink}
+            handleLinkChange = {handleLinkChange}
+            showGSM = {showGSM}
+            handleClickGSM = {handleClickGSM}
+            translateToGSM = {translateToGSM}
+            handleSubmit = {handleSubmit}
+          />
+          <SideMenu 
+            locations = {locations} 
+            location = {location} 
+            handleSetLocation = {handleSetLocation} 
+            title = {title} 
+            setTitle = {setTitle} 
+            shortDescription = {shortDescription} 
+            setShortDescription = {setShortDescription} 
+            isActive = {isActive} 
+            handleIsActive = {handleIsActive} 
+            isSaving = {isSaving} 
+            handleSaveCampaign = {handleSaveCampaign} 
+            handleLoadCampaign = {handleLoadCampaign} 
+            filteredCampaigns = {filteredCampaigns} 
+            handleDelete = {handleDelete} 
+          />
+          <RecipientList 
+            handleCustomerChange = {handleCustomerChange} 
+            customer = {customer} 
+            setCustomer = {setCustomer}
+            handleAddCustomer = {handleAddCustomer}
+            recipients = {recipients}
+            handleCSVImport = {handleCSVImport}
+            handleRefresh = {handleRefresh}
+            removeSwitch = {removeSwitch}
+            setRemoveSwitch = {setRemoveSwitch}
+            handleSelectCustomer = {handleSelectCustomer}
+            multiSelect = {multiSelect}
+            setMultiSelect = {setMultiSelect}
+            handleMultiSelect = {handleMultiSelect}
+            filter = {filter}
+            setFilter = {setFilter}
+            handleRemoveCustomer = {handleRemoveCustomer}
+          />
         </div>
       }
     </>
