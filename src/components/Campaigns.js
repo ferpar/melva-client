@@ -9,6 +9,7 @@ import SideMenu from "./Campaigns/SideMenu.js";
 import CampaignMessage from "./Campaigns/CampaignMessage.js" ;
 
 import Modali, { useModali } from "modali";
+import * as inner from "./Campaigns/Modali/inner.js";
 
 import { toast } from "react-toastify";
 toast.configure();
@@ -412,26 +413,18 @@ const CampaignManager = props => {
           </button>
       </Menu>
       <Modali.Modal {...confirmModal}>
-        <div className="modal-text">
-          <p>
-            Confirme el envío de {recipients.filter(recipient => (recipient.selected && (recipient.smsStatus==="not-sent" || recipient.smsStatus===null))).length} mensajes con el siguiente mensaje:
-          </p>
-          <p>
-            {"<<"}{greeting ? ( customLink ? translateToGSM("Hola (NOMBRE), " + message + " https://dentt.info/xxxxxxxxx") 
-              : translateToGSM("Hola (NOMBRE), " + message) ) : 
-                ( customLink ? translateToGSM(message + " https://dentt.info/xxxxxxxxx") : translateToGSM(message) )}{">>"}
-          </p>
-        </div>
+        <inner.confirmModal 
+          recipients = {recipients}
+          message = {message}
+          greeting = {greeting}
+          customLink = {customLink}
+          translateToGSM = {translateToGSM}
+        />
       </Modali.Modal>
       <Modali.Modal {...deleteModal}>
-        <div className="modal-text">
-          <p>
-            Confirme el BORRADO PERMANENTE de la siguiente campaña:
-          </p>
-          <p>
-            {"<<"}{title}{">>"}
-          </p>
-        </div>
+        <inner.deleteModal
+          title = {title}
+        />
       </Modali.Modal>
       {
       isSending 
