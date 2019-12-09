@@ -78,6 +78,14 @@ const CampaignManager = props => {
     setIsActive(!e.target.checked) 
   }
 
+  const handleSetTitle = e => {
+    setTitle(e.target.value)
+  }
+
+  const handleSetShortDescription = e => {
+    setShortDescription(e.target.value)
+  }
+
   const clearSelection = (recipientsToClear) => {
     const clearedRecipients = recipientsToClear.map( recipient => {
       recipient.selected = false;
@@ -458,9 +466,9 @@ const CampaignManager = props => {
             location = {location} 
             handleSetLocation = {handleSetLocation} 
             title = {title} 
-            setTitle = {setTitle} 
+            handleSetTitle = {handleSetTitle}
             shortDescription = {shortDescription} 
-            setShortDescription = {setShortDescription} 
+            handleSetShortDescription = {handleSetShortDescription}
             isActive = {isActive} 
             handleIsActive = {handleIsActive} 
             isSaving = {isSaving} 

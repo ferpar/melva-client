@@ -5,9 +5,9 @@ const CampaignManager = ({
   location,
   handleSetLocation,
   title,
-  setTitle,
+  handleSetTitle,
   shortDescription,
-  setShortDescription,
+  handleSetShortDescription,
   isActive,
   handleIsActive,
   isSaving,
@@ -29,11 +29,11 @@ const CampaignManager = ({
                 <>
                   <div className="campaign-name">
                     <label htmlFor="title">nombre de campaña</label>
-                    <input name="title" id="title" type="text" value={title} onChange={(e) => setTitle(e.target.value)}/>
+                    <input name="title" id="title" type="text" value={title} onChange={(e) => handleSetTitle(e)}/>
                   </div>
                 <div className="campaign-description">
                     <label htmlFor="short-description">nombre público</label>
-                    <input name="short-description" id="short-description" type="text" value={shortDescription} onChange={(e) => setShortDescription(e.target.value)}/>
+                    <input name="short-description" id="short-description" type="text" value={shortDescription} onChange={(e) => handleSetShortDescription(e)}/>
                 </div>
                 <div className="campaign-status">
                     <input type="checkbox" id="isactive" name="isactive" checked={!isActive} onChange={e => handleIsActive(e)}/>
