@@ -1,5 +1,9 @@
 import React from "react";
 
+import "react-phone-number-input/style.css";
+import PhoneInput from "react-phone-number-input";
+import Switch from "react-ios-switch";
+
 const RecipientList = (
   {
     handleCustomerChange,
@@ -17,9 +21,7 @@ const RecipientList = (
     handleMultiSelect,
     filter,
     setFilter,
-    handleRemoveCustomer,
-    PhoneInput,
-    Switch
+    handleRemoveCustomer
   }
 ) => (
           <div className="recipients-list">
