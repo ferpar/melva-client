@@ -49,6 +49,19 @@ const CampaignManager = props => {
 
   const [location, setLocation] = useState("")
 
+  // SubForm state
+  const [recipients, setRecipients] = useState([])
+  const [customer, setCustomer] = useState({userId: {name: "", surname: "", phone: ""}})
+  const [removeSwitch, setRemoveSwitch] = useState(false)
+  const [multiSelect, setMultiSelect] = useState(false)
+  const [selectArray, setSelectArray] = useState([])
+  // ==
+  
+  const [bufferedSaveState, setBufferedSaveState] = useState(null)
+  const [campaignChanged, setCampaignChanged] = useState(false)
+  const [saveBufferFlag, setSaveBufferFlag] = useState(false)
+  const [checkCampaignFlag, setCheckCampaignFlag] = useState(false)
+
   const handleSetLocation = e => {
     const selectedLocationId = e.target.value
     setLocation(selectedLocationId)
@@ -59,6 +72,7 @@ const CampaignManager = props => {
 
   const handleMsgChange = e => {
     setMessage(e.target.value);
+    setCheckCampaignFlag(true)
   }
 
   const handleClickGSM = e => {
@@ -68,22 +82,27 @@ const CampaignManager = props => {
 
   const handleGreetingChange = e => {
     setGreeting(e.target.checked)
+    setCheckCampaignFlag(true)
   }
 
   const handleLinkChange = e => {
     setCustomLink(e.target.checked)
+    setCheckCampaignFlag(true)
   }
 
   const handleIsActive = e => {
     setIsActive(!e.target.checked) 
+    setCheckCampaignFlag(true)
   }
 
   const handleSetTitle = e => {
     setTitle(e.target.value)
+    setCheckCampaignFlag(true)
   }
 
   const handleSetShortDescription = e => {
     setShortDescription(e.target.value)
+    setCheckCampaignFlag(true)
   }
 
   const clearSelection = (recipientsToClear) => {
@@ -163,6 +182,7 @@ const CampaignManager = props => {
     await saveCampaign()
     await notify(title)
     setIsSaving(false)
+    setSaveBufferFlag(true)
     }
   }
 
@@ -191,6 +211,7 @@ const CampaignManager = props => {
       await loadCampaign(campaignId)
     }
     setSelectedCampaignId(campaignId)
+    setSaveBufferFlag(true)
   }
 
   const deleteCampaign = async () => {
@@ -221,14 +242,42 @@ const CampaignManager = props => {
     await refreshCampaigns()
   }
 
+  const saveBufferState = () => {
+    setBufferedSaveState(
+      {
+        title, message, shortDescription, isActive, greeting, customLink 
+      }
+    )
+    setSaveBufferFlag(false)
+    setCampaignChanged(false)
+  }
+
+  const campaignChecker = () => {
+    if (bufferedSaveState) {
+      let change = false
+      const actualState = {
+        title, message, shortDescription, isActive, greeting, customLink
+      }
+      for (let subprop in bufferedSaveState) {
+        console.log(subprop)
+        console.log(bufferedSaveState[subprop])
+        console.log(actualState[subprop])
+        if (bufferedSaveState[subprop] != actualState[subprop]){
+          change = true
+        }
+      }
+      console.log("campaignChanged: " + change)
+      setCampaignChanged(change)
+     } else {
+       console.log("no buffered State")
+       setCampaignChanged(false)
+     }
+    setCheckCampaignFlag(false)
+  }
+
   // ====
 
   // == SubForm ==
-  const [recipients, setRecipients] = useState([])
-  const [customer, setCustomer] = useState({userId: {name: "", surname: "", phone: ""}})
-  const [removeSwitch, setRemoveSwitch] = useState(false)
-  const [multiSelect, setMultiSelect] = useState(false)
-  const [selectArray, setSelectArray] = useState([])
 
   const handleAddCustomer = async e => {
     e.preventDefault();
@@ -403,6 +452,15 @@ const CampaignManager = props => {
     return () => isSubscribed = false;
   }, [])
 
+  useEffect(() => {
+    if (saveBufferFlag) saveBufferState()
+  }, [saveBufferFlag]
+  )
+
+  useEffect(() => {
+    if (checkCampaignFlag) campaignChecker()
+  }, [checkCampaignFlag])
+
   return (
    
     <>
@@ -476,6 +534,7 @@ const CampaignManager = props => {
             handleLoadCampaign = {handleLoadCampaign} 
             filteredCampaigns = {filteredCampaigns} 
             handleDelete = {handleDelete} 
+            campaignChanged = {campaignChanged}
           />
           <RecipientList 
             handleCustomerChange = {handleCustomerChange} 

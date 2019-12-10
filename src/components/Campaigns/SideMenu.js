@@ -14,7 +14,8 @@ const CampaignManager = ({
   handleSaveCampaign,
   handleLoadCampaign,
   filteredCampaigns,
-  handleDelete
+  handleDelete,
+  campaignChanged
 }) => (
     <div className="campaign-management">
         <label htmlFor="location-select">clínica</label>
@@ -47,7 +48,11 @@ const CampaignManager = ({
                 <input type="checkbox" id="isactive" name="isactive" checked={!isActive} onChange={e => handleIsActive(e)}/>
                 <label htmlFor="isactive">Campaña terminada</label>
             </div>
+            { campaignChanged ?
             <button disabled={isSaving} className="save cp-button" onClick={e => handleSaveCampaign(e)}>{isSaving ? "Guardando..." : "Guardar Cambios"}</button>
+              :
+            <button disabled={true} className="save cp-button" onClick={e => handleSaveCampaign(e)}>{title ? "Sin Cambios" : "Elige Campaña"}</button>
+            }
             <hr/>
             <button className="delete cs-button" onClick={e => handleDelete(e)} >Borrar Campaña</button>
           </>
