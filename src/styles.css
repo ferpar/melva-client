@@ -732,6 +732,8 @@ Note: Beware of modifying this element as it can break the animations - you shou
   letter-spacing: 1px;
   margin-bottom: 1rem;
   max-width: 20rem;
+  transform: translateY(4px);
+  box-shadow: 0 5px grey;
 }
 
 .tab:hover{
@@ -741,7 +743,10 @@ Note: Beware of modifying this element as it can break the animations - you shou
 }
 
 .tab-selected{
-  background-color: var(--dentist-1)  
+  background-color: var(--dentist-1);
+  transform: translateY(9px);
+  box-shadow: none;
+  border-color: var(--dentist-1);
 }
 
 .tab-container{

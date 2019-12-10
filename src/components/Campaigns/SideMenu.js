@@ -47,7 +47,7 @@ const CampaignManager = ({
               </button>
             </div>
 
-            <div class="tab-container">
+            <div className="tab-container">
               {!newCampaign && (
               <>
                 <label htmlFor="campaign-select">campaña</label>
