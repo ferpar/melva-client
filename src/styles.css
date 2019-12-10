@@ -715,6 +715,48 @@ Note: Beware of modifying this element as it can break the animations - you shou
  padding: 1rem 2rem;
 }
 
+.tab-options{
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+}
+
+.tab{
+  background-color: var(--primary);
+  color: #fff;
+  border: 2px solid var(--primary);
+  border-radius: 5px;
+  padding: 0.5rem;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 1rem;
+  max-width: 20rem;
+}
+
+.tab:hover{
+  color: #fff;
+  background-color: rgba(0, 123, 255, 0.7);
+  border: 2px solid rgba(0, 123, 255, 0.7);
+}
+
+.tab-selected{
+  background-color: var(--dentist-1)  
+}
+
+.tab-container{
+  display: flex;
+  flex-direction: column;
+  border-radius: 5px;
+  padding: 0.5rem;
+  box-shadow: 1px 1px grey;
+  width: 100%;
+}
+
+.campaign-select{
+  margin-bottom: 0.25rem;
+}
+
 .camp-management-separator {
   border: 1px solid black;
   width: 100%;

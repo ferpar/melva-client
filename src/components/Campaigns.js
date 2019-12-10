@@ -62,6 +62,12 @@ const CampaignManager = props => {
   const [saveBufferFlag, setSaveBufferFlag] = useState(false)
   const [checkCampaignFlag, setCheckCampaignFlag] = useState(false)
 
+  const [newCampaign, setNewCampaign] = useState(false)
+
+  const handleNewCampaign = () => {
+    setNewCampaign(!newCampaign)
+  }
+
   const handleSetLocation = e => {
     const selectedLocationId = e.target.value
     setLocation(selectedLocationId)
@@ -524,6 +530,7 @@ const CampaignManager = props => {
             location = {location} 
             handleSetLocation = {handleSetLocation} 
             title = {title} 
+            message = {message}
             handleSetTitle = {handleSetTitle}
             shortDescription = {shortDescription} 
             handleSetShortDescription = {handleSetShortDescription}
@@ -535,6 +542,9 @@ const CampaignManager = props => {
             filteredCampaigns = {filteredCampaigns} 
             handleDelete = {handleDelete} 
             campaignChanged = {campaignChanged}
+            newCampaign = {newCampaign}
+            setNewCampaign = {setNewCampaign}
+            handleNewCampaign = {handleNewCampaign}
           />
           <RecipientList 
             handleCustomerChange = {handleCustomerChange} 
