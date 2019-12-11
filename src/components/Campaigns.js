@@ -177,7 +177,8 @@ const CampaignManager = props => {
       .save(postData)
         .catch( err => console.error("error saving campaign", err))
 
-    await refreshCampaigns(savedCampaign.data._id)
+    console.log(savedCampaign)
+    await refreshCampaigns(savedCampaign.data.savedCampaign._id)
   }
 
   const handleSaveCampaign = async e => {
@@ -240,10 +241,13 @@ const CampaignManager = props => {
      toggleDeleteModal()
   }
 
-  const refreshCampaigns = async (newCampaignId = null) => {
+  const refreshCampaigns = async (newCampaignId) => {
+      console.log(newCampaignId)
+      console.log("gets to here")
     if (newCampaignId){
       await loadCampaigns()
       await loadCampaign(newCampaignId)
+      console.log("should be setting selectedCampaignId to: " + newCampaignId)
       setSelectedCampaignId(newCampaignId)
       setSaveBufferFlag(true) //this flag is Redundant since it is already set at the handleSaveCampaign()
     } else {
