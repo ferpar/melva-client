@@ -178,7 +178,14 @@ const CampaignManager = props => {
         .catch( err => console.error("error saving campaign", err))
 
     console.log(savedCampaign)
+    //here I could instead have checked for selectedLocationId, 
+    //and not bothered sending updatedCampaign but I'm doing since
+    //I believe it is the most robust implementation.
+    if (savedCampaign.data.savedCampaign) { 
     await refreshCampaigns(savedCampaign.data.savedCampaign._id)
+    } else {
+    await refreshCampaigns(savedCampaign.data.updatedCampaign._id)
+    }
   }
 
   const handleSaveCampaign = async e => {

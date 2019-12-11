@@ -106,7 +106,10 @@ const CampaignManager = ({
                   <button 
                     disabled={isSaving} 
                     className="save cp-button" 
-                    onClick={e => handleSaveCampaign(e)}
+                    onClick={e => {
+                      handleSaveCampaign(e)
+                      setNewCampaign(false)
+                    }}
                   >
                     {isSaving ? "Guardando..." : "Crear Campaña"}
                   </button>
