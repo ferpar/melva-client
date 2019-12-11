@@ -173,12 +173,11 @@ const CampaignManager = props => {
     const postData = { title, message, shortDescription, recipients, customGreeting: greeting, customLink, location, isActive }
     if (newRecipients) postData.recipients = newRecipients;
 
-    await props.campaignService
+    const savedCampaign = await props.campaignService
       .save(postData)
-        .then( results => setCampaigns( prevCampaigns => [...prevCampaigns, results.data]))
         .catch( err => console.error("error saving campaign", err))
 
-    await refreshCampaigns()
+    await refreshCampaigns(savedCampaign.data._id)
   }
 
   const handleSaveCampaign = async e => {
@@ -241,13 +240,34 @@ const CampaignManager = props => {
      toggleDeleteModal()
   }
 
-  const refreshCampaigns = async () => {
-    await loadCampaigns()
-    await loadCampaign(selectedCampaignId)
+  const refreshCampaigns = async (newCampaignId = null) => {
+    if (newCampaignId){
+      await loadCampaigns()
+      await loadCampaign(newCampaignId)
+      setSelectedCampaignId(newCampaignId)
+      setSaveBufferFlag(true) //this flag is Redundant since it is already set at the handleSaveCampaign()
+    } else {
+      await loadCampaigns()
+      await loadCampaign(selectedCampaignId) //On new campaigns: here I could be receiving the campaignId from the save function ****
+    }
+    // here I will need to update the selectedCampaignId if there is a new one, *** ***
+    // And also update the filteredCampaigns if there is a new campaign (or maybe do this inside loadCampaigns() checking that a location was selected) *** ***
   }
 
   const handleRefresh = async () => {
     await refreshCampaigns()
+  }
+
+  const clearCampaignState = async () => {
+          await setTitle("")
+          await setShortDescription("")
+          await setMessage("")
+          await setGreeting(false)
+          await setCustomLink(false)
+          await setIsActive(true)
+          await setRecipients([])
+
+          await setSelectedCampaignId("")
   }
 
   // this state is saved for comparison, 
@@ -272,9 +292,6 @@ const CampaignManager = props => {
         title, message, shortDescription, isActive, greeting, customLink
       }
       for (let subprop in bufferedSaveState) {
-        console.log(subprop)
-        console.log(bufferedSaveState[subprop])
-        console.log(actualState[subprop])
         if (bufferedSaveState[subprop] != actualState[subprop]){
           change = true
         }
@@ -467,12 +484,19 @@ const CampaignManager = props => {
 
   useEffect(() => {
     if (saveBufferFlag) saveBufferState()
-  }, [saveBufferFlag]
-  )
+  }, [saveBufferFlag])
 
   useEffect(() => {
     if (checkCampaignFlag) campaignChecker()
   }, [checkCampaignFlag])
+
+  useEffect(() => {
+    if (location) { 
+      setFilteredCampaigns(campaigns.filter(campaign => {
+        return campaign.location === location
+      }))
+    }
+  }, [campaigns])
 
   return (
    
@@ -547,11 +571,13 @@ const CampaignManager = props => {
             handleSaveCampaign = {handleSaveCampaign} 
             handleLoadCampaign = {handleLoadCampaign} 
             filteredCampaigns = {filteredCampaigns} 
+            selectedCampaignId = {selectedCampaignId}
             handleDelete = {handleDelete} 
             campaignChanged = {campaignChanged}
             newCampaign = {newCampaign}
             setNewCampaign = {setNewCampaign}
             handleNewCampaign = {handleNewCampaign}
+            clearCampaignState = {clearCampaignState}
           />
           <RecipientList 
             handleCustomerChange = {handleCustomerChange} 

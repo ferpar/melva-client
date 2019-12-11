@@ -15,11 +15,13 @@ const CampaignManager = ({
   handleSaveCampaign,
   handleLoadCampaign,
   filteredCampaigns,
+  selectedCampaignId,
   handleDelete,
   campaignChanged,
   newCampaign,
   setNewCampaign,
-  handleNewCampaign
+  handleNewCampaign,
+  clearCampaignState
 }) => (
     <div className="campaign-management">
         <label htmlFor="location-select">clínica</label>
@@ -41,7 +43,10 @@ const CampaignManager = ({
               </button>
               <button 
                 className={newCampaign ? "save tab tab-selected" : "save tab"} 
-                onClick={() => setNewCampaign(true)}
+                onClick={() => {
+                  clearCampaignState()
+                  setNewCampaign(true)
+                }}
               >
                 {"Nueva"}
               </button>
@@ -57,6 +62,7 @@ const CampaignManager = ({
                   className="campaign-select"
                   id="campaign-select" 
                   name="campaign-select"
+                  value={selectedCampaignId}
                 >
                   <option value="">seleccionar campaña</option>
                   {filteredCampaigns.map( (campaign, ind) => (
