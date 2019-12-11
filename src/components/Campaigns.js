@@ -229,6 +229,8 @@ const CampaignManager = props => {
           await setShortDescription("")
           await setMessage("")
           await setGreeting(false)
+          await setCustomLink(false)
+          await setIsActive(true)
           await setRecipients([])
         })
     await loadCampaigns()
@@ -248,6 +250,10 @@ const CampaignManager = props => {
     await refreshCampaigns()
   }
 
+  // this state is saved for comparison, 
+  // to enable the save button only when changes have been made.
+  // It is a representation of the actual state in the DB,
+  // (but without the recipients list for now).
   const saveBufferState = () => {
     setBufferedSaveState(
       {
@@ -258,6 +264,7 @@ const CampaignManager = props => {
     setCampaignChanged(false)
   }
 
+  //this function compares the savedState with changes made in the UI
   const campaignChecker = () => {
     if (bufferedSaveState) {
       let change = false
