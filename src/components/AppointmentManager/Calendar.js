@@ -47,7 +47,7 @@ const MyCalendar = props => {
   return (
     <div className="calendar-container">
       <div className="calendar-wrapper">
-        <h1>Calendar</h1>
+        <h1>Calendario</h1>
         <Calendar
           culture={"es"}
           localizer={localizer}
