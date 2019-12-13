@@ -30,7 +30,12 @@ const DatePickr = ({date, availableDates, dateChangeHandler, appointments }) => 
               onChange={e => dateChangeHandler(e)}
               onOpen = {(dates, dateStr, instance) => { 
                 instance.jumpToDate(
-                  new Date(availableDates[0])
+                  new Date(moment.tz(availableDates[0], "Europe/Madrid"))
+                    .getTime() > new Date().getTime() 
+                  ?
+                    new Date(moment.tz(availableDates[0], "Europe/Madrid")) 
+                  : 
+                    new Date()
                 )} 
               }
             />
