@@ -9,14 +9,14 @@ const confirmModal = ({
 }) => (
         <div className="modal-text">
           <p>
-            Confirme el envío de 
+            {"Confirme el envío de "}
             {recipients.filter( 
               recipient => (
                 recipient.selected && (
                   recipient.smsStatus==="not-sent" || 
                   recipient.smsStatus===null)))
             .length} 
-            mensajes con el siguiente mensaje:
+            {" mensajes con el siguiente mensaje: "}
           </p>
           <p>
             {"<<"}

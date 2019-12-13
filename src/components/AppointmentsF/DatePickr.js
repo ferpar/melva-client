@@ -18,9 +18,9 @@ const DatePickr = ({date, availableDates, dateChangeHandler, appointments }) => 
                 dateFormat: 'd-m-Y',
                 disableMobile: true,
                 locale: Spanish,
-                minDate: new Date( new Date().setDate( new Date().getDate() + 1)),
                 altInput: true,
                 altFormat: "F j, Y",
+                //minDate: new Date(moment.tz(availableDates[0], "Europe/Madrid")),
                 enable: availableDates.length > 0 
                   ? [ ...availableDates.map( dateStr => new Date(moment.tz(dateStr,"Europe/Madrid").format())) ]
                   : ["2018-4-01"]
@@ -28,6 +28,11 @@ const DatePickr = ({date, availableDates, dateChangeHandler, appointments }) => 
               className="appointments-flatpickr"
               placeholder="pulse aquí..."
               onChange={e => dateChangeHandler(e)}
+              onOpen = {(dates, dateStr, instance) => { 
+                instance.jumpToDate(
+                  new Date(availableDates[0])
+                )} 
+              }
             />
             <h2 className="appointments-date">
             {date &&
