@@ -144,6 +144,7 @@ class App extends React.Component {
                 authService = {this.authService}
                 appointmentService = {this.appointmentService}
                 campaignService = {this.campaignService}
+                getLoggedIn = {this.getLoggedIn}
                 handleLogout = {this.handleLogout}
               />}
           />

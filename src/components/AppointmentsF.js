@@ -117,6 +117,7 @@ const Appointment = props => {
         onClick={async () => {
           await props.authService.consent({_id: props.user._id, consent: true})
           toggleConsentModal();
+          await props.getLoggedIn();
         }}
       />
     ],
