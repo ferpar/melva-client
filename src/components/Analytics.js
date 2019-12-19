@@ -147,7 +147,7 @@ const Analytics = props => {
   const rankPatientBase = (patientBase, rankParameters, yearSumToggle = false) => {
     const rankedPatientBase = {...patientBase}
       
-      for (patient in patientBase) {
+      for ( let patient in patientBase) {
 
         //longevity ranking
         if (yearSumToggle) {
@@ -180,6 +180,25 @@ const Analytics = props => {
 
     return rankedPatientBase
   }
+  
+  const generateYearlyReport = async (formattedData, rankParameters, yearSumToggle) => {
+    let yearlyReport = {}
+    const billsByYear = groupBy(formattedData, "year")
+    for (let year in billsByYear) {
+      yearlyReport[year] = rankPatientBase(generatePatientBase(formattedData.filter( bill => bill.date.getTime() < new Date(parseInt(year)+1, 0) )), rankParameters)
+    }
+    return yearlyReport
+  }
+
+  useEffect( () => {
+    const loadReport = async () => {
+      if (formattedSourceData) {
+       const yearlyReport = await generateYearlyReport( formattedSourceData, {"Ayears": 8, "Byears": 4, "Abills": 20, "Bbills": 10})
+       console.log(yearlyReport)
+      } 
+    }
+    loadReport()
+  }, [formattedSourceData])
 
   useEffect( () => {
     setIsLoading(false)
