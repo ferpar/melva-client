@@ -52,6 +52,14 @@ const Analytics = props => {
       address: billable.Direccion,
       day: billable.Fecha.split("/")[1],
       month: billable.Fecha.split("/")[0],
+      quarter: 
+        billable.Fecha.split("/")[0] > 9 ? 
+          4 
+          : (billable.Fecha.split("/")[0] > 6 ?
+            3
+            : (billable.Fecha.split("/")[0] > 3 ?
+              2 : 1)
+          ),
       year: billable.Fecha.split("/")[2],
       date: new Date(
         billable.Fecha.split("/")[2], 
@@ -60,6 +68,7 @@ const Analytics = props => {
     }))  
   )
 
+  //groups an array turning it into an object with the selected criterion as key/property
   const groupBy = (formattedData, criterion = "year") => {
 
     const groupedBills = {}
@@ -75,6 +84,7 @@ const Analytics = props => {
     return groupedBills
   }
 
+  //fist iteration of nested grouping year=>month
   const groupByMonth = (formattedData, criterion = "year") => {
     
     const groupedBills = groupBy(formattedData, criterion)
@@ -88,7 +98,7 @@ const Analytics = props => {
 
   }
 
-
+  //first iteration of double nested grouping year => month => day
   const groupByDay = (formattedData, criterion = "year") => {
     
     const groupedBills = groupBy(formattedData, criterion)
@@ -105,6 +115,7 @@ const Analytics = props => {
 
   }
 
+  //second iteration of nested grouping: year => patient
   const groupByYearPatient = (formattedData, criterion = "year") => {
     
     const groupedBills = groupBy(formattedData, criterion)
@@ -115,6 +126,17 @@ const Analytics = props => {
     }
 
     return nestedGroupBills
+  }
+
+  //function for nested grouping after groupBy was first used ==> Generalization for second level subGroups
+  const groupObjectBy = ( inputObject, criterion="patient" ) => {
+    const nestedGroupedObject = {}
+
+    for (let prop in inputObject) {
+      nestedGroupedObject[prop] = groupBy(inputObject[prop], criterion)  
+    }
+
+    return nestedGroupedObject
   }
 
   const generatePatientBase = (formattedData) => {
@@ -254,8 +276,10 @@ const Analytics = props => {
   useEffect( () => {
     const loadReport = async () => {
       if (formattedSourceData) {
-       const yearlyReport = await generateYearlyReport( formattedSourceData, {"Ayears": 8, "Byears": 4, "Abills": 20, "Bbills": 10})
-       console.log(yearlyReport)
+        const yearlyReport = await generateYearlyReport( formattedSourceData, {"Ayears": 8, "Byears": 4, "Abills": 20, "Bbills": 10})
+        console.log(yearlyReport)
+        const subGroupingTest = await groupObjectBy(groupBy(formattedSourceData, "year"), "month")
+        console.log(subGroupingTest)
       } 
     }
     loadReport()
