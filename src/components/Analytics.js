@@ -181,11 +181,72 @@ const Analytics = props => {
     return rankedPatientBase
   }
   
+  const rankPatientBaseYearly = (patientBase, rankParameters, year, yearSumToggle = false) => {
+    const rankedPatientBase = {...patientBase}
+      
+      for ( let patient in patientBase) {
+
+        //longevity ranking
+        if (yearSumToggle) {
+          if (patientBase[patient].yearSum > rankParameters.Ayears) {
+            rankedPatientBase[patient].longevityRank = "A"
+          } else if (patientBase[patient].yearSum > rankParameters.Byears) {
+            rankedPatientBase[patient].longevityRank = "B"
+          } else {
+            rankedPatientBase[patient].longevityRank = "C";
+          }
+        } else {
+          if (patientBase[patient].yearSpan > rankParameters.Ayears) {
+            rankedPatientBase[patient].longevityRank = "A"
+          } else if (patientBase[patient].yearSpan > rankParameters.Byears) {
+            rankedPatientBase[patient].longevityRank = "B"
+          } else {
+            rankedPatientBase[patient].longevityRank = "C";
+          }
+        }
+
+        //asiduity ranking
+        if (patientBase[patient].billSum > rankParameters.Abills) {
+          rankedPatientBase[patient].asiduityRank = "A"
+        } else if (patientBase[patient].billSum > rankParameters.Bbills) {
+          rankedPatientBase[patient].asiduityRank = "B"
+        } else {
+          rankedPatientBase[patient].asiduityRank = "C";
+        }
+
+        //customer status
+        if (patientBase[patient].years.has(year)){
+          if (patientBase[patient].years.has( (parseInt(year) -1).toString())){
+            rankedPatientBase[patient].status = "retained" 
+          } else {
+            if (patientBase[patient].years.size === 1) {
+              rankedPatientBase[patient].status = "gained" 
+            } else {
+              rankedPatientBase[patient].satus = "regained"
+            }
+          }
+        } else {
+          if (patientBase[patient].years.has( (parseInt(year) -1).toString())){
+            rankedPatientBase[patient].status = "lost"
+          } else {
+            if (patientBase[patient].years.size === 1){
+              rankedPatientBase[patient].status = "forgotten1Year"
+            } else {
+              rankedPatientBase[patient].status = "forgottenMultiYear"
+            }
+          }
+        }
+      }
+
+    return rankedPatientBase
+  }
+
   const generateYearlyReport = async (formattedData, rankParameters, yearSumToggle) => {
     let yearlyReport = {}
     const billsByYear = groupBy(formattedData, "year")
     for (let year in billsByYear) {
-      yearlyReport[year] = rankPatientBase(generatePatientBase(formattedData.filter( bill => bill.date.getTime() < new Date(parseInt(year)+1, 0) )), rankParameters)
+      //yearlyReport[year] = rankPatientBase(generatePatientBase(formattedData.filter( bill => bill.date.getTime() < new Date(parseInt(year)+1, 0) )), rankParameters)
+      yearlyReport[year] = rankPatientBaseYearly(generatePatientBase(formattedData.filter( bill => bill.date.getTime() < new Date(parseInt(year)+1, 0) )), rankParameters, year)
     }
     return yearlyReport
   }
