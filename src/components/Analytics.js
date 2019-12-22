@@ -158,9 +158,9 @@ const Analytics = props => {
         }
 
         if (patientList[bill.patientId].months[bill.year]) {
-          patientList[bill.patientId].months[bill.year].add(bill.month)
+          patientList[bill.patientId].months[bill.year].add(parseInt(bill.month))
         } else {
-          patientList[bill.patientId].months[bill.year] = new Set([bill.month])
+          patientList[bill.patientId].months[bill.year] = new Set([parseInt(bill.month)])
         }
 
       } else {
@@ -173,7 +173,7 @@ const Analytics = props => {
           yearSpan: 1,
           billSum: 1,
           quarters: {[bill.year]: new Set([bill.quarter])},
-          months: {[bill.year]: new Set([bill.month])}
+          months: {[bill.year]: new Set([parseInt(bill.month)])}
         }
       }
     })
@@ -382,16 +382,111 @@ const Analytics = props => {
     return quarterlyReport
   }
 
+  const rankPatientBaseMonthly = (patientBase, rankParameters, year, month, yearSumToggle = false) => {
+    const rankedPatientBase = {...patientBase}
+      
+        //auxiliary function to check if there were bills on any of the previous 4 quarters
+        function checkLastYearBills(patientObject, year, month) {
+          for (let i = month-1; i >= 1; i--){
+            if ( patientObject.months[year] && patientObject.months[year].has(parseInt(i)) ) return true
+          }
+          for (let i= month; i<=12; i++){
+            if ( patientObject.years.has((parseInt(year) -1).toString())  && patientObject.months[year-1].has(parseInt(i)) ) return true
+          }
+          return false
+        }
+
+        function checkIfLost(patientObject, year, month) {
+          if (month == 1) {
+            if ( patientObject.months[year-2] && patientObject.months[year-2].has(12)) return true
+          } else {
+            if (patientObject.months[year-1] && patientObject.months[year-1].has(month-1)) return true
+          }
+          return false
+        }
+      for ( let patient in patientBase) {
+
+        //longevity ranking
+        if (yearSumToggle) {
+          if (patientBase[patient].yearSum > rankParameters.Ayears) {
+            rankedPatientBase[patient].longevityRank = "A"
+          } else if (patientBase[patient].yearSum > rankParameters.Byears) {
+            rankedPatientBase[patient].longevityRank = "B"
+          } else {
+            rankedPatientBase[patient].longevityRank = "C";
+          }
+        } else {
+          if (patientBase[patient].yearSpan > rankParameters.Ayears) {
+            rankedPatientBase[patient].longevityRank = "A"
+          } else if (patientBase[patient].yearSpan > rankParameters.Byears) {
+            rankedPatientBase[patient].longevityRank = "B"
+          } else {
+            rankedPatientBase[patient].longevityRank = "C";
+          }
+        }
+
+        //asiduity ranking
+        if (patientBase[patient].billSum > rankParameters.Abills) {
+          rankedPatientBase[patient].asiduityRank = "A"
+        } else if (patientBase[patient].billSum > rankParameters.Bbills) {
+          rankedPatientBase[patient].asiduityRank = "B"
+        } else {
+          rankedPatientBase[patient].asiduityRank = "C";
+        }
+
+
+        //customer status
+        if ((patientBase[patient].years.has(year.toString()) && patientBase[patient].months[year].has(parseInt(month))) || checkLastYearBills(patientBase[patient], year, month)) {
+          if(checkLastYearBills(patientBase[patient], year, month)){
+            rankedPatientBase[patient].status="retained" 
+          } else {
+            if (patientBase[patient].years.size === 1) {
+              rankedPatientBase[patient].status="gained"
+            } else {
+              rankedPatientBase[patient].status="regained"
+            }
+          }
+          
+        } else {
+          if (checkIfLost(patientBase[patient], year, month)){
+            rankedPatientBase[patient].status = "lost"
+          } else {
+            if (patientBase[patient].years.size === 1){
+              rankedPatientBase[patient].status = "forgotten1Year"
+            } else {
+              rankedPatientBase[patient].status = "forgottenMultiYear"
+            }
+          }
+        }
+      }
+
+    return rankedPatientBase
+  }
+
+  const generateMonthlyReport = async (formattedData, rankParameters, yearSumToggle) => {
+    let monthlyReport = {}
+    const billsByYearMonth= groupObjectBy(groupBy(formattedData, "year"), "month")
+    for (let year in billsByYearMonth) {
+      if (!monthlyReport[year]) monthlyReport[year]={}
+      for (let month in billsByYearMonth[year]) {
+        monthlyReport[year][month] = rankPatientBaseMonthly(generatePatientBase(formattedData.filter( bill => bill.date.getTime() < new Date(parseInt(year), parseInt(month)-1)  )), rankParameters, year, month)
+      }
+    }
+    return monthlyReport
+  }
   useEffect( () => {
     const loadReport = async () => {
       if (formattedSourceData) {
         const yearlyReport = await generateYearlyReport( formattedSourceData, {"Ayears": 8, "Byears": 4, "Abills": 20, "Bbills": 10})
         console.log(yearlyReport)
-        const subGroupingTest = await groupObjectBy(groupBy(formattedSourceData, "year"), "quarter")
-        console.log(subGroupingTest)
+        //const subGroupingTest = await groupObjectBy(groupBy(formattedSourceData, "year"), "quarter")
+        //console.log(subGroupingTest)
 
         const quarterlyReport = await generateQuarterlyReport( formattedSourceData, {"Ayears": 8, "Byears": 4, "Abills": 20, "Bbills": 10})
         console.log(quarterlyReport)
+
+        const monthlyReport = await generateMonthlyReport( formattedSourceData, {"Ayears": 8, "Byears": 4, "Abills": 20, "Bbills": 10})
+        console.log(monthlyReport)
       } 
     }
     loadReport()
