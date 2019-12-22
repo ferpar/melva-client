@@ -150,14 +150,30 @@ const Analytics = props => {
         patientList[bill.patientId].years.forEach(year => years.push(year))
         patientList[bill.patientId].yearSpan = (Math.max(...years) - Math.min(...years))
         patientList[bill.patientId].billSum = patientList[bill.patientId].bills.length
+
+        if (patientList[bill.patientId].quarters[bill.year]) {
+          patientList[bill.patientId].quarters[bill.year].add(bill.quarter)
+        } else {
+          patientList[bill.patientId].quarters[bill.year] = new Set([bill.quarter])
+        }
+
+        if (patientList[bill.patientId].months[bill.year]) {
+          patientList[bill.patientId].months[bill.year].add(bill.month)
+        } else {
+          patientList[bill.patientId].months[bill.year] = new Set([bill.month])
+        }
+
       } else {
         patientList[bill.patientId]= {
+          patientId: bill.patientId,
           bills: [bill], 
           fullname: bill.fullname,
           years: new Set([bill.year]),
           yearSum: 1,
           yearSpan: 1,
-          billSum: 1
+          billSum: 1,
+          quarters: {[bill.year]: new Set([bill.quarter])},
+          months: {[bill.year]: new Set([bill.month])}
         }
       }
     })
@@ -175,7 +191,7 @@ const Analytics = props => {
         if (yearSumToggle) {
           if (patientBase[patient].yearSum > rankParameters.Ayears) {
             rankedPatientBase[patient].longevityRank = "A"
-          } else if (patientBase[patient].yearSum > rankParameters.Byears) {
+          } else if (patientBase[patient].yearSum >= rankParameters.Byears) {
             rankedPatientBase[patient].longevityRank = "B"
           } else {
             rankedPatientBase[patient].longevityRank = "C";
@@ -183,7 +199,7 @@ const Analytics = props => {
         } else {
           if (patientBase[patient].yearSpan > rankParameters.Ayears) {
             rankedPatientBase[patient].longevityRank = "A"
-          } else if (patientBase[patient].yearSpan > rankParameters.Byears) {
+          } else if (patientBase[patient].yearSpan >= rankParameters.Byears) {
             rankedPatientBase[patient].longevityRank = "B"
           } else {
             rankedPatientBase[patient].longevityRank = "C";
@@ -273,13 +289,109 @@ const Analytics = props => {
     return yearlyReport
   }
 
+  const rankPatientBaseQuarterly = (patientBase, rankParameters, year, quarter, yearSumToggle = false) => {
+    const rankedPatientBase = {...patientBase}
+      
+        //auxiliary function to check if there were bills on any of the previous 4 quarters
+        function checkLastYearBills(patientObject, year, quarter) {
+          for (let i = quarter-1; i >= 1; i--){
+            if ( patientObject.quarters[year] && patientObject.quarters[year].has(parseInt(i)) ) return true
+          }
+          for (let i= quarter; i<=4; i++){
+            if ( patientObject.years.has((parseInt(year) -1).toString())  && patientObject.quarters[year-1].has(parseInt(i)) ) return true
+          }
+          return false
+        }
+
+        function checkIfLost(patientObject, year, quarter) {
+          if (quarter == 1) {
+            if ( patientObject.quarters[year-2] && patientObject.quarters[year-2].has(4)) return true
+          } else {
+            if (patientObject.quarters[year-1] && patientObject.quarters[year-1].has(quarter-1)) return true
+          }
+          return false
+        }
+      for ( let patient in patientBase) {
+
+        //longevity ranking
+        if (yearSumToggle) {
+          if (patientBase[patient].yearSum > rankParameters.Ayears) {
+            rankedPatientBase[patient].longevityRank = "A"
+          } else if (patientBase[patient].yearSum > rankParameters.Byears) {
+            rankedPatientBase[patient].longevityRank = "B"
+          } else {
+            rankedPatientBase[patient].longevityRank = "C";
+          }
+        } else {
+          if (patientBase[patient].yearSpan > rankParameters.Ayears) {
+            rankedPatientBase[patient].longevityRank = "A"
+          } else if (patientBase[patient].yearSpan > rankParameters.Byears) {
+            rankedPatientBase[patient].longevityRank = "B"
+          } else {
+            rankedPatientBase[patient].longevityRank = "C";
+          }
+        }
+
+        //asiduity ranking
+        if (patientBase[patient].billSum > rankParameters.Abills) {
+          rankedPatientBase[patient].asiduityRank = "A"
+        } else if (patientBase[patient].billSum > rankParameters.Bbills) {
+          rankedPatientBase[patient].asiduityRank = "B"
+        } else {
+          rankedPatientBase[patient].asiduityRank = "C";
+        }
+
+
+        //customer status
+        if ((patientBase[patient].years.has(year.toString()) && patientBase[patient].quarters[year].has(parseInt(quarter))) || checkLastYearBills(patientBase[patient], year, quarter)) {
+          if(checkLastYearBills(patientBase[patient], year, quarter)){
+            rankedPatientBase[patient].status="retained" 
+          } else {
+            if (patientBase[patient].years.size === 1) {
+              rankedPatientBase[patient].status="gained"
+            } else {
+              rankedPatientBase[patient].status="regained"
+            }
+          }
+          
+        } else {
+          if (checkIfLost(patientBase[patient], year, quarter)){
+            rankedPatientBase[patient].status = "lost"
+          } else {
+            if (patientBase[patient].years.size === 1){
+              rankedPatientBase[patient].status = "forgotten1Year"
+            } else {
+              rankedPatientBase[patient].status = "forgottenMultiYear"
+            }
+          }
+        }
+      }
+
+    return rankedPatientBase
+  }
+
+  const generateQuarterlyReport = async (formattedData, rankParameters, yearSumToggle) => {
+    let quarterlyReport = {}
+    const billsByYearQuarter = groupObjectBy(groupBy(formattedData, "year"), "quarter")
+    for (let year in billsByYearQuarter) {
+      if (!quarterlyReport[year]) quarterlyReport[year]={}
+      for (let quarter in billsByYearQuarter[year]) {
+        quarterlyReport[year][quarter] = rankPatientBaseQuarterly(generatePatientBase(formattedData.filter( bill => bill.date.getTime() < new Date(parseInt(year), parseInt(quarter)*3)  )), rankParameters, year, quarter)
+      }
+    }
+    return quarterlyReport
+  }
+
   useEffect( () => {
     const loadReport = async () => {
       if (formattedSourceData) {
         const yearlyReport = await generateYearlyReport( formattedSourceData, {"Ayears": 8, "Byears": 4, "Abills": 20, "Bbills": 10})
         console.log(yearlyReport)
-        const subGroupingTest = await groupObjectBy(groupBy(formattedSourceData, "year"), "month")
+        const subGroupingTest = await groupObjectBy(groupBy(formattedSourceData, "year"), "quarter")
         console.log(subGroupingTest)
+
+        const quarterlyReport = await generateQuarterlyReport( formattedSourceData, {"Ayears": 8, "Byears": 4, "Abills": 20, "Bbills": 10})
+        console.log(quarterlyReport)
       } 
     }
     loadReport()
