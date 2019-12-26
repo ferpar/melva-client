@@ -7,6 +7,15 @@ import csv from "csvtojson";
 import Spinner from "./spinners/Ripple.js";
 import { slide as Menu } from "react-burger-menu";
 
+//import ForceLayout from "./Analytics/D3/ForceLayout.js";
+//import BasicChart from "./Analytics/D3/BasicChart.js";
+//import CurvedLineChart from "./Analytics/D3/CurvedLineChart.js";
+//import AxisScales from "./Analytics/D3/AxisScales.js";
+//import AnimatedChart from "./Analytics/D3/AnimatedChart.js";
+//import InteractiveChart from "./Analytics/D3/InteractiveChart.js";
+//import ResponsiveChart from "./Analytics/D3/ResponsiveChart.js";
+import HistoPie from "./Analytics/D3/HistoPie.js";
+
 const Analytics = props => {
   const { franchise } = props.user
   const [isLoading, setIsLoading] = useState(true);
@@ -526,6 +535,14 @@ const Analytics = props => {
                   </div>
                 </div>
                 <div className="analytics-wrapper">
+          {/*<ForceLayout width={600} height={400}/>*/}
+          {/*<BasicChart />*/}
+          {/*      <CurvedLineChart />*/}
+          {/*      <AxisScales /> */}
+          {/*     <AnimatedChart /> */}
+          {/*       <InteractiveChart />*/}
+          {/*        <ResponsiveChart />*/}
+                  <HistoPie />
                   {jsonSource ? 
                       (
                         jsonSource.slice(0, 10).map( (unit, idx) => 
