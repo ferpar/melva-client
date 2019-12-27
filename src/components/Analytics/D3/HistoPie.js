@@ -24,6 +24,7 @@ const freqData=[
 ,{State:'IL',freq:{low:4498, mid:3852, high:942}}
 ,{State:'IN',freq:{low:797, mid:1849, high:1534}}
 ,{State:'KS',freq:{low:162, mid:379, high:471}}
+,{State:'ES',freq:{low:1660, mid:579, high:471}}
 ];
 
 const initialColors = {
@@ -65,7 +66,7 @@ const HistoPie = props => {
 
     const Hgsvg = 
       select(wrapperRef.current)
-      .append("svg")
+      .select(".histogram")
       .attr("width", HgDim.w + HgDim.pr + HgDim.pl)
       .attr("height", HgDim.h + HgDim.pt + HgDim.pb)
       .style("border", "1px solid black")
@@ -173,7 +174,7 @@ const HistoPie = props => {
     
     const piesvg = 
       select(wrapperRef.current)
-      .append("svg")
+      .select(".piechart")
       .attr("width", pieDim.w)
       .attr("height", pieDim.h)
       .append("g")
@@ -236,7 +237,7 @@ const HistoPie = props => {
             
     // create table for legend.
     let legend = select(wrapperRef.current)
-      .append("table")
+      .select(".legend")
       .attr('class','legend');
     
     // create one row per segment.
@@ -299,10 +300,13 @@ const HistoPie = props => {
 
 
 
-  }, [data, HgData, pieData])
+  }, [data])
 
   return (
     <div ref={wrapperRef} className="chart-container">
+      <svg className="histogram"></svg>
+      <svg className="piechart"></svg>
+      <svg className="legend"></svg>
     </div>
   )
 }

@@ -483,6 +483,8 @@ const Analytics = props => {
     }
     return monthlyReport
   }
+
+
   useEffect( () => {
     const loadReport = async () => {
       if (formattedSourceData) {
