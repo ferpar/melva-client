@@ -306,7 +306,7 @@ const HistoPie = props => {
     <div ref={wrapperRef} className="chart-container">
       <svg className="histogram"></svg>
       <svg className="piechart"></svg>
-      <svg className="legend"></svg>
+      <table className="legend"></table>
     </div>
   )
 }
