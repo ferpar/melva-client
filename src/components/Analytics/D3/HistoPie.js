@@ -78,12 +78,9 @@ const HistoPie = props => {
   useEffect( () => {
 
     if (!dimensions) return;
-    console.log(dimensions)
 
     //HistoGram config
-    const Hg = {}, HgDim = {pt: 60, pr: 0, pb: 30, pl: 0};
-    HgDim.w = 500 - HgDim.pr - HgDim.pl;
-    HgDim.h = 300 - HgDim.pt - HgDim.pb;
+    const Hg = {}, HgDim = {pt: 10, pr: 0, pb: 30, pl: 0};
 
     //creating svg for histogram
 
@@ -133,9 +130,9 @@ const HistoPie = props => {
           bars
             .append("rect")
               .attr("x", d => xScale(d[0]))
-              .attr("y", d => yScale(d[1]))
+              .attr("y", d => yScale(d[1]) + HgDim.pt)
               .attr("width", xScale.bandwidth())
-              .attr("height", d => dimensions.height - yScale(d[1]))
+              .attr("height", d => dimensions.height - yScale(d[1]) - HgDim.pb)
               .attr("fill", colors.barColor)
               .on("mouseover", HgMouseover)
               .on("mouseout", HgMouseout)
@@ -145,10 +142,35 @@ const HistoPie = props => {
             .append("text")
               .text(d => format(',')(d[1]))
               .attr("x", d => xScale(d[0]) + xScale.bandwidth() /2)
-              .attr("y", d => yScale(d[1]) - 5 )
+              .attr("y", d => yScale(d[1]) - 5 + HgDim.pt )
               .attr("text-anchor", "middle")
       
         return bars
+      },
+      
+      update => {
+        const updatedBars = update
+
+        //updating the rectangles
+          updatedBars
+            .selectAll("rect")
+              .attr("x", d => xScale(d[0]))
+              .attr("y", d => yScale(d[1]) + HgDim.pt)
+              .attr("width", xScale.bandwidth())
+              .attr("height", d => dimensions.height - yScale(d[1]) - HgDim.pb)
+              .attr("fill", colors.barColor)
+              .on("mouseover", HgMouseover)
+              .on("mouseout", HgMouseout)
+
+        //updating the text
+          updatedBars
+            .selectAll("text")
+              .text(d => format(',')(d[1]))
+              .attr("x", d => xScale(d[0]) + xScale.bandwidth() /2)
+              .attr("y", d => yScale(d[1]) - 5 + HgDim.pt )
+              .attr("text-anchor", "middle")
+          
+        return updatedBars
       })
       .attr("class", "bar")
 
@@ -181,7 +203,7 @@ const HistoPie = props => {
       bars
         .select("rect").transition().duration(500)
         .attr("y", d => yScale(d[1]) + HgDim.pt)
-        .attr("height", d => dimensions.height - yScale(d[1]))
+        .attr("height", d => dimensions.height - yScale(d[1]) - HgDim.pb)
         .attr("fill", color)
 
       // transition the labels location and change value
