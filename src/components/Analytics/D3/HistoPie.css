@@ -45,3 +45,12 @@ display: none;
 svg {
   overflow: visible;
 }
+
+.chart-container {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  margin: 2rem;
+  height: 20vh;
+}

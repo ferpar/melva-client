@@ -13,6 +13,25 @@ import {
 } from "d3";
 import "./HistoPie.css";
 
+import ResizeObserver from "resize-observer-polyfill";
+
+const useResizeObserver = (ref) => {
+  const [dimensions, setDimensions] = useState(null);
+  useEffect( () => {
+    const observeTarget = ref.current;
+    const resizeObserver = new ResizeObserver( (entries) => {
+      entries.forEach( entry => {
+        setDimensions(entry.contentRect)
+      })
+    })
+    resizeObserver.observe(observeTarget);
+    return () => {
+      resizeObserver.unobserve(observeTarget)
+    }
+  }, [ref])
+  return dimensions;
+}
+
 const freqData=[
 {State:'AL',freq:{low:4786, mid:1319, high:249}}
 ,{State:'AZ',freq:{low:1101, mid:412, high:674}}
@@ -36,6 +55,7 @@ const initialColors = {
 
 const HistoPie = props => {
   const wrapperRef = useRef();
+  const dimensions = useResizeObserver(wrapperRef)
 
   const [colors, setColors] = useState(initialColors)
 
@@ -57,6 +77,9 @@ const HistoPie = props => {
 
   useEffect( () => {
 
+    if (!dimensions) return;
+    console.log(dimensions)
+
     //HistoGram config
     const Hg = {}, HgDim = {pt: 60, pr: 0, pb: 30, pl: 0};
     HgDim.w = 500 - HgDim.pr - HgDim.pl;
@@ -67,15 +90,15 @@ const HistoPie = props => {
     const Hgsvg = 
       select(wrapperRef.current)
       .select(".histogram")
-      .attr("width", HgDim.w + HgDim.pr + HgDim.pl)
-      .attr("height", HgDim.h + HgDim.pt + HgDim.pb)
+      .attr("width", dimensions.width/3)
+      .attr("height", dimensions.height)
       .style("border", "1px solid black")
 
     //x-axis mapping
     
     const xScale = scaleBand()
       .domain(HgData.map( arr => arr[0]))
-      .range([0, HgDim.w])
+      .range([0, dimensions.width/3])
       .padding(0.1)
 
     //creating x-axis
@@ -86,44 +109,48 @@ const HistoPie = props => {
     //adding x-axis to the histogram svg
     
     Hgsvg
-      .append("g")
-      .attr("transform", `translate( 0, ${HgDim.h + HgDim.pt})`)
+      .select(".x-axis")
+      .attr("transform", `translate( 0, ${dimensions.height})`)
       .call(xAxis)
       
     //y-axis mapping
     
     const yScale = scaleLinear()
       .domain([0, max(HgData, arr => arr[1] )])
-      .range([HgDim.h, 0])
+      .range([dimensions.height - HgDim.pt - HgDim.pb, 0])
 
     //creating bars for histogram to contain rectangles and freq labels
     
-    const bars = Hgsvg
+    Hgsvg
       .selectAll(".bar")
       .data(HgData)
-      .join("g")
+      .join(enter => {
+        
+        const bars = enter.append("g")
+        
+        //appending the rectangles
+
+          bars
+            .append("rect")
+              .attr("x", d => xScale(d[0]))
+              .attr("y", d => yScale(d[1]))
+              .attr("width", xScale.bandwidth())
+              .attr("height", d => dimensions.height - yScale(d[1]))
+              .attr("fill", colors.barColor)
+              .on("mouseover", HgMouseover)
+              .on("mouseout", HgMouseout)
+
+        //appending the labels
+          bars
+            .append("text")
+              .text(d => format(',')(d[1]))
+              .attr("x", d => xScale(d[0]) + xScale.bandwidth() /2)
+              .attr("y", d => yScale(d[1]) - 5 )
+              .attr("text-anchor", "middle")
+      
+        return bars
+      })
       .attr("class", "bar")
-
-    //appending the rectangles
-    
-    bars
-      .append("rect")
-      .attr("x", d => xScale(d[0]))
-      .attr("y", d => yScale(d[1]) + HgDim.pt)
-      .attr("width", xScale.bandwidth())
-      .attr("height", d => HgDim.h - yScale(d[1]))
-      .attr("fill", colors.barColor)
-      .on("mouseover", HgMouseover)
-      .on("mouseout", HgMouseout)
-
-    //appending the labels
-    
-    bars
-      .append("text")
-      .text(d => format(',')(d[1]))
-      .attr("x", d => xScale(d[0]) + xScale.bandwidth() /2)
-      .attr("y", d => yScale(d[1]) - 5 + HgDim.pt)
-      .attr("text-anchor", "middle")
 
     //HgMouseover function
     function HgMouseover(d) {
@@ -154,7 +181,7 @@ const HistoPie = props => {
       bars
         .select("rect").transition().duration(500)
         .attr("y", d => yScale(d[1]) + HgDim.pt)
-        .attr("height", d => HgDim.h - yScale(d[1]))
+        .attr("height", d => dimensions.height - yScale(d[1]))
         .attr("fill", color)
 
       // transition the labels location and change value
@@ -300,11 +327,13 @@ const HistoPie = props => {
 
 
 
-  }, [data])
+  }, [data, dimensions])
 
   return (
     <div ref={wrapperRef} className="chart-container">
-      <svg className="histogram"></svg>
+      <svg className="histogram">
+        <g className="x-axis" />
+      </svg>
       <svg className="piechart"></svg>
       <table className="legend"></table>
     </div>
