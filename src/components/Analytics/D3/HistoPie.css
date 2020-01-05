@@ -54,3 +54,8 @@ svg {
   margin: 2rem 0;
   height: 30vh;
 }
+
+.legend {
+  display: flex;
+  justify-content: center;
+}

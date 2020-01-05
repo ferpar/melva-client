@@ -262,6 +262,9 @@ const HistoPie = props => {
           const updatedPieChart = update
 
             updatedPieChart
+              .attr("transform", `translate(${pieDim.w/2},${pieDim.h/2})`)
+
+            updatedPieChart
               .selectAll("path")
                 .each(function(d){this._current = d})
                 .attr("d", arcGen)
