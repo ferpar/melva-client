@@ -80,7 +80,7 @@ const HistoPie = props => {
     if (!dimensions) return;
 
     //HistoGram config
-    const Hg = {}, HgDim = {pt: 10, pr: 0, pb: 30, pl: 0};
+    const Hg = {}, HgDim = {pt: 30, pr: 0, pb: 30, pl: 0};
 
     //creating svg for histogram
 
@@ -107,7 +107,7 @@ const HistoPie = props => {
     
     Hgsvg
       .select(".x-axis")
-      .attr("transform", `translate( 0, ${dimensions.height})`)
+      .attr("transform", `translate( 0, ${dimensions.height - HgDim.pb })`)
       .call(xAxis)
       
     //y-axis mapping
@@ -132,7 +132,7 @@ const HistoPie = props => {
               .attr("x", d => xScale(d[0]))
               .attr("y", d => yScale(d[1]) + HgDim.pt)
               .attr("width", xScale.bandwidth())
-              .attr("height", d => dimensions.height - yScale(d[1]) - HgDim.pb)
+              .attr("height", d => dimensions.height - yScale(d[1]) - HgDim.pb - HgDim.pt)
               .attr("fill", colors.barColor)
               .on("mouseover", HgMouseover)
               .on("mouseout", HgMouseout)
