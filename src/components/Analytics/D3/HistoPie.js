@@ -224,10 +224,8 @@ const HistoPie = props => {
     const piesvg = 
       select(wrapperRef.current)
       .select(".piechart")
-      .attr("width", pieDim.w)
-      .attr("height", pieDim.h)
-      .append("g")
-      .attr("transform", `translate(${pieDim.w/2},${pieDim.h/2})`)
+        .attr("width", pieDim.w)
+        .attr("height", pieDim.h)
 
     //function to draw the arcs of the pie slices
     const arcGen = arc()
@@ -240,9 +238,41 @@ const HistoPie = props => {
 
     //draw the pie slices
     piesvg
-      .selectAll("path")
+      .selectAll("g")
       .data(pieGen(pieData))
-      .join("path")
+      .join( 
+        enter => {
+         const pieChart = 
+            enter
+              .append("g")
+                .attr("transform", `translate(${pieDim.w/2},${pieDim.h/2})`)
+
+            pieChart
+              .append("path")
+                .each(function(d){this._current = d})
+                .attr("d", arcGen)
+                .attr("fill", d => colors[d.data.type])
+                .on("mouseover", pieMouseover)
+                .on("mouseout", pieMouseout)
+
+          return pieChart
+        },
+
+        update => {
+          const updatedPieChart = update
+
+            updatedPieChart
+              .selectAll("path")
+                .each(function(d){this._current = d})
+                .attr("d", arcGen)
+                .attr("fill", d => colors[d.data.type])
+                .on("mouseover", pieMouseover)
+                .on("mouseout", pieMouseout)
+
+          return updatedPieChart
+        }
+      )
+   //   .join("path")
       .each(function(d){this._current = d})
       .attr("d", arcGen)
       .attr("fill", d => colors[d.data.type])
