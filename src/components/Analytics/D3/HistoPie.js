@@ -87,7 +87,7 @@ const HistoPie = props => {
     const Hgsvg = 
       select(wrapperRef.current)
       .select(".histogram")
-      .attr("width", dimensions.width/3)
+      .attr("width", dimensions.width/2)
       .attr("height", dimensions.height)
       .style("border", "1px solid black")
 
@@ -95,7 +95,7 @@ const HistoPie = props => {
     
     const xScale = scaleBand()
       .domain(HgData.map( arr => arr[0]))
-      .range([0, dimensions.width/3])
+      .range([0, dimensions.width/2])
       .padding(0.1)
 
     //creating x-axis
@@ -216,7 +216,7 @@ const HistoPie = props => {
 
 
     //PieChart Config
-    const Pc = {}, pieDim = {w: 250, h: 250};
+    const Pc = {}, pieDim = {w: dimensions.width/4, h: dimensions.height};
     pieDim.r = Math.min(pieDim.w, pieDim.h)/2
 
     //creating svg for piechart
@@ -287,7 +287,9 @@ const HistoPie = props => {
     // create table for legend.
     let legend = select(wrapperRef.current)
       .select(".legend")
-      .attr('class','legend');
+      .attr('class','legend')
+      .attr("width", dimensions.width/4)
+    ;
     
     // create one row per segment.
     let tr = legend
