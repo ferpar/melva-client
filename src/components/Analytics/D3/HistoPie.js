@@ -33,17 +33,17 @@ const useResizeObserver = (ref) => {
 }
 
 const freqData=[
-{State:'AL',freq:{low:4786, mid:1319, high:249}}
-,{State:'AZ',freq:{low:1101, mid:412, high:674}}
-,{State:'CT',freq:{low:932, mid:2149, high:418}}
-,{State:'DE',freq:{low:832, mid:1152, high:1862}}
-,{State:'FL',freq:{low:4481, mid:3304, high:948}}
-,{State:'GA',freq:{low:1619, mid:167, high:1063}}
-,{State:'IA',freq:{low:1819, mid:247, high:1203}}
-,{State:'IL',freq:{low:4498, mid:3852, high:942}}
-,{State:'IN',freq:{low:797, mid:1849, high:1534}}
-,{State:'KS',freq:{low:162, mid:379, high:471}}
-,{State:'ES',freq:{low:1660, mid:579, high:471}}
+{category:'AL',freq:{low:4786, mid:1319, high:249}}
+,{category:'AZ',freq:{low:1101, mid:412, high:674}}
+,{category:'CT',freq:{low:932, mid:2149, high:418}}
+,{category:'DE',freq:{low:832, mid:1152, high:1862}}
+,{category:'FL',freq:{low:4481, mid:3304, high:948}}
+,{category:'GA',freq:{low:1619, mid:167, high:1063}}
+,{category:'IA',freq:{low:1819, mid:247, high:1203}}
+,{category:'IL',freq:{low:4498, mid:3852, high:942}}
+,{category:'IN',freq:{low:797, mid:1849, high:1534}}
+,{category:'KS',freq:{low:162, mid:379, high:471}}
+,{category:'ES',freq:{low:1660, mid:579, high:471}}
 ];
 
 const initialColors = {
@@ -53,25 +53,27 @@ const initialColors = {
   high:"#41ab5d"
 }
 
-const HistoPie = props => {
+const HistoPie = ({data:propData}) => {
   const wrapperRef = useRef();
   const dimensions = useResizeObserver(wrapperRef)
 
   const [colors, setColors] = useState(initialColors)
 
-  const inputData = freqData.map( obj => {
+  const inputData = propData ? propData : freqData
+
+  const processedInput = inputData.map( obj => {
      const newObj = {...obj}
      newObj.total = Object.values(obj.freq).reduce( (ac,cu) => ac+cu)
      return newObj
   }) 
-  const [data, setData] = useState(inputData)
+  const [data, setData] = useState(processedInput)
 
-  const HgData = inputData.map( obj => [obj.State, obj.total])
+  const HgData = processedInput.map( obj => [obj.category, obj.total])
 
-  const pieData = Object.keys(inputData[0].freq) //for each type of frequency
+  const pieData = Object.keys(processedInput[0].freq) //for each type of frequency
     .map( type => ({
       type: type,
-      freq: inputData.map(obj => obj.freq[type]).reduce((ac,cu) => ac+cu) //calc sum of all elements
+      freq: processedInput.map(obj => obj.freq[type]).reduce((ac,cu) => ac+cu) //calc sum of all elements
     }) 
   )
 
@@ -176,7 +178,7 @@ const HistoPie = props => {
 
     //HgMouseover function
     function HgMouseover(d) {
-      let st = data.filter( s => s.State == d[0])[0]
+      let st = data.filter( s => s.category == d[0])[0]
       let nD = Object.keys(st.freq).map( s => ({type: s, freq: st.freq[s]}))
 
       Pc.update(nD)
@@ -279,7 +281,7 @@ const HistoPie = props => {
     //pieMouseover
     function pieMouseover(d) {
       Hg.update(
-        data.map( obj => [obj.State, obj.freq[d.data.type]]),
+        data.map( obj => [obj.category, obj.freq[d.data.type]]),
         colors[d.data.type]
       )
     }
@@ -287,7 +289,7 @@ const HistoPie = props => {
     //pieMouseout
     function pieMouseout(d){
       Hg.update(
-        data.map( obj => [obj.State, obj.total]),
+        data.map( obj => [obj.category, obj.total]),
         colors.barColor
       )
     }

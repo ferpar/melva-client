@@ -193,7 +193,7 @@
             if (patientBase[patient].years.size === 1) {
               rankedPatientBase[patient].status = "gained" 
             } else {
-              rankedPatientBase[patient].satus = "regained"
+              rankedPatientBase[patient].status = "regained"
             }
           }
         } else {
@@ -216,7 +216,6 @@
     let yearlyReport = {}
     const billsByYear = groupBy(formattedData, "year")
     for (let year in billsByYear) {
-      //yearlyReport[year] = rankPatientBase(generatePatientBase(formattedData.filter( bill => bill.date.getTime() < new Date(parseInt(year)+1, 0) )), rankParameters)
       yearlyReport[year] = rankPatientBaseYearly(generatePatientBase(formattedData.filter( bill => bill.date.getTime() < new Date(parseInt(year)+1, 0) )), rankParameters, year)
     }
     return yearlyReport

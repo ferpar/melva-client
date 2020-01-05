@@ -33,6 +33,20 @@ import {
 //import ResponsiveChart from "./Analytics/D3/ResponsiveChart.js";
 import HistoPie from "./Analytics/D3/HistoPie.js";
 
+const freqData=[
+{category:'AL',freq:{low:8786, mid:1319, high:249}}
+,{category:'AZ',freq:{low:1101, mid:412, high:674}}
+,{category:'CT',freq:{low:932, mid:2149, high:418}}
+,{category:'DE',freq:{low:832, mid:1152, high:1862}}
+,{category:'FL',freq:{low:4481, mid:3304, high:948}}
+,{category:'GA',freq:{low:1619, mid:167, high:1063}}
+,{category:'IA',freq:{low:1819, mid:247, high:1203}}
+,{category:'IL',freq:{low:4498, mid:3852, high:942}}
+,{category:'IN',freq:{low:797, mid:1849, high:1534}}
+,{category:'KS',freq:{low:162, mid:379, high:471}}
+,{category:'ES',freq:{low:1660, mid:579, high:471}}
+];
+
 const Analytics = props => {
   const { franchise } = props.user
   const [isLoading, setIsLoading] = useState(true);
@@ -140,7 +154,6 @@ const Analytics = props => {
         ) : ( 
             <div className="analytics-container">
                 <div className="analytics-wrapper">
-                  <p>testing</p>
                   <div className="import-container">
                     <label className="csv-import-button" htmlFor="csv-import">Importar desde .csv</label>
                     <input accept=".csv" id="csv-import" name="csv-import" type="file" onChange={e => handleCSVImport(e)}/>
@@ -154,7 +167,7 @@ const Analytics = props => {
           {/*     <AnimatedChart /> */}
           {/*       <InteractiveChart />*/}
           {/*        <ResponsiveChart />*/}
-                  <HistoPie />
+                  <HistoPie data={freqData}/>
                   {jsonSource ? 
                       (
                         jsonSource.slice(0, 10).map( (unit, idx) => 
@@ -164,7 +177,7 @@ const Analytics = props => {
                             <p>{unit.Apellidos}</p>
                           </div>)
                       ) 
-                    : (<p>test2</p>) }
+                    : (<p>Porfavor, importe los datos a analizar.</p>) }
                 </div>
             </div>
         )
