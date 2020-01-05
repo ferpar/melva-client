@@ -157,7 +157,7 @@ const HistoPie = props => {
               .attr("x", d => xScale(d[0]))
               .attr("y", d => yScale(d[1]) + HgDim.pt)
               .attr("width", xScale.bandwidth())
-              .attr("height", d => dimensions.height - yScale(d[1]) - HgDim.pb)
+              .attr("height", d => dimensions.height - yScale(d[1]) - HgDim.pb - HgDim.pt)
               .attr("fill", colors.barColor)
               .on("mouseover", HgMouseover)
               .on("mouseout", HgMouseout)
@@ -203,7 +203,7 @@ const HistoPie = props => {
       bars
         .select("rect").transition().duration(500)
         .attr("y", d => yScale(d[1]) + HgDim.pt)
-        .attr("height", d => dimensions.height - yScale(d[1]) - HgDim.pb)
+        .attr("height", d => dimensions.height - yScale(d[1]) - HgDim.pb - HgDim.pt)
         .attr("fill", color)
 
       // transition the labels location and change value
