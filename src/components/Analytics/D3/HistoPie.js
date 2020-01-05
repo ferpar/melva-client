@@ -272,12 +272,6 @@ const HistoPie = props => {
           return updatedPieChart
         }
       )
-   //   .join("path")
-      .each(function(d){this._current = d})
-      .attr("d", arcGen)
-      .attr("fill", d => colors[d.data.type])
-      .on("mouseover", pieMouseover)
-      .on("mouseout", pieMouseout)
 
     //pieMouseover
     function pieMouseover(d) {
@@ -323,38 +317,45 @@ const HistoPie = props => {
     
     // create one row per segment.
     let tr = legend
-      .append("tbody")
+      .select("tbody")
       .selectAll("tr")
       .data(pieData)
-      .join("tr");
-        
-    // create the first column for each segment.
-    tr
-      .append("td")
-      .append("svg")
-      .attr("width", '16')
-      .attr("height", '16')
-      .append("rect")
-        .attr("width", '16')
-        .attr("height", '16')
-        .attr("fill", d => colors[d.type]);
-        
-    // create the second column for each segment.
-    tr
-      .append("td")
-      .text(d => d.type);
+      .join( 
+        enter => {
+          const enterLegend = 
+            enter.append("tr")
 
-    // create the third column for each segment.
-    tr
-      .append("td")
-      .attr("class",'legendFreq')
-        .text( d => format(",")(d.freq) );
+          // create the first column for each segment.
+          enterLegend
+            .append("td")
+            .append("svg")
+            .attr("width", '16')
+            .attr("height", '16')
+            .append("rect")
+              .attr("width", '16')
+              .attr("height", '16')
+              .attr("fill", d => colors[d.type]);
 
-    // create the fourth column for each segment.
-    tr
-      .append("td")
-      .attr("class",'legendPerc')
-        .text( d => getLegend(d,pieData) );
+          // create the second column for each segment.
+          enterLegend
+            .append("td")
+            .text(d => d.type);
+
+          // create the third column for each segment.
+          enterLegend
+            .append("td")
+            .attr("class",'legendFreq')
+              .text( d => format(",")(d.freq) );
+
+          // create the fourth column for each segment.
+          enterLegend
+            .append("td")
+            .attr("class",'legendPerc')
+              .text( d => getLegend(d,pieData) );
+
+          return enterLegend
+      })
+        
 
     // Utility function to be used to update the legend.
     leg.update = function(nD){
@@ -389,7 +390,9 @@ const HistoPie = props => {
         <g className="x-axis" />
       </svg>
       <svg className="piechart"></svg>
-      <table className="legend"></table>
+      <table className="legend">
+        <tbody />
+      </table>
     </div>
   )
 }
