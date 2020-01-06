@@ -24,13 +24,6 @@ import {
   generateMonthlyReport
 } from "../helpers/analytics.js";
 
-//import ForceLayout from "./Analytics/D3/ForceLayout.js";
-//import BasicChart from "./Analytics/D3/BasicChart.js";
-//import CurvedLineChart from "./Analytics/D3/CurvedLineChart.js";
-//import AxisScales from "./Analytics/D3/AxisScales.js";
-//import AnimatedChart from "./Analytics/D3/AnimatedChart.js";
-//import InteractiveChart from "./Analytics/D3/InteractiveChart.js";
-//import ResponsiveChart from "./Analytics/D3/ResponsiveChart.js";
 import HistoPie from "./Analytics/D3/HistoPie.js";
 
 const freqData=[
@@ -50,9 +43,23 @@ const freqData=[
 const Analytics = props => {
   const { franchise } = props.user
   const [isLoading, setIsLoading] = useState(true);
-  const [jsonSource, setJsonSource] = useState(null);
-  const [formattedSourceData, setFormattedSourceData] = useState(null);
 
+  //data cache
+  const [formattedSourceData, setFormattedSourceData] = useState(null); //raw imported data
+  const [jsonSource, setJsonSource] = useState(null); //preprocessed data
+
+  //reports cache
+  const [rawYearly, setRawYearly] = useState(null)
+  const [yearlyReport, setYearlyReport] = useState(null)
+  const [rawQuarterly, setRawQuarterly] = useState(null)
+  const [quarterlyReport, setQuarterlyReport] = useState(null)
+  const [rawMonthly, setRawMonthly] = useState(null)
+  const [monthlyReport, setMonthlyReport] = useState(null)
+
+  //histopie data
+  const [histoPieData, setHistoPieData] = useState(freqData)
+
+  //sidemenu
   const [menuOpen, setMenuOpen] = useState(false);
   const handleStateChange = state => {
     setMenuOpen(state.isOpen)
@@ -60,7 +67,9 @@ const Analytics = props => {
   const closeMenu = () => {
     setMenuOpen(false)
   }
+  // -------
 
+  //import function
   const handleCSVImport = async e => {
     const csvContent= await e.target.files[0].text()
     const jsonObj = await csv({
@@ -69,13 +78,10 @@ const Analytics = props => {
     })
       .fromString(csvContent)
 
-    console.log(jsonObj)
-    setJsonSource(jsonObj)
+    setJsonSource(jsonObj) //raw imported data
 
-    const afterFormatting = await formatImport(jsonObj)
-    console.log(afterFormatting)
+    const afterFormatting = await formatImport(jsonObj) //preprocessed data
     setFormattedSourceData(afterFormatting)
-    
   }
 
   //preprocess the imported data into a usable object
@@ -109,23 +115,75 @@ const Analytics = props => {
   )
 
 
+  // on Import
   useEffect( () => {
     const loadReport = async () => {
       if (formattedSourceData) {
-        const yearlyReport = await generateYearlyReport( formattedSourceData, {"Ayears": 8, "Byears": 4, "Abills": 20, "Bbills": 10})
-        console.log(yearlyReport)
-        //const subGroupingTest = await groupObjectBy(groupBy(formattedSourceData, "year"), "quarter")
-        //console.log(subGroupingTest)
+        setRawYearly(await generateYearlyReport( formattedSourceData, {"Ayears": 8, "Byears": 4, "Abills": 20, "Bbills": 10}))
 
-        const quarterlyReport = await generateQuarterlyReport( formattedSourceData, {"Ayears": 8, "Byears": 4, "Abills": 20, "Bbills": 10})
-        console.log(quarterlyReport)
+        setRawQuarterly(await generateQuarterlyReport( formattedSourceData, {"Ayears": 8, "Byears": 4, "Abills": 20, "Bbills": 10}))
 
-        const monthlyReport = await generateMonthlyReport( formattedSourceData, {"Ayears": 8, "Byears": 4, "Abills": 20, "Bbills": 10})
-        console.log(monthlyReport)
+        setRawMonthly(await generateMonthlyReport( formattedSourceData, {"Ayears": 8, "Byears": 4, "Abills": 20, "Bbills": 10}))
       } 
     }
     loadReport()
   }, [formattedSourceData])
+
+  // yearly report array
+  useEffect(() => {
+    if (rawYearly) {
+    const processedYearly =  [
+        ...Object.values(rawYearly).map( (elem, i) => ({
+          year: Object.keys(rawYearly)[i],
+          retained: Object.values(elem).filter(elem => elem.status==="retained").length,
+          regained: Object.values(elem).filter(elem => elem.status==="regained").length,
+          gained: Object.values(elem).filter(elem => elem.status==="gained").length,
+          lost: Object.values(elem).filter(elem => elem.status==="lost").length,
+          forgotten1Year: Object.values(elem).filter(elem => elem.status==="forgotten1Year").length,
+          forgottenMultiYear: Object.values(elem).filter(elem => elem.status==="forgottenMultiYear").length
+        })) 
+      ]
+      setYearlyReport(processedYearly)
+      console.log(rawYearly)
+    }
+  }, [rawYearly])
+
+  useEffect(() => {
+    if (yearlyReport) {
+      console.log(yearlyReport)
+      setHistoPieData(
+          yearlyReport.map( 
+            obj => ({
+              category: obj.year,
+              freq: {
+                gained: obj.gained,
+                regained: obj.regained,
+                retained: obj.retained
+              }
+          })
+        )
+      )
+    }
+  },[yearlyReport])
+
+  useEffect(() => {
+    if (histoPieData) {
+      console.log(histoPieData)
+    }
+  }, [histoPieData])
+
+  useEffect(() => {
+    if (rawQuarterly) {
+      console.log(rawQuarterly)
+    }
+  }, [rawQuarterly])
+
+  useEffect(() => {
+    if(rawMonthly){
+      console.log(rawMonthly)
+    }
+  }, [rawMonthly])
+
 
   useEffect( () => {
     setIsLoading(false)
@@ -160,14 +218,7 @@ const Analytics = props => {
                   </div>
                 </div>
                 <div className="analytics-wrapper">
-          {/*<ForceLayout width={600} height={400}/>*/}
-          {/*<BasicChart />*/}
-          {/*      <CurvedLineChart />*/}
-          {/*      <AxisScales /> */}
-          {/*     <AnimatedChart /> */}
-          {/*       <InteractiveChart />*/}
-          {/*        <ResponsiveChart />*/}
-                  <HistoPie data={freqData}/>
+                  <HistoPie data={histoPieData}/>
                   {jsonSource ? 
                       (
                         jsonSource.slice(0, 10).map( (unit, idx) => 

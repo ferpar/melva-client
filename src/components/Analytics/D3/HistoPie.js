@@ -50,7 +50,10 @@ const initialColors = {
   barColor: 'steelblue',
   low:"#807dba", 
   mid:"#e08214",
-  high:"#41ab5d"
+  high:"#41ab5d",
+  gained:"#807dba", 
+  regained:"#e08214",
+  retained:"#41ab5d"
 }
 
 const HistoPie = ({data:propData}) => {
@@ -58,28 +61,68 @@ const HistoPie = ({data:propData}) => {
   const dimensions = useResizeObserver(wrapperRef)
 
   const [colors, setColors] = useState(initialColors)
+  const [processedInput, setProcessedInput] = useState(freqData)
 
-  const inputData = propData ? propData : freqData
 
-  const processedInput = inputData.map( obj => {
-     const newObj = {...obj}
-     newObj.total = Object.values(obj.freq).reduce( (ac,cu) => ac+cu)
-     return newObj
-  }) 
-  const [data, setData] = useState(processedInput)
+  useEffect(() => {
+    const inputData = propData ? propData : freqData
 
-  const HgData = processedInput.map( obj => [obj.category, obj.total])
+    setProcessedInput(inputData.map( obj => {
+         const newObj = {...obj}
+         newObj.total = Object.values(obj.freq).reduce( (ac,cu) => ac+cu)
+         return newObj
+      }) 
+    )
 
-  const pieData = Object.keys(processedInput[0].freq) //for each type of frequency
-    .map( type => ({
-      type: type,
-      freq: processedInput.map(obj => obj.freq[type]).reduce((ac,cu) => ac+cu) //calc sum of all elements
-    }) 
-  )
+    //removing d3 elements before update
+      //cleaning up Histogram
+    const Hgsvg = 
+      select(wrapperRef.current)
+        .select(".histogram")
+
+    Hgsvg
+      .selectAll(".bar")
+      .data([])
+      .join("g")
+      
+      //cleaning up Pie chart
+    const piesvg = 
+      select(wrapperRef.current)
+      .select(".piechart")
+
+    piesvg
+      .selectAll("g")
+      .data([])
+      .join("g") 
+      
+      //cleaning up legend
+    let legend = select(wrapperRef.current)
+      .select(".legend")
+
+    legend
+      .select("tbody")
+        .selectAll("tr")
+        .data([])
+        .join("tr")
+
+  
+  }, [propData])
 
   useEffect( () => {
 
     if (!dimensions) return;
+
+    //histogram initial data-formatting
+    const HgData = processedInput.map( obj => [obj.category, obj.total])
+    console.log(HgData)
+
+    //pie initial data-formatting
+    const pieData = Object.keys(processedInput[0].freq) //for each type of frequency
+      .map( type => ({
+        type: type,
+        freq: processedInput.map(obj => obj.freq[type]).reduce((ac,cu) => ac+cu) //calc sum of all elements
+      }) 
+    )
 
     //HistoGram config
     const Hg = {}, HgDim = {pt: 30, pr: 0, pb: 30, pl: 0};
@@ -89,9 +132,9 @@ const HistoPie = ({data:propData}) => {
     const Hgsvg = 
       select(wrapperRef.current)
       .select(".histogram")
-      .attr("width", dimensions.width/2)
-      .attr("height", dimensions.height)
-      .style("border", "1px solid black")
+        .attr("width", dimensions.width/2)
+        .attr("height", dimensions.height)
+        .style("border", "1px solid black")
 
     //x-axis mapping
     
@@ -109,8 +152,8 @@ const HistoPie = ({data:propData}) => {
     
     Hgsvg
       .select(".x-axis")
-      .attr("transform", `translate( 0, ${dimensions.height - HgDim.pb })`)
-      .call(xAxis)
+        .attr("transform", `translate( 0, ${dimensions.height - HgDim.pb })`)
+        .call(xAxis)
       
     //y-axis mapping
     
@@ -178,7 +221,7 @@ const HistoPie = ({data:propData}) => {
 
     //HgMouseover function
     function HgMouseover(d) {
-      let st = data.filter( s => s.category == d[0])[0]
+      let st = processedInput.filter( s => s.category == d[0])[0]
       let nD = Object.keys(st.freq).map( s => ({type: s, freq: st.freq[s]}))
 
       Pc.update(nD)
@@ -281,7 +324,7 @@ const HistoPie = ({data:propData}) => {
     //pieMouseover
     function pieMouseover(d) {
       Hg.update(
-        data.map( obj => [obj.category, obj.freq[d.data.type]]),
+        processedInput.map( obj => [obj.category, obj.freq[d.data.type]]),
         colors[d.data.type]
       )
     }
@@ -289,7 +332,7 @@ const HistoPie = ({data:propData}) => {
     //pieMouseout
     function pieMouseout(d){
       Hg.update(
-        data.map( obj => [obj.category, obj.total]),
+        processedInput.map( obj => [obj.category, obj.total]),
         colors.barColor
       )
     }
@@ -333,29 +376,29 @@ const HistoPie = ({data:propData}) => {
           // create the first column for each segment.
           enterLegend
             .append("td")
-            .append("svg")
-            .attr("width", '16')
-            .attr("height", '16')
-            .append("rect")
-              .attr("width", '16')
-              .attr("height", '16')
-              .attr("fill", d => colors[d.type]);
+              .append("svg")
+                .attr("width", '16')
+                .attr("height", '16')
+                .append("rect")
+                  .attr("width", '16')
+                  .attr("height", '16')
+                  .attr("fill", d => colors[d.type]);
 
           // create the second column for each segment.
           enterLegend
             .append("td")
-            .text(d => d.type);
+              .text(d => d.type);
 
           // create the third column for each segment.
           enterLegend
             .append("td")
-            .attr("class",'legendFreq')
+              .attr("class",'legendFreq')
               .text( d => format(",")(d.freq) );
 
           // create the fourth column for each segment.
           enterLegend
             .append("td")
-            .attr("class",'legendPerc')
+              .attr("class",'legendPerc')
               .text( d => getLegend(d,pieData) );
 
           return enterLegend
@@ -367,18 +410,18 @@ const HistoPie = ({data:propData}) => {
         // update the data attached to the row elements.
         var l = legend
           .select("tbody")
-          .selectAll("tr")
-          .data(nD);
+            .selectAll("tr")
+            .data(nD);
 
         // update the frequencies.
         l
           .select(".legendFreq")
-          .text( d => format(",")(d.freq) );
+            .text( d => format(",")(d.freq) );
 
         // update the percentage column.
         l
           .select(".legendPerc")
-          .text( d => getLegend(d,nD) );        
+            .text( d => getLegend(d,nD) );        
     }
     
     function getLegend(d,aD){ // Utility function to compute percentage.
@@ -387,7 +430,7 @@ const HistoPie = ({data:propData}) => {
 
 
 
-  }, [data, dimensions])
+  }, [processedInput, dimensions])
 
   return (
     <div ref={wrapperRef} className="chart-container">
