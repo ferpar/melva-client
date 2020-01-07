@@ -140,7 +140,12 @@ const Analytics = props => {
           gained: Object.values(elem).filter(elem => elem.status==="gained").length,
           lost: Object.values(elem).filter(elem => elem.status==="lost").length,
           forgotten1Year: Object.values(elem).filter(elem => elem.status==="forgotten1Year").length,
-          forgottenMultiYear: Object.values(elem).filter(elem => elem.status==="forgottenMultiYear").length
+          forgottenMultiYear: Object.values(elem).filter(elem => elem.status==="forgottenMultiYear").length,
+          total: 
+            Object.values(elem).filter(elem => elem.status==="retained").length +
+            Object.values(elem).filter(elem => elem.status==="regained").length +
+            Object.values(elem).filter(elem => elem.status==="gained").length
+
         })) 
       ]
       setYearlyReport(processedYearly)
@@ -155,10 +160,12 @@ const Analytics = props => {
           yearlyReport.map( 
             obj => ({
               category: obj.year,
+              total: obj.total,
               freq: {
                 gained: obj.gained,
                 regained: obj.regained,
-                retained: obj.retained
+                retained: obj.retained,
+                lost: obj.lost
               }
           })
         )

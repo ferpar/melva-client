@@ -9,7 +9,8 @@ import {
   arc,
   pie,
   interpolate,
-  precisionFixed
+  precisionFixed,
+  schemePaired
 } from "d3";
 import "./HistoPie.css";
 
@@ -53,7 +54,8 @@ const initialColors = {
   high:"#41ab5d",
   gained:"#807dba", 
   regained:"#e08214",
-  retained:"#41ab5d"
+  retained:"#41ab5d",
+  lost: schemePaired[5]
 }
 
 const HistoPie = ({data:propData}) => {
@@ -67,12 +69,16 @@ const HistoPie = ({data:propData}) => {
   useEffect(() => {
     const inputData = propData ? propData : freqData
 
-    setProcessedInput(inputData.map( obj => {
-         const newObj = {...obj}
-         newObj.total = Object.values(obj.freq).reduce( (ac,cu) => ac+cu)
-         return newObj
-      }) 
-    )
+    if (!inputData[0].hasOwnProperty("total")){
+      setProcessedInput(inputData.map( obj => {
+           const newObj = {...obj}
+           newObj.total = Object.values(obj.freq).reduce( (ac,cu) => ac+cu)
+           return newObj
+        }) 
+      )
+    } else {
+      setProcessedInput(inputData)
+    }
   }, [propData])
 
   useEffect( () => {
@@ -81,7 +87,6 @@ const HistoPie = ({data:propData}) => {
 
     //histogram initial data-formatting
     const HgData = processedInput.map( obj => [obj.category, obj.total])
-    console.log(HgData)
 
     //pie initial data-formatting
     const pieData = Object.keys(processedInput[0].freq) //for each type of frequency
@@ -101,7 +106,6 @@ const HistoPie = ({data:propData}) => {
       .select(".histogram")
         .attr("width", dimensions.width/2)
         .attr("height", dimensions.height)
-        .style("border", "1px solid black")
 
     //x-axis mapping
     
@@ -215,15 +219,15 @@ const HistoPie = ({data:propData}) => {
       // transition the height and color of the rectangles
       bars
         .select("rect").transition().duration(500)
-        .attr("y", d => yScale(d[1]) + HgDim.pt)
-        .attr("height", d => dimensions.height - yScale(d[1]) - HgDim.pb - HgDim.pt)
-        .attr("fill", color)
+          .attr("y", d => yScale(d[1]) + HgDim.pt)
+          .attr("height", d => dimensions.height - yScale(d[1]) - HgDim.pb - HgDim.pt)
+          .attr("fill", color)
 
       // transition the labels location and change value
       bars
         .select("text").transition().duration(500)
-        .text(d => format(',')(d[1]))
-        .attr("y", d => yScale(d[1]) - 5 + HgDim.pt)
+          .text(d => format(',')(d[1]))
+          .attr("y", d => yScale(d[1]) - 5 + HgDim.pt)
         
     }
 
@@ -278,7 +282,7 @@ const HistoPie = ({data:propData}) => {
               .attr("transform", `translate(${pieDim.w/2},${pieDim.h/2})`)
 
             updatedPieChart
-              .selectAll("path")
+              .select("path")
                 .each(function(d){this._current = d})
                 .attr("d", arcGen)
                 .attr("fill", d => colors[d.data.type])
@@ -344,6 +348,7 @@ const HistoPie = ({data:propData}) => {
           // create the first column for each segment.
           enterLegend
             .append("td")
+            .attr("class", "first")
               .append("svg")
                 .attr("width", '16')
                 .attr("height", '16')
@@ -355,22 +360,59 @@ const HistoPie = ({data:propData}) => {
           // create the second column for each segment.
           enterLegend
             .append("td")
+            .attr("class", "second")
               .text(d => d.type);
 
           // create the third column for each segment.
           enterLegend
             .append("td")
+            .attr("class", "third")
               .attr("class",'legendFreq')
               .text( d => format(",")(d.freq) );
 
           // create the fourth column for each segment.
           enterLegend
             .append("td")
+            .attr("class", "fourth")
               .attr("class",'legendPerc')
               .text( d => getLegend(d,pieData) );
 
           return enterLegend
-      })
+      },
+      
+        update => {
+          const updatedLegend = update
+
+          // create the first column for each segment.
+          updatedLegend
+            .select(".first")
+              .select("svg")
+                .attr("width", '16')
+                .attr("height", '16')
+                .select("rect")
+                  .attr("width", '16')
+                  .attr("height", '16')
+                  .attr("fill", d => colors[d.type]);
+
+          // create the second column for each segment.
+          updatedLegend
+            .select(".second")
+              .text(d => d.type);
+
+          // create the third column for each segment.
+          updatedLegend
+            .select(".legendFreq")
+              .text( d => format(",")(d.freq) );
+
+          // create the fourth column for each segment.
+          updatedLegend
+            .select(".legendPerc")
+              .text( d => getLegend(d,pieData) );
+
+          return updatedLegend
+           
+        }
+      )
         
 
     // Utility function to be used to update the legend.
