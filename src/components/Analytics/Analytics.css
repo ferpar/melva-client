@@ -74,6 +74,8 @@
 }
 
 .analytics-list-slug{
-  display: flex;
-  justify-content: space-between;
+}
+
+.analytics-list-slug > * {
+  text-align: center;
 }

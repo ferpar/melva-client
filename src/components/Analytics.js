@@ -226,14 +226,38 @@ const Analytics = props => {
                 </div>
                 <div className="analytics-wrapper">
                   <HistoPie data={histoPieData}/>
-                  {jsonSource ? 
+                  {yearlyReport ? 
                       (
-                        jsonSource.slice(0, 10).map( (unit, idx) => 
-                          <div key={idx} className="analytics-list-slug">
-                            <p>{unit.NHC}</p>
-                            <p>{unit.Nombre}</p>
-                            <p>{unit.Apellidos}</p>
-                          </div>)
+                        <table>
+                          <thead>
+                            <tr className="analytics-list-slug">
+                              <th>año</th>
+                              <th>retenidos</th>
+                              <th>repescados</th>
+                              <th>ganados</th>
+                              <th>perdidos</th>
+                              <th>olvidados 1 año</th>
+                              <th>olvidados multiaño</th>
+                              <th>Total</th>
+                              <th>Potencial</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {[...yearlyReport].sort((a,b)=>b.year-a.year).map( (row, idx) => 
+                              <tr key={idx} className="analytics-list-slug">
+                                <td>{row.year}</td>
+                                <td>{row.retained}</td>
+                                <td>{row.regained}</td>
+                                <td>{row.gained}</td>
+                                <td>{row.lost}</td>
+                                <td>{row.forgotten1Year}</td>
+                                <td>{row.forgottenMultiYear}</td>
+                                <td>{row.retained + row.regained + row.gained}</td>
+                                <td>{row.retained + row.regained + row.gained + row.lost}</td>
+                              </tr>)
+                            }
+                          </tbody>
+                        </table>
                       ) 
                     : (<p>Porfavor, importe los datos a analizar.</p>) }
                 </div>
