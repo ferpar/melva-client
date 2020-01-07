@@ -73,39 +73,6 @@ const HistoPie = ({data:propData}) => {
          return newObj
       }) 
     )
-
-    //removing d3 elements before update
-      //cleaning up Histogram
-    const Hgsvg = 
-      select(wrapperRef.current)
-        .select(".histogram")
-
-    Hgsvg
-      .selectAll(".bar")
-      .data([])
-      .join("g")
-      
-      //cleaning up Pie chart
-    const piesvg = 
-      select(wrapperRef.current)
-      .select(".piechart")
-
-    piesvg
-      .selectAll("g")
-      .data([])
-      .join("g") 
-      
-      //cleaning up legend
-    let legend = select(wrapperRef.current)
-      .select(".legend")
-
-    legend
-      .select("tbody")
-        .selectAll("tr")
-        .data([])
-        .join("tr")
-
-  
   }, [propData])
 
   useEffect( () => {
@@ -198,7 +165,7 @@ const HistoPie = ({data:propData}) => {
 
         //updating the rectangles
           updatedBars
-            .selectAll("rect")
+            .select("rect")
               .attr("x", d => xScale(d[0]))
               .attr("y", d => yScale(d[1]) + HgDim.pt)
               .attr("width", xScale.bandwidth())
@@ -209,14 +176,15 @@ const HistoPie = ({data:propData}) => {
 
         //updating the text
           updatedBars
-            .selectAll("text")
+            .select("text")
               .text(d => format(',')(d[1]))
               .attr("x", d => xScale(d[0]) + xScale.bandwidth() /2)
               .attr("y", d => yScale(d[1]) - 5 + HgDim.pt )
               .attr("text-anchor", "middle")
           
         return updatedBars
-      })
+      }
+      )
       .attr("class", "bar")
 
     //HgMouseover function
