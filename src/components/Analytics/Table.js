@@ -2,12 +2,22 @@ import React, {useState} from "react"
 import "./Table.css"
 
 const YearlyTable = ({yearlyReport}) => {
-  const [expanded, setExpanded] = useState(false)
+  const [expanded, setExpanded] = useState(0)
 
   const handleSetExpanded = () => {
-    setExpanded(!expanded)
+    if (expanded === 0){
+      setExpanded(expanded + 1)
+    } else {
+      setExpanded(expanded - 1)
+    }
   }
 
+  const handleSetExpanded2 = () => {
+    if (expanded === 1) {
+      setExpanded(expanded + 1)
+    }
+  }
+  
   return (
     <div className="table-container">
       <table className="table">
@@ -18,7 +28,7 @@ const YearlyTable = ({yearlyReport}) => {
           </tr>
         </thead>
         <tbody>
-            {expanded ? (
+            {expanded > 0 ? (
               <>
                 <tr className="table-row">
                   <td>Pacientes</td>
@@ -38,17 +48,31 @@ const YearlyTable = ({yearlyReport}) => {
                     )
                   }   
                 </tr>
-                <tr className="table-row row-pt2">
-                  <td>nuevos</td>
-                  {yearlyReport.map( (row, idx) => <td key={idx}>{row.gained}</td>)}   
-                </tr>
-                <tr className="table-row">
-                  <td>repescados</td>
-                  {yearlyReport.map( (row, idx) => <td key={idx}>{row.regained}</td>)}   
-                </tr>
+                { expanded > 1 ? (
+                  <>
+                    <tr className="table-row row-pt2">
+                      <td>nuevos</td>
+                      {yearlyReport.map( (row, idx) => <td key={idx}>{row.gained}</td>)}   
+                    </tr>
+                    <tr className="table-row">
+                      <td>repescados</td>
+                      {yearlyReport.map( (row, idx) => <td key={idx}>{row.regained}</td>)}   
+                    </tr>
+                    <tr className="table-row">
+                      <td>ganados</td>
+                      {yearlyReport.map( (row, idx) => <td className="ganados" key={idx}>{row.gained + row.regained}</td>)}   
+                    </tr>
+                  </>
+                ) : (
+                    <tr className="table-row row-pt2">
+                      <td>ganados</td>
+                      {yearlyReport.map( (row, idx) => <td className="ganados" key={idx}>{row.gained + row.regained}</td>)}   
+                    </tr>
+                )
+                }
                 <tr className="table-row row-pt2">
                   <td>perdidos</td>
-                  {yearlyReport.map( (row, idx) => <td key={idx}>{row.lost}</td>)}   
+                  {yearlyReport.map( (row, idx) => <td className="perdidos" key={idx}>{"- "}{row.lost}</td>)}   
                 </tr>
               </>
             ) : (
@@ -59,11 +83,19 @@ const YearlyTable = ({yearlyReport}) => {
             )}
         </tbody>
       </table>
-      <div>
+      <div className="table-buttons">
         <button 
           className="expand-button" 
-          onClick={handleSetExpanded}>Detalles
+          onClick={handleSetExpanded}>
+            {expanded > 0 ? ("- Detalle") : ("+ Detalle")}
         </button>
+        { expanded === 1 &&
+          <button 
+            className="expand-button" 
+            onClick={handleSetExpanded2}>
+              + Detalle
+          </button>
+        }
       </div>
     </div>
   )

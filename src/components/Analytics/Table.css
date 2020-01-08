@@ -18,6 +18,11 @@
   padding-top: 4rem;
 }
 
+.table-buttons{
+  display: flex;
+  flex-direction: column;
+  min-width: 7rem;
+}
 
 .expand-button{
   display: inline-block;
@@ -40,3 +45,10 @@
   color: var(--primary);
 }
 
+.ganados{
+  color: green;
+}
+
+.perdidos{
+  color: red;
+}
