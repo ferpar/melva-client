@@ -13,9 +13,7 @@ const YearlyTable = ({yearlyReport}) => {
   }
 
   const handleSetExpanded2 = () => {
-    if (expanded === 1) {
       setExpanded(expanded + 1)
-    }
   }
   
   return (
@@ -48,7 +46,7 @@ const YearlyTable = ({yearlyReport}) => {
                     )
                   }   
                 </tr>
-                { expanded > 1 ? (
+                { expanded > 2 ? (
                   <>
                     <tr className="table-row row-pt2">
                       <td>nuevos</td>
@@ -74,6 +72,24 @@ const YearlyTable = ({yearlyReport}) => {
                   <td>perdidos</td>
                   {yearlyReport.map( (row, idx) => <td className="perdidos" key={idx}>{"- "}{row.lost}</td>)}   
                 </tr>
+                { expanded > 3 && (
+                  <> 
+                    <tr className="table-row">
+                      <td>olv 1 año</td>
+                      {yearlyReport.map( (row, idx) => <td key={idx}>{row.forgotten1Year}</td>)}   
+                    </tr>
+                    <tr className="table-row">
+                      <td>ovl multiaño</td>
+                      {yearlyReport.map( (row, idx) => <td key={idx}>{row.forgottenMultiYear}</td>)}   
+                    </tr>
+                  </>
+                ) }
+                { expanded > 1 &&
+                <tr className="table-row row-pt2">
+                  <td>potencial</td>
+                  {yearlyReport.map( (row, idx) => <td key={idx}>{row.gained + row.regained + row.retained + row.lost}</td>)}   
+                </tr>
+                }
               </>
             ) : (
             <tr className="table-row">
@@ -89,7 +105,7 @@ const YearlyTable = ({yearlyReport}) => {
           onClick={handleSetExpanded}>
             {expanded > 0 ? ("- Detalle") : ("+ Detalle")}
         </button>
-        { expanded === 1 &&
+        { (expanded > 0 && expanded < 4) &&
           <button 
             className="expand-button" 
             onClick={handleSetExpanded2}>
