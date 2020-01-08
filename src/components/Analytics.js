@@ -24,6 +24,8 @@ import {
   generateMonthlyReport
 } from "../helpers/analytics.js";
 
+import {YearlyTable} from "./Analytics/Table.js"
+
 import HistoPie from "./Analytics/D3/HistoPie.js";
 
 const freqData=[
@@ -43,6 +45,7 @@ const freqData=[
 const Analytics = props => {
   const { franchise } = props.user
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedYear, setSelectedYear] = useState(null);
 
   //data cache
   const [formattedSourceData, setFormattedSourceData] = useState(null); //raw imported data
@@ -228,36 +231,38 @@ const Analytics = props => {
                   <HistoPie data={histoPieData}/>
                   {yearlyReport ? 
                       (
-                        <table>
-                          <thead>
-                            <tr className="analytics-list-slug">
-                              <th>año</th>
-                              <th>retenidos</th>
-                              <th>repescados</th>
-                              <th>ganados</th>
-                              <th>perdidos</th>
-                              <th>olvidados 1 año</th>
-                              <th>olvidados multiaño</th>
-                              <th>Total</th>
-                              <th>Potencial</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {[...yearlyReport].sort((a,b)=>b.year-a.year).map( (row, idx) => 
-                              <tr key={idx} className="analytics-list-slug">
-                                <td>{row.year}</td>
-                                <td>{row.retained}</td>
-                                <td>{row.regained}</td>
-                                <td>{row.gained}</td>
-                                <td>{row.lost}</td>
-                                <td>{row.forgotten1Year}</td>
-                                <td>{row.forgottenMultiYear}</td>
-                                <td>{row.retained + row.regained + row.gained}</td>
-                                <td>{row.retained + row.regained + row.gained + row.lost}</td>
-                              </tr>)
-                            }
-                          </tbody>
-                        </table>
+  //                      <table>
+  //                        <thead>
+  //                          <tr className="analytics-list-slug">
+  //                            <th>año</th>
+  //                            <th>retenidos</th>
+  //                            <th>repescados</th>
+  //                            <th>ganados</th>
+  //                            <th>perdidos</th>
+  //                            <th>olvidados 1 año</th>
+  //                            <th>olvidados multiaño</th>
+  //                            <th>Total</th>
+  //                            <th>Potencial</th>
+  //                          </tr>
+  //                        </thead>
+  //                        <tbody>
+  //                          {[...yearlyReport].sort((a,b)=>b.year-a.year).map( (row, idx) => 
+  //                            <tr key={idx} className="analytics-list-slug">
+  //                              <td>{row.year}</td>
+  //                              <td>{row.retained}</td>
+  //                              <td>{row.regained}</td>
+  //                              <td>{row.gained}</td>
+  //                              <td>{row.lost}</td>
+  //                              <td>{row.forgotten1Year}</td>
+  //                              <td>{row.forgottenMultiYear}</td>
+  //                              <td>{row.retained + row.regained + row.gained}</td>
+  //                              <td>{row.retained + row.regained + row.gained + row.lost}</td>
+  //                            </tr>)
+  //                          }
+  //                        </tbody>
+  //                      </table>
+                        
+                        <YearlyTable yearlyReport={yearlyReport}/>
                       ) 
                     : (<p>Porfavor, importe los datos a analizar.</p>) }
                 </div>

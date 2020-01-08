@@ -79,3 +79,11 @@
 .analytics-list-slug > * {
   text-align: center;
 }
+
+.analytics-main-summary{
+  display: flex;
+}
+
+.analytics-yearly-table{
+  width:100%;
+}
