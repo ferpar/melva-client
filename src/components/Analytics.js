@@ -24,7 +24,7 @@ import {
   generateMonthlyReport
 } from "../helpers/analytics.js";
 
-import {YearlyTable} from "./Analytics/Table.js"
+import {YearlyTable, QuarterlyTable, MonthlyTable} from "./Analytics/Table.js"
 
 import HistoPie from "./Analytics/D3/HistoPie.js";
 
@@ -135,26 +135,84 @@ const Analytics = props => {
   // yearly report array
   useEffect(() => {
     if (rawYearly) {
-    const processedYearly =  [
-        ...Object.values(rawYearly).map( (elem, i) => ({
-          year: Object.keys(rawYearly)[i],
-          retained: Object.values(elem).filter(elem => elem.status==="retained").length,
-          regained: Object.values(elem).filter(elem => elem.status==="regained").length,
-          gained: Object.values(elem).filter(elem => elem.status==="gained").length,
-          lost: Object.values(elem).filter(elem => elem.status==="lost").length,
-          forgotten1Year: Object.values(elem).filter(elem => elem.status==="forgotten1Year").length,
-          forgottenMultiYear: Object.values(elem).filter(elem => elem.status==="forgottenMultiYear").length,
-          total: 
-            Object.values(elem).filter(elem => elem.status==="retained").length +
-            Object.values(elem).filter(elem => elem.status==="regained").length +
-            Object.values(elem).filter(elem => elem.status==="gained").length
+      const processedYearly =  [
+          ...Object.values(rawYearly).map( (elem, i) => ({
+            year: Object.keys(rawYearly)[i],
+            retained: Object.values(elem).filter(elem => elem.status==="retained").length,
+            regained: Object.values(elem).filter(elem => elem.status==="regained").length,
+            gained: Object.values(elem).filter(elem => elem.status==="gained").length,
+            lost: Object.values(elem).filter(elem => elem.status==="lost").length,
+            forgotten1Year: Object.values(elem).filter(elem => elem.status==="forgotten1Year").length,
+            forgottenMultiYear: Object.values(elem).filter(elem => elem.status==="forgottenMultiYear").length,
+            total: 
+              Object.values(elem).filter(elem => elem.status==="retained").length +
+              Object.values(elem).filter(elem => elem.status==="regained").length +
+              Object.values(elem).filter(elem => elem.status==="gained").length
 
-        })) 
-      ]
-      setYearlyReport(processedYearly)
-      console.log(rawYearly)
+          })) 
+        ]
+        setYearlyReport(processedYearly)
+        console.log(rawYearly)
     }
   }, [rawYearly])
+
+  //quarterly report array
+  useEffect(() => {
+    if(rawQuarterly) {
+      const processedQuarterly = []
+      for (let year in rawQuarterly){
+        for (let quarter in rawQuarterly[year]){
+          processedQuarterly.push(
+            {
+              year,
+              quarter,
+              gained: Object.values(rawQuarterly[year][quarter]).filter(elem => elem.status === "gained").length,
+              regained: Object.values(rawQuarterly[year][quarter]).filter(elem => elem.status === "regained").length,
+              retained: Object.values(rawQuarterly[year][quarter]).filter(elem => elem.status === "retained").length,
+              lost: Object.values(rawQuarterly[year][quarter]).filter(elem => elem.status === "lost").length,
+              forgotten1Year: Object.values(rawQuarterly[year][quarter]).filter(elem => elem.status === "forgotten1Year").length,
+              forgottenMultiYear: Object.values(rawQuarterly[year][quarter]).filter(elem => elem.status === "forgottenMultiYear").length,
+              total: 
+                Object.values(rawQuarterly[year][quarter]).filter(elem => elem.status === "gained").length +
+                Object.values(rawQuarterly[year][quarter]).filter(elem => elem.status === "regained").length +
+                Object.values(rawQuarterly[year][quarter]).filter(elem => elem.status === "retained").length
+            }
+          )
+        }
+      }
+      console.log("processedQuarterly")
+      console.log(processedQuarterly)
+    }
+  }, [rawQuarterly])
+
+  //monthly  report array
+  useEffect(() => {
+    if(rawMonthly) {
+      const processedMonthly= []
+      for (let year in rawMonthly){
+        for (let month in rawMonthly[year]){
+          processedMonthly.push(
+            {
+              year,
+              month,
+              gained: Object.values(rawMonthly[year][month]).filter(elem => elem.status === "gained").length,
+              regained: Object.values(rawMonthly[year][month]).filter(elem => elem.status === "regained").length,
+              retained: Object.values(rawMonthly[year][month]).filter(elem => elem.status === "retained").length,
+              lost: Object.values(rawMonthly[year][month]).filter(elem => elem.status === "lost").length,
+              forgotten1Year: Object.values(rawMonthly[year][month]).filter(elem => elem.status === "forgotten1Year").length,
+              forgottenMultiYear: Object.values(rawMonthly[year][month]).filter(elem => elem.status === "forgottenMultiYear").length,
+              total: 
+                Object.values(rawMonthly[year][month]).filter(elem => elem.status === "gained").length +
+                Object.values(rawMonthly[year][month]).filter(elem => elem.status === "regained").length +
+                Object.values(rawMonthly[year][month]).filter(elem => elem.status === "retained").length
+            }
+          )
+        }
+      }
+      console.log("processedMonthly")
+      console.log(processedMonthly)
+    }
+  }, [rawMonthly])
 
   useEffect(() => {
     if (yearlyReport) {
@@ -231,40 +289,10 @@ const Analytics = props => {
                   <HistoPie data={histoPieData}/>
                   {yearlyReport ? 
                       (
-  //                      <table>
-  //                        <thead>
-  //                          <tr className="analytics-list-slug">
-  //                            <th>año</th>
-  //                            <th>retenidos</th>
-  //                            <th>repescados</th>
-  //                            <th>ganados</th>
-  //                            <th>perdidos</th>
-  //                            <th>olvidados 1 año</th>
-  //                            <th>olvidados multiaño</th>
-  //                            <th>Total</th>
-  //                            <th>Potencial</th>
-  //                          </tr>
-  //                        </thead>
-  //                        <tbody>
-  //                          {[...yearlyReport].sort((a,b)=>b.year-a.year).map( (row, idx) => 
-  //                            <tr key={idx} className="analytics-list-slug">
-  //                              <td>{row.year}</td>
-  //                              <td>{row.retained}</td>
-  //                              <td>{row.regained}</td>
-  //                              <td>{row.gained}</td>
-  //                              <td>{row.lost}</td>
-  //                              <td>{row.forgotten1Year}</td>
-  //                              <td>{row.forgottenMultiYear}</td>
-  //                              <td>{row.retained + row.regained + row.gained}</td>
-  //                              <td>{row.retained + row.regained + row.gained + row.lost}</td>
-  //                            </tr>)
-  //                          }
-  //                        </tbody>
-  //                      </table>
-                        
                         <YearlyTable yearlyReport={yearlyReport}/>
                       ) 
-                    : (<p>Porfavor, importe los datos a analizar.</p>) }
+                    : (<p>Porfavor, importe los datos a analizar.</p>) 
+                  }
                 </div>
             </div>
         )

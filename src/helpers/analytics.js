@@ -317,7 +317,7 @@
   const rankPatientBaseMonthly = (patientBase, rankParameters, year, month, yearSumToggle = false) => {
     const rankedPatientBase = {...patientBase}
       
-        //auxiliary function to check if there were bills on any of the previous 4 quarters
+        //auxiliary function to check if there were bills on any of the previous 12 months
         function checkLastYearBills(patientObject, year, month) {
           for (let i = month-1; i >= 1; i--){
             if ( patientObject.months[year] && patientObject.months[year].has(parseInt(i)) ) return true
@@ -401,7 +401,7 @@
     for (let year in billsByYearMonth) {
       if (!monthlyReport[year]) monthlyReport[year]={}
       for (let month in billsByYearMonth[year]) {
-        monthlyReport[year][month] = rankPatientBaseMonthly(generatePatientBase(formattedData.filter( bill => bill.date.getTime() < new Date(parseInt(year), parseInt(month)-1)  )), rankParameters, year, month)
+        monthlyReport[year][month] = rankPatientBaseMonthly(generatePatientBase(formattedData.filter( bill => bill.date.getTime() < new Date(parseInt(year), parseInt(month))  )), rankParameters, year, month)
       }
     }
     return monthlyReport
