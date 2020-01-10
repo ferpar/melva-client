@@ -1,20 +1,14 @@
 import React, {useState} from "react"
 import "./Table.css"
 
-const ReportTable = ({report, interval}) => {
-  const [expanded, setExpanded] = useState(0)
+const ReportTable = ({
+  report, 
+  interval, 
+  expanded,
+  handleSetExpanded,
+  handleSetExpanded2
+}) => {
 
-  const handleSetExpanded = () => {
-    if (expanded === 0){
-      setExpanded(expanded + 1)
-    } else {
-      setExpanded(expanded - 1)
-    }
-  }
-
-  const handleSetExpanded2 = () => {
-      setExpanded(expanded + 1)
-  }
   
   return (
     <div className="table-container">

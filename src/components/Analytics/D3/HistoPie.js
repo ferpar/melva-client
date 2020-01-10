@@ -53,9 +53,13 @@ const initialColors = {
   mid:"#e08214",
   high:"#41ab5d",
   new:"#807dba", 
+  nuevos:"#807dba", 
   regained:"#e08214",
+  repecados:"#e08214",
   retained:"#41ab5d",
-  lost: schemePaired[5]
+  mantenidos:"#41ab5d",
+  lost: schemePaired[5],
+  perdidos: schemePaired[5]
 }
 
 const HistoPie = ({data:propData}) => {

@@ -47,6 +47,23 @@ const Analytics = props => {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedYear, setSelectedYear] = useState(null);
 
+  //detail levels
+  const [expanded, setExpanded] = useState(0)
+
+  const handleSetExpanded = () => {
+    console.log(expanded)
+    if (expanded === 0){
+      setExpanded(expanded + 1)
+    } else {
+      setExpanded(expanded - 1)
+    }
+  }
+
+  const handleSetExpanded2 = () => {
+    console.log(expanded)
+      setExpanded(expanded + 1)
+  }
+
   //data cache
   const [formattedSourceData, setFormattedSourceData] = useState(null); //raw imported data
   const [jsonSource, setJsonSource] = useState(null); //preprocessed data
@@ -180,6 +197,7 @@ const Analytics = props => {
           )
         }
       }
+      setQuarterlyReport(processedQuarterly)
       console.log("processedQuarterly")
       console.log(processedQuarterly)
     }
@@ -209,6 +227,7 @@ const Analytics = props => {
           )
         }
       }
+      setMonthlyReport(processedMonthly)
       console.log("processedMonthly")
       console.log(processedMonthly)
     }
@@ -289,7 +308,13 @@ const Analytics = props => {
                   <HistoPie data={histoPieData}/>
                   {yearlyReport ? 
                       (
-                        <ReportTable report={yearlyReport} interval="yearly"/>
+                        <ReportTable 
+                          report={yearlyReport} 
+                          interval="yearly"
+                          expanded={expanded}
+                          handleSetExpanded={handleSetExpanded}
+                          handleSetExpanded2={handleSetExpanded2}
+                        />
                       ) 
                     : (<p>Porfavor, importe los datos a analizar.</p>) 
                   }
