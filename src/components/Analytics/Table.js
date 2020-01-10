@@ -32,15 +32,15 @@ const ReportTable = ({report, interval}) => {
               <>
                 <tr className="table-row">
                   <td>Pacientes</td>
-                  {report.map( (row, idx) => <td key={idx}>{row.retained + row.regained + row.gained}</td>)}   
+                  {report.map( (row, idx) => <td key={idx}>{row.retained + row.regained + row.new}</td>)}   
                 </tr>
                 <tr className="table-row">
                   <td>% cambio</td>
                   {report.map( (row, idx) => 
                     
                     ( idx>0 
-                      ? <td key={idx}>{Math.round((row.retained + row.regained + row.gained)/
-                        (report[idx-1].retained + report[idx-1].regained + report[idx-1].gained)
+                      ? <td key={idx}>{Math.round((row.retained + row.regained + row.new)/
+                        (report[idx-1].retained + report[idx-1].regained + report[idx-1].new)
                         * 100 -100) + "%"
                       }</td> 
                       : <td key={idx}>{" "}</td>
@@ -58,7 +58,7 @@ const ReportTable = ({report, interval}) => {
                   <>
                     <tr className="table-row row-pt2">
                       <td>nuevos</td>
-                      {report.map( (row, idx) => <td key={idx}>{row.gained}</td>)}   
+                      {report.map( (row, idx) => <td key={idx}>{row.new}</td>)}   
                     </tr>
                     <tr className="table-row">
                       <td>repescados</td>
@@ -66,13 +66,13 @@ const ReportTable = ({report, interval}) => {
                     </tr>
                     <tr className="table-row">
                       <td>ganados</td>
-                      {report.map( (row, idx) => <td className="ganados" key={idx}>{row.gained + row.regained}</td>)}   
+                      {report.map( (row, idx) => <td className="ganados" key={idx}>{row.new + row.regained}</td>)}   
                     </tr>
                   </>
                 ) : (
                     <tr className="table-row row-pt2">
                       <td>ganados</td>
-                      {report.map( (row, idx) => <td className="ganados" key={idx}>{row.gained + row.regained}</td>)}   
+                      {report.map( (row, idx) => <td className="ganados" key={idx}>{row.new + row.regained}</td>)}   
                     </tr>
                 )
                 }
@@ -95,7 +95,7 @@ const ReportTable = ({report, interval}) => {
                 { expanded > 1 &&
                 <tr className="table-row row-pt2">
                   <td>potenciales</td>
-                  {report.map( (row, idx) => <td key={idx}>{row.gained + row.regained + row.retained + row.lost}</td>)}   
+                  {report.map( (row, idx) => <td key={idx}>{row.new + row.regained + row.retained + row.lost}</td>)}   
                 </tr>
                 }
               </>
@@ -103,15 +103,15 @@ const ReportTable = ({report, interval}) => {
               <>
                 <tr className="table-row">
                   <td>Pacientes</td>
-                  {report.map( (row, idx) => <td key={idx}>{row.retained + row.regained + row.gained}</td>)}   
+                  {report.map( (row, idx) => <td key={idx}>{row.retained + row.regained + row.new}</td>)}   
                 </tr>
                 <tr className="table-row">
                   <td>% cambio</td>
                   {report.map( (row, idx) => 
                     
                     ( idx>0 
-                      ? <td key={idx}>{Math.round((row.retained + row.regained + row.gained)/
-                        (report[idx-1].retained + report[idx-1].regained + report[idx-1].gained)
+                      ? <td key={idx}>{Math.round((row.retained + row.regained + row.new)/
+                        (report[idx-1].retained + report[idx-1].regained + report[idx-1].new)
                         * 100 -100) + "%"
                       }</td> 
                       : <td key={idx}>{" "}</td>

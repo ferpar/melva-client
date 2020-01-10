@@ -191,7 +191,7 @@
             rankedPatientBase[patient].status = "retained" 
           } else {
             if (patientBase[patient].years.size === 1) {
-              rankedPatientBase[patient].status = "gained" 
+              rankedPatientBase[patient].status = "new" 
             } else {
               rankedPatientBase[patient].status = "regained"
             }
@@ -280,7 +280,7 @@
             rankedPatientBase[patient].status="retained" 
           } else {
             if (patientBase[patient].years.size === 1) {
-              rankedPatientBase[patient].status="gained"
+              rankedPatientBase[patient].status="new"
             } else {
               rankedPatientBase[patient].status="regained"
             }
@@ -377,7 +377,7 @@
             rankedPatientBase[patient].status="retained" 
           } else {
             if (patientBase[patient].years.size === 1) {
-              rankedPatientBase[patient].status="gained"
+              rankedPatientBase[patient].status="new"
             } else {
               rankedPatientBase[patient].status="regained"
             }

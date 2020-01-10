@@ -52,7 +52,7 @@ const initialColors = {
   low:"#807dba", 
   mid:"#e08214",
   high:"#41ab5d",
-  gained:"#807dba", 
+  new:"#807dba", 
   regained:"#e08214",
   retained:"#41ab5d",
   lost: schemePaired[5]

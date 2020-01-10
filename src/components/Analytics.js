@@ -140,14 +140,14 @@ const Analytics = props => {
             year: Object.keys(rawYearly)[i],
             retained: Object.values(elem).filter(elem => elem.status==="retained").length,
             regained: Object.values(elem).filter(elem => elem.status==="regained").length,
-            gained: Object.values(elem).filter(elem => elem.status==="gained").length,
+            new: Object.values(elem).filter(elem => elem.status==="new").length,
             lost: Object.values(elem).filter(elem => elem.status==="lost").length,
             forgotten1Year: Object.values(elem).filter(elem => elem.status==="forgotten1Year").length,
             forgottenMultiYear: Object.values(elem).filter(elem => elem.status==="forgottenMultiYear").length,
             total: 
               Object.values(elem).filter(elem => elem.status==="retained").length +
               Object.values(elem).filter(elem => elem.status==="regained").length +
-              Object.values(elem).filter(elem => elem.status==="gained").length
+              Object.values(elem).filter(elem => elem.status==="new").length
 
           })) 
         ]
@@ -166,14 +166,14 @@ const Analytics = props => {
             {
               year,
               quarter,
-              gained: Object.values(rawQuarterly[year][quarter]).filter(elem => elem.status === "gained").length,
+              new: Object.values(rawQuarterly[year][quarter]).filter(elem => elem.status === "new").length,
               regained: Object.values(rawQuarterly[year][quarter]).filter(elem => elem.status === "regained").length,
               retained: Object.values(rawQuarterly[year][quarter]).filter(elem => elem.status === "retained").length,
               lost: Object.values(rawQuarterly[year][quarter]).filter(elem => elem.status === "lost").length,
               forgotten1Year: Object.values(rawQuarterly[year][quarter]).filter(elem => elem.status === "forgotten1Year").length,
               forgottenMultiYear: Object.values(rawQuarterly[year][quarter]).filter(elem => elem.status === "forgottenMultiYear").length,
               total: 
-                Object.values(rawQuarterly[year][quarter]).filter(elem => elem.status === "gained").length +
+                Object.values(rawQuarterly[year][quarter]).filter(elem => elem.status === "new").length +
                 Object.values(rawQuarterly[year][quarter]).filter(elem => elem.status === "regained").length +
                 Object.values(rawQuarterly[year][quarter]).filter(elem => elem.status === "retained").length
             }
@@ -195,14 +195,14 @@ const Analytics = props => {
             {
               year,
               month,
-              gained: Object.values(rawMonthly[year][month]).filter(elem => elem.status === "gained").length,
+              new: Object.values(rawMonthly[year][month]).filter(elem => elem.status === "new").length,
               regained: Object.values(rawMonthly[year][month]).filter(elem => elem.status === "regained").length,
               retained: Object.values(rawMonthly[year][month]).filter(elem => elem.status === "retained").length,
               lost: Object.values(rawMonthly[year][month]).filter(elem => elem.status === "lost").length,
               forgotten1Year: Object.values(rawMonthly[year][month]).filter(elem => elem.status === "forgotten1Year").length,
               forgottenMultiYear: Object.values(rawMonthly[year][month]).filter(elem => elem.status === "forgottenMultiYear").length,
               total: 
-                Object.values(rawMonthly[year][month]).filter(elem => elem.status === "gained").length +
+                Object.values(rawMonthly[year][month]).filter(elem => elem.status === "new").length +
                 Object.values(rawMonthly[year][month]).filter(elem => elem.status === "regained").length +
                 Object.values(rawMonthly[year][month]).filter(elem => elem.status === "retained").length
             }
@@ -223,7 +223,7 @@ const Analytics = props => {
               category: obj.year,
               total: obj.total,
               freq: {
-                gained: obj.gained,
+                new: obj.new,
                 regained: obj.regained,
                 retained: obj.retained,
                 lost: obj.lost
