@@ -239,28 +239,63 @@ const Analytics = props => {
       console.log(yearlyReport)
       setHistoPieData(
           yearlyReport.map( 
-            obj => ({
-              category: obj.year,
-              total: obj.total,
-              freq: {
-                nuevos: obj.new,
-                repescados: obj.regained,
-                mantenidos: obj.retained,
-                perdidos: obj.lost
-              },
-              colors: {
-                barColor: 'steelBlue',
-                nuevos:"#807dba", 
-                repescados:"lightblue",
-                mantenidos:"#41ab5d",
-                perdidos: schemePaired[5]
+            obj => { 
+
+              let freq = {}, colors = {}
+              switch (expanded){
+                case 0:
+                case 1:
+                  freq = {
+                    ganados: obj.new + obj.regained,
+                    perdidos: obj.lost
+                  }
+                  colors = {
+                    barColor: "steelBlue",
+                    ganados: "#41ab5d",
+                    perdidos: schemePaired[5]
+                  }
+                  break;
+                case 2:
+                  freq = {
+                    ganados: obj.new + obj.regained,
+                    mantenidos: obj.retained,
+                    perdidos: obj.lost
+                  }
+                  colors = {
+                    barColor: "steelBlue",
+                    ganados: "#41ab5d",
+                    mantenidos: "#807dba",
+                    perdidos: schemePaired[5]
+                  }
+                  break;
+                case 3:
+                case 4:
+                  freq = {
+                    nuevos: obj.new,
+                    repescados: obj.regained,
+                    mantenidos: obj.retained,
+                    perdidos: obj.lost
+                  }
+                  colors = {
+                    barColor: 'steelBlue',
+                    nuevos:"#41ab5d", 
+                    repescados:"#e08214",
+                    mantenidos:"#807dba",
+                    perdidos: schemePaired[5]
+                  }
               }
               
-          })
+              return {
+                category: obj.year,
+                total: obj.total,
+                freq,
+                colors
+              }
+            }
         )
       )
     }
-  },[yearlyReport])
+  },[yearlyReport, expanded])
 
   useEffect(() => {
     if (histoPieData) {
