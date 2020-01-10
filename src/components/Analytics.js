@@ -27,6 +27,7 @@ import {
 import ReportTable from "./Analytics/Table.js"
 
 import HistoPie from "./Analytics/D3/HistoPie.js";
+import {schemePaired} from "d3";
 
 const freqData=[
 {category:'AL',freq:{low:8786, mid:1319, high:249}}
@@ -242,11 +243,19 @@ const Analytics = props => {
               category: obj.year,
               total: obj.total,
               freq: {
-                new: obj.new,
-                regained: obj.regained,
-                retained: obj.retained,
-                lost: obj.lost
+                nuevos: obj.new,
+                repescados: obj.regained,
+                mantenidos: obj.retained,
+                perdidos: obj.lost
+              },
+              colors: {
+                barColor: 'steelBlue',
+                nuevos:"#807dba", 
+                repescados:"lightblue",
+                mantenidos:"#41ab5d",
+                perdidos: schemePaired[5]
               }
+              
           })
         )
       )

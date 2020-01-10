@@ -55,7 +55,7 @@ const initialColors = {
   new:"#807dba", 
   nuevos:"#807dba", 
   regained:"#e08214",
-  repecados:"#e08214",
+  repescados:"#e08214",
   retained:"#41ab5d",
   mantenidos:"#41ab5d",
   lost: schemePaired[5],
@@ -73,6 +73,7 @@ const HistoPie = ({data:propData}) => {
   useEffect(() => {
     const inputData = propData ? propData : freqData
 
+    //set data depending on whether totals are provided
     if (!inputData[0].hasOwnProperty("total")){
       setProcessedInput(inputData.map( obj => {
            const newObj = {...obj}
@@ -83,6 +84,13 @@ const HistoPie = ({data:propData}) => {
     } else {
       setProcessedInput(inputData)
     }
+
+    //set colors if they are provided
+    if(inputData[0].hasOwnProperty("colors")){
+      console.log(inputData[0].colors)
+      setColors(inputData[0].colors)
+    }  
+
   }, [propData])
 
   useEffect( () => {
