@@ -42,13 +42,13 @@ const ReportTable = ({
                     )
                   }   
                 </tr>
-                { expanded > 1 &&
+                { expanded > 2 &&
                   <tr className="table-row">
                     <td>mantenidos</td>
                     {report.map( (row, idx) => <td key={idx}>{row.retained}</td>)}   
                   </tr>
                 }
-                { expanded > 2 ? (
+                { expanded > 1 ? (
                   <>
                     <tr className="table-row row-pt2">
                       <td>nuevos</td>
@@ -86,7 +86,7 @@ const ReportTable = ({
                     </tr>
                   </>
                 ) }
-                { expanded > 1 &&
+                { expanded > 2 &&
                 <tr className="table-row row-pt2">
                   <td>potenciales</td>
                   {report.map( (row, idx) => <td key={idx}>{row.new + row.regained + row.retained + row.lost}</td>)}   

@@ -27,7 +27,7 @@ import {
 import ReportTable from "./Analytics/Table.js"
 
 import HistoPie from "./Analytics/D3/HistoPie.js";
-import {schemePaired} from "d3";
+import {schemePaired, schemeDark2} from "d3";
 
 const freqData=[
 {category:'AL',freq:{low:8786, mid:1319, high:249}}
@@ -257,14 +257,14 @@ const Analytics = props => {
                   break;
                 case 2:
                   freq = {
-                    ganados: obj.new + obj.regained,
-                    mantenidos: obj.retained,
+                    nuevos: obj.new,
+                    repescados: obj.regained,
                     perdidos: obj.lost
                   }
                   colors = {
                     barColor: "steelBlue",
-                    ganados: "#41ab5d",
-                    mantenidos: "#807dba",
+                    nuevos: schemeDark2[0], 
+                    repescados:"#e08214",
                     perdidos: schemePaired[5]
                   }
                   break;
@@ -278,7 +278,7 @@ const Analytics = props => {
                   }
                   colors = {
                     barColor: 'steelBlue',
-                    nuevos:"#41ab5d", 
+                    nuevos: schemeDark2[0], 
                     repescados:"#e08214",
                     mantenidos:"#807dba",
                     perdidos: schemePaired[5]
