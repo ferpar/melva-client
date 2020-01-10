@@ -48,6 +48,12 @@ const ReportTable = ({report, interval}) => {
                     )
                   }   
                 </tr>
+                { expanded > 1 &&
+                  <tr className="table-row">
+                    <td>mantenidos</td>
+                    {report.map( (row, idx) => <td key={idx}>{row.retained}</td>)}   
+                  </tr>
+                }
                 { expanded > 2 ? (
                   <>
                     <tr className="table-row row-pt2">
@@ -88,16 +94,32 @@ const ReportTable = ({report, interval}) => {
                 ) }
                 { expanded > 1 &&
                 <tr className="table-row row-pt2">
-                  <td>potencial</td>
+                  <td>potenciales</td>
                   {report.map( (row, idx) => <td key={idx}>{row.gained + row.regained + row.retained + row.lost}</td>)}   
                 </tr>
                 }
               </>
             ) : (
-            <tr className="table-row">
-              <td>Pacientes</td>
-              {report.map( (row, idx) => <td key={idx}>{row.retained + row.regained + row.gained}</td>)}   
-            </tr>
+              <>
+                <tr className="table-row">
+                  <td>Pacientes</td>
+                  {report.map( (row, idx) => <td key={idx}>{row.retained + row.regained + row.gained}</td>)}   
+                </tr>
+                <tr className="table-row">
+                  <td>% cambio</td>
+                  {report.map( (row, idx) => 
+                    
+                    ( idx>0 
+                      ? <td key={idx}>{Math.round((row.retained + row.regained + row.gained)/
+                        (report[idx-1].retained + report[idx-1].regained + report[idx-1].gained)
+                        * 100 -100) + "%"
+                      }</td> 
+                      : <td key={idx}>{" "}</td>
+                    )
+                    )
+                  }   
+                </tr>
+              </>
             )}
         </tbody>
       </table>
