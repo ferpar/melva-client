@@ -369,6 +369,10 @@
 
         //customer status
         if ((patientBase[patient].years.has(year.toString()) && patientBase[patient].months[year].has(parseInt(month))) || checkLastYearBills(patientBase[patient], year, month)) {
+     //     rankedPatientBase[patient].cond1 = (patientBase[patient].years.has(year.toString()) && patientBase[patient].months[year].has(parseInt(month)));
+     //     rankedPatientBase[patient].cond2 = checkLastYearBills(patientBase[patient], year, month)
+     //     rankedPatientBase[patient].calcMonth = month
+     //     rankedPatientBase[patient].calcYear = year
           if(checkLastYearBills(patientBase[patient], year, month)){
             rankedPatientBase[patient].status="retained" 
           } else {
@@ -401,7 +405,17 @@
     for (let year in billsByYearMonth) {
       if (!monthlyReport[year]) monthlyReport[year]={}
       for (let month in billsByYearMonth[year]) {
-        monthlyReport[year][month] = rankPatientBaseMonthly(generatePatientBase(formattedData.filter( bill => bill.date.getTime() < new Date(parseInt(year), parseInt(month))  )), rankParameters, year, month)
+        monthlyReport[year][month] = 
+          rankPatientBaseMonthly(
+            generatePatientBase(
+              formattedData.filter( bill => 
+                bill.date.getTime() < new Date(parseInt(year), parseInt(month))  
+              )
+            ), 
+            rankParameters, 
+            year, 
+            month
+          )
       }
     }
     return monthlyReport

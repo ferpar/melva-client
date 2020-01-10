@@ -24,7 +24,7 @@ import {
   generateMonthlyReport
 } from "../helpers/analytics.js";
 
-import {YearlyTable, QuarterlyTable, MonthlyTable} from "./Analytics/Table.js"
+import ReportTable from "./Analytics/Table.js"
 
 import HistoPie from "./Analytics/D3/HistoPie.js";
 
@@ -289,7 +289,7 @@ const Analytics = props => {
                   <HistoPie data={histoPieData}/>
                   {yearlyReport ? 
                       (
-                        <YearlyTable yearlyReport={yearlyReport}/>
+                        <ReportTable report={yearlyReport} interval="yearly"/>
                       ) 
                     : (<p>Porfavor, importe los datos a analizar.</p>) 
                   }
