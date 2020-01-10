@@ -20,6 +20,18 @@ const ReportTable = ({
             {report.map( (yearSummary, idx) => <th key={idx}>{yearSummary.year}</th>)}
           </tr>
           }
+          {interval === "monthly" &&
+          <tr className="table-row">
+            <th>mes</th>
+            {report.map( (yearSummary, idx) => <th key={idx}>{yearSummary.month}</th>)}
+          </tr>
+          }
+          {interval === "quarterly" &&
+          <tr className="table-row">
+            <th>trimestre</th>
+            {report.map( (yearSummary, idx) => <th key={idx}>{yearSummary.quarter}</th>)}
+          </tr>
+          }
         </thead>
         <tbody>
             {expanded > 0 ? (
