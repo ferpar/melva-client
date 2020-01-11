@@ -24,7 +24,8 @@ import {
   generateMonthlyReport
 } from "../helpers/analytics.js";
 
-import ReportTable from "./Analytics/Table.js"
+import ReportTable from "./Analytics/Table.js";
+import IntervalSelector from "./Analytics/IntervalSelector.js";
 
 import HistoPie from "./Analytics/D3/HistoPie.js";
 import {schemePaired, schemeDark2} from "d3";
@@ -47,6 +48,10 @@ const Analytics = props => {
   const { franchise } = props.user
   const [isLoading, setIsLoading] = useState(true);
   const [selectedYear, setSelectedYear] = useState(null);
+  const [timeInterval, setTimeInterval] = useState("quarterly");
+  const handleSetTimeInterval = e => {
+    setTimeInterval(e.target.value)
+  }
 
   //detail levels
   const [expanded, setExpanded] = useState(0)
@@ -235,10 +240,23 @@ const Analytics = props => {
   }, [rawMonthly])
 
   useEffect(() => {
-    if (yearlyReport) {
-      console.log(yearlyReport)
+
+    if (yearlyReport && quarterlyReport && monthlyReport) {
+    let report = null;
+    switch (timeInterval){
+      case "yearly":
+        report = yearlyReport;
+        break;
+      case "quarterly":
+        report = quarterlyReport.filter( elem => elem.year === "2016" || elem.year === "2017" || elem.year ==="2018" || elem.year === "2019");
+        break;
+      case "monthly":
+        report = monthlyReport.filter(elem => elem.year === "2018" || elem.year === "2019");
+        break;
+    }
+
       setHistoPieData(
-          yearlyReport.map( 
+          report.map( 
             obj => { 
 
               let freq = {}, colors = {}
@@ -285,17 +303,37 @@ const Analytics = props => {
                   }
               }
               
-              return {
-                category: obj.year,
-                total: obj.total,
-                freq,
-                colors
+              switch(timeInterval){
+                case "yearly":
+                  return {
+                    category: obj.year,
+                    total: obj.total,
+                    freq,
+                    colors
+                  }
+                  break;
+                case "quarterly":
+                  return {
+                    category: obj.year + " " + obj.quarter,
+                    total: obj.total,
+                    freq,
+                    colors
+                  }
+                  break;
+                case "monthly":
+                  return {
+                    category: obj.year + " " + obj.month,
+                    total: obj.total,
+                    freq,
+                    colors
+                  }
+                  break;
               }
             }
         )
       )
     }
-  },[yearlyReport, expanded])
+  },[yearlyReport, quarterlyReport, monthlyReport, timeInterval, expanded])
 
   useEffect(() => {
     if (histoPieData) {
@@ -342,19 +380,43 @@ const Analytics = props => {
           </div>
         ) : ( 
             <div className="analytics-container">
-                <div className="analytics-wrapper">
-                  <div className="import-container">
-                    <label className="csv-import-button" htmlFor="csv-import">Importar desde .csv</label>
-                    <input accept=".csv" id="csv-import" name="csv-import" type="file" onChange={e => handleCSVImport(e)}/>
+                <div className="analytics-controls-wrapper">
+                  <div className="analytics-import-container">
+                    <label 
+                      className="csv-import-button" 
+                      htmlFor="csv-import"
+                    >
+                      Importar desde .csv
+                    </label>
+                    <input 
+                      accept=".csv" 
+                      id="csv-import" 
+                      name="csv-import" 
+                      type="file" 
+                      onChange={e => handleCSVImport(e)}
+                    />
                   </div>
+                   { (yearlyReport && quarterlyReport && monthlyReport) &&
+                     <IntervalSelector
+                      timeInterval={timeInterval}
+                      handleSetTimeInterval={handleSetTimeInterval}
+                     /> 
+                   }
                 </div>
                 <div className="analytics-wrapper">
                   <HistoPie data={histoPieData}/>
-                  {yearlyReport ? 
+                  {yearlyReport && quarterlyReport && monthlyReport ? 
                       (
                         <ReportTable 
-                          report={yearlyReport} 
-                          interval="yearly"
+                          report={
+                            timeInterval === "quarterly" 
+                            ? quarterlyReport.filter(elem => elem.year==="2016" || elem.year==="2017" || elem.year==="2018" || elem.year==="2019") : (
+                                timeInterval === "monthly" 
+                                ? monthlyReport.filter(elem => elem.year==="2018" || elem.year==="2019") 
+                                : yearlyReport
+                            )
+                          } 
+                          interval={timeInterval}
                           expanded={expanded}
                           handleSetExpanded={handleSetExpanded}
                           handleSetExpanded2={handleSetExpanded2}

@@ -40,13 +40,23 @@
   margin-bottom: 2rem;
 }
 
-.import-container { 
+.analytics-controls-wrapper{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   align-items: center;
-  grid-area: import-container;
+  padding: 1rem 3rem;
+  border-radius: 6px;
+  box-shadow: 0px 10px 50px #555;
+  background-color: #fff;
+  margin-bottom: 2rem;
+}
+
+.analytics-import-container { 
+  align-items: center;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-bottom: 1.5rem;  
 }
 
 #csv-import {
