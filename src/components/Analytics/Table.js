@@ -93,7 +93,7 @@ const ReportTable = ({
                       {report.map( (row, idx) => <td key={idx}>{row.forgotten1Year}</td>)}   
                     </tr>
                     <tr className="table-row">
-                      <td>ovl multiaño</td>
+                      <td>olv multiaño</td>
                       {report.map( (row, idx) => <td key={idx}>{row.forgottenMultiYear}</td>)}   
                     </tr>
                   </>
@@ -104,6 +104,14 @@ const ReportTable = ({
                   {report.map( (row, idx) => <td key={idx}>{row.new + row.regained + row.retained + row.lost}</td>)}   
                 </tr>
                 }
+                { expanded > 3 && (
+                  <> 
+                    <tr className="table-row">
+                      <td>visitaron</td>
+                      {report.map( (row, idx) => <td key={idx}>{row.accumulated}</td>)}   
+                    </tr>
+                  </>
+                ) }
               </>
             ) : (
               <>

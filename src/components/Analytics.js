@@ -170,7 +170,8 @@ const Analytics = props => {
             total: 
               Object.values(elem).filter(elem => elem.status==="retained").length +
               Object.values(elem).filter(elem => elem.status==="regained").length +
-              Object.values(elem).filter(elem => elem.status==="new").length
+              Object.values(elem).filter(elem => elem.status==="new").length,
+            accumulated: Object.values(elem).length
 
           })) 
         ]
@@ -198,7 +199,8 @@ const Analytics = props => {
               total: 
                 Object.values(rawQuarterly[year][quarter]).filter(elem => elem.status === "new").length +
                 Object.values(rawQuarterly[year][quarter]).filter(elem => elem.status === "regained").length +
-                Object.values(rawQuarterly[year][quarter]).filter(elem => elem.status === "retained").length
+                Object.values(rawQuarterly[year][quarter]).filter(elem => elem.status === "retained").length,
+              accumulated: Object.values(rawQuarterly[year][quarter]).length
             }
           )
         }
@@ -228,7 +230,8 @@ const Analytics = props => {
               total: 
                 Object.values(rawMonthly[year][month]).filter(elem => elem.status === "new").length +
                 Object.values(rawMonthly[year][month]).filter(elem => elem.status === "regained").length +
-                Object.values(rawMonthly[year][month]).filter(elem => elem.status === "retained").length
+                Object.values(rawMonthly[year][month]).filter(elem => elem.status === "retained").length,
+              accumulated: Object.values(rawMonthly[year][month]).length
             }
           )
         }
