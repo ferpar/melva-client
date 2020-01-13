@@ -229,7 +229,7 @@
           for (let i = quarter-1; i >= 1; i--){
             if ( patientObject.quarters[year] && patientObject.quarters[year].has(parseInt(i)) ) return true
           }
-          for (let i= quarter; i<=4; i++){
+          for (let i= quarter + 1; i<=4; i++){
             if ( patientObject.years.has((parseInt(year) -1).toString())  && patientObject.quarters[year-1].has(parseInt(i)) ) return true
           }
           return false
@@ -322,7 +322,7 @@
           for (let i = month-1; i >= 1; i--){
             if ( patientObject.months[year] && patientObject.months[year].has(parseInt(i)) ) return true
           }
-          for (let i= month; i<=12; i++){
+          for (let i= month + 1; i<=12; i++){
             if ( patientObject.years.has((parseInt(year) -1).toString())  && patientObject.months[year-1].has(parseInt(i)) ) return true
           }
           return false
