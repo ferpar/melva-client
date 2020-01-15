@@ -224,23 +224,24 @@
   const rankPatientBaseQuarterly = (patientBase, rankParameters, year, quarter, yearSumToggle = false) => {
     const rankedPatientBase = {...patientBase}
       
-        //auxiliary function to check if there were bills on any of the previous 4 quarters
+        //auxiliary function to check if there were bills on any of the previous 3 quarters
         function checkLastYearBills(patientObject, year, quarter) {
           for (let i = quarter-1; i >= 1; i--){
             if ( patientObject.quarters[year] && patientObject.quarters[year].has(parseInt(i)) ) return true
           }
-          for (let i= quarter + 1; i<=4; i++){
+          for (let i= parseInt(quarter) + 1 ; i<=4; i++){
             if ( patientObject.years.has((parseInt(year) -1).toString())  && patientObject.quarters[year-1].has(parseInt(i)) ) return true
           }
           return false
         }
 
         function checkIfLost(patientObject, year, quarter) {
-          if (quarter == 1) {
-            if ( patientObject.quarters[year-2] && patientObject.quarters[year-2].has(4)) return true
-          } else {
-            if (patientObject.quarters[year-1] && patientObject.quarters[year-1].has(quarter-1)) return true
-          }
+         // if (quarter == 1) { //old mechanism for when looking 4 instead of 3 quarters back
+         //   if ( patientObject.quarters[year-2] && patientObject.quarters[year-2].has(4)) return true
+         // } else {
+         //   if (patientObject.quarters[year-1] && patientObject.quarters[year-1].has(quarter-1)) return true
+         // }
+          if (patientObject.quarters[year-1] && patientObject.quarters[year-1].has(parseInt(quarter))) return true
           return false
         }
       for ( let patient in patientBase) {
@@ -322,18 +323,19 @@
           for (let i = month-1; i >= 1; i--){
             if ( patientObject.months[year] && patientObject.months[year].has(parseInt(i)) ) return true
           }
-          for (let i= month + 1; i<=12; i++){
+          for (let i = parseInt(month) + 1; i<=12; i++){
             if ( patientObject.years.has((parseInt(year) -1).toString())  && patientObject.months[year-1].has(parseInt(i)) ) return true
           }
           return false
         }
 
         function checkIfLost(patientObject, year, month) {
-          if (month == 1) {
-            if ( patientObject.months[year-2] && patientObject.months[year-2].has(12)) return true
-          } else {
-            if (patientObject.months[year-1] && patientObject.months[year-1].has(month-1)) return true
-          }
+         // if (month == 1) { //this is for when looking 12 months back instead of just 11
+         //   if ( patientObject.months[year-2] && patientObject.months[year-2].has(12)) return true
+         // } else {
+         //   if (patientObject.months[year-1] && patientObject.months[year-1].has(month-1)) return true
+         // }
+          if (patientObject.months[year-1] && patientObject.months[year-1].has(parseInt(month))) return true
           return false
         }
       for ( let patient in patientBase) {
