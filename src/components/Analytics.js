@@ -94,6 +94,15 @@ const Analytics = props => {
     setMenuOpen(false)
   }
   // -------
+  
+  //filtering function
+  
+  const filterFunc = (startYear, endYear) => (
+    elem => (
+      parseInt(elem.year) >= startYear 
+      && parseInt(elem.year) <= endYear
+    ) 
+  )
 
   //import function
   const handleCSVImport = async e => {
@@ -141,7 +150,9 @@ const Analytics = props => {
   )
 
 
-  // on Import
+/////HOOKS
+
+  // on Import: generate all reports
   useEffect( () => {
     const loadReport = async () => {
       if (formattedSourceData) {
@@ -251,10 +262,10 @@ const Analytics = props => {
         report = yearlyReport;
         break;
       case "quarterly":
-        report = quarterlyReport.filter( elem => elem.year === "2016" || elem.year === "2017" || elem.year ==="2018" || elem.year === "2019");
+        report = quarterlyReport.filter( filterFunc(2016, 2019));
         break;
       case "monthly":
-        report = monthlyReport.filter(elem => elem.year === "2018" || elem.year === "2019");
+        report = monthlyReport.filter( filterFunc(2018, 2019));
         break;
     }
 
@@ -413,9 +424,9 @@ const Analytics = props => {
                         <ReportTable 
                           report={
                             timeInterval === "quarterly" 
-                            ? quarterlyReport.filter(elem => elem.year==="2016" || elem.year==="2017" || elem.year==="2018" || elem.year==="2019") : (
+                            ? quarterlyReport.filter(filterFunc(2016,2019)) : (
                                 timeInterval === "monthly" 
-                                ? monthlyReport.filter(elem => elem.year==="2018" || elem.year==="2019") 
+                                ? monthlyReport.filter(filterFunc(2018, 2019)) 
                                 : yearlyReport
                             )
                           } 
