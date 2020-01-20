@@ -27,6 +27,7 @@ import {
 import ReportTable from "./Analytics/Table.js";
 import IntervalSelector from "./Analytics/IntervalSelector.js";
 import YearSelector from "./Analytics/YearSelector.js";
+import Limiter from "./Analytics/Limiter.js";
 
 import HistoPie from "./Analytics/D3/HistoPie.js";
 import {schemePaired, schemeDark2} from "d3";
@@ -57,6 +58,10 @@ const Analytics = props => {
   const [timeInterval, setTimeInterval] = useState("yearly");
   const handleSetTimeInterval = e => {
     setTimeInterval(e.target.value)
+  }
+  const [dataPointLimit, setDataPointLimit] = useState(24)
+  const handleSetDataPointLimit = (e) => {
+    setDataPointLimit(parseInt(e.target.value))
   }
 
   //detail levels
@@ -279,7 +284,7 @@ const Analytics = props => {
             selectedYears && selectedYears.start, 
             selectedYears && selectedYears.end
           )
-        );
+        ).slice(0, dataPointLimit);
         setSelectedReport(report)
         break;
       case "quarterly":
@@ -288,7 +293,7 @@ const Analytics = props => {
             selectedYears && selectedYears.start, 
             selectedYears && selectedYears.end
           )
-        ).slice(0, 24);
+        ).slice(0, dataPointLimit);
         setSelectedReport(report)
         break;
       case "monthly":
@@ -297,7 +302,7 @@ const Analytics = props => {
             selectedYears && selectedYears.start, 
             selectedYears && selectedYears.end
           )
-        ).slice(0, 24);
+        ).slice(0, dataPointLimit);
         setSelectedReport(report)
         break;
     }
@@ -380,7 +385,7 @@ const Analytics = props => {
         )
       )
     }
-  },[yearlyReport, quarterlyReport, monthlyReport, timeInterval, expanded, selectedYears])
+  },[yearlyReport, quarterlyReport, monthlyReport, timeInterval, expanded, selectedYears, dataPointLimit])
 
   useEffect(() => {
     if (histoPieData) {
@@ -455,6 +460,10 @@ const Analytics = props => {
                         availableYears={
                           yearlyReport.map(elem => parseInt(elem.year))
                         }
+                       />
+                       <Limiter 
+                        dataPointLimit={dataPointLimit}
+                        handleSetDataPointLimit={handleSetDataPointLimit}
                        />
                      </>
                    }
