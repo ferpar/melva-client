@@ -16,7 +16,7 @@ const YearSelector = ({selectedYears, handleSetSelectedYears, availableYears}) =
               </option>
               {availableYears
                 .filter(year => {
-                  return selectedYears ?
+                  return selectedYears && selectedYears.end ?
                     year <= selectedYears.end
                   :
                     year

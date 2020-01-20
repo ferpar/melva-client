@@ -274,15 +274,30 @@ const Analytics = props => {
     let report = null;
     switch (timeInterval){
       case "yearly":
-        report = yearlyReport.filter(filterFunc(selectedYears && selectedYears.start, selectedYears && selectedYears.end));
+        report = yearlyReport.filter(
+          filterFunc(
+            selectedYears && selectedYears.start, 
+            selectedYears && selectedYears.end
+          )
+        );
         setSelectedReport(report)
         break;
       case "quarterly":
-        report = quarterlyReport.filter( filterFunc(2016));
+        report = quarterlyReport.filter( 
+          filterFunc(
+            selectedYears && selectedYears.start, 
+            selectedYears && selectedYears.end
+          )
+        ).slice(0, 24);
         setSelectedReport(report)
         break;
       case "monthly":
-        report = monthlyReport.filter( filterFunc(2018, 2019));
+        report = monthlyReport.filter(
+          filterFunc(
+            selectedYears && selectedYears.start, 
+            selectedYears && selectedYears.end
+          )
+        ).slice(0, 24);
         setSelectedReport(report)
         break;
     }
