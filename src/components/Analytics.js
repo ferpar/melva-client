@@ -47,7 +47,7 @@ const freqData=[
 const Analytics = props => {
   const { franchise } = props.user
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedYear, setSelectedYear] = useState(null);
+  const [selectedYears, setSelectedYears] = useState(null);
   const [timeInterval, setTimeInterval] = useState("yearly");
   const handleSetTimeInterval = e => {
     setTimeInterval(e.target.value)
@@ -81,6 +81,7 @@ const Analytics = props => {
   const [quarterlyReport, setQuarterlyReport] = useState(null)
   const [rawMonthly, setRawMonthly] = useState(null)
   const [monthlyReport, setMonthlyReport] = useState(null)
+  const [selectedReport, setSelectedReport] = useState(null)
 
   //histopie data
   const [histoPieData, setHistoPieData] = useState(freqData)
@@ -97,12 +98,21 @@ const Analytics = props => {
   
   //filtering function
   
-  const filterFunc = (startYear, endYear) => (
-    elem => (
-      parseInt(elem.year) >= startYear 
-      && parseInt(elem.year) <= endYear
-    ) 
-  )
+  const filterFunc = (
+    startYear, 
+    endYear = new Date().getFullYear() //setting the actual year as end default value
+  ) => {   
+    if (!startYear) {
+      return elem => elem
+    } else {
+      return ( 
+        elem => (
+          parseInt(elem.year) >= startYear 
+          && parseInt(elem.year) <= endYear
+        ) 
+      )
+    }
+  }
 
   //import function
   const handleCSVImport = async e => {
@@ -187,7 +197,6 @@ const Analytics = props => {
           })) 
         ]
         setYearlyReport(processedYearly)
-        console.log(rawYearly)
     }
   }, [rawYearly])
 
@@ -259,13 +268,16 @@ const Analytics = props => {
     let report = null;
     switch (timeInterval){
       case "yearly":
-        report = yearlyReport;
+        report = yearlyReport.filter(filterFunc());
+        setSelectedReport(report)
         break;
       case "quarterly":
-        report = quarterlyReport.filter( filterFunc(2016, 2019));
+        report = quarterlyReport.filter( filterFunc(2016));
+        setSelectedReport(report)
         break;
       case "monthly":
         report = monthlyReport.filter( filterFunc(2018, 2019));
+        setSelectedReport(report)
         break;
     }
 
@@ -419,17 +431,10 @@ const Analytics = props => {
                 </div>
                 <div className="analytics-wrapper">
                   <HistoPie data={histoPieData}/>
-                  {yearlyReport && quarterlyReport && monthlyReport ? 
+                  {selectedReport ? 
                       (
                         <ReportTable 
-                          report={
-                            timeInterval === "quarterly" 
-                            ? quarterlyReport.filter(filterFunc(2016,2019)) : (
-                                timeInterval === "monthly" 
-                                ? monthlyReport.filter(filterFunc(2018, 2019)) 
-                                : yearlyReport
-                            )
-                          } 
+                          report={selectedReport} 
                           interval={timeInterval}
                           expanded={expanded}
                           handleSetExpanded={handleSetExpanded}
