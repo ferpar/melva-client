@@ -26,6 +26,7 @@ import {
 
 import ReportTable from "./Analytics/Table.js";
 import IntervalSelector from "./Analytics/IntervalSelector.js";
+import YearSelector from "./Analytics/YearSelector.js";
 
 import HistoPie from "./Analytics/D3/HistoPie.js";
 import {schemePaired, schemeDark2} from "d3";
@@ -48,6 +49,11 @@ const Analytics = props => {
   const { franchise } = props.user
   const [isLoading, setIsLoading] = useState(true);
   const [selectedYears, setSelectedYears] = useState(null);
+  const handleSetSelectedYears = (e, type) => {
+    const newSelectedYears = {...selectedYears}
+    newSelectedYears[type] = e.target.value
+    setSelectedYears(newSelectedYears)
+  }
   const [timeInterval, setTimeInterval] = useState("yearly");
   const handleSetTimeInterval = e => {
     setTimeInterval(e.target.value)
@@ -268,7 +274,7 @@ const Analytics = props => {
     let report = null;
     switch (timeInterval){
       case "yearly":
-        report = yearlyReport.filter(filterFunc());
+        report = yearlyReport.filter(filterFunc(selectedYears && selectedYears.start, selectedYears && selectedYears.end));
         setSelectedReport(report)
         break;
       case "quarterly":
@@ -359,7 +365,7 @@ const Analytics = props => {
         )
       )
     }
-  },[yearlyReport, quarterlyReport, monthlyReport, timeInterval, expanded])
+  },[yearlyReport, quarterlyReport, monthlyReport, timeInterval, expanded, selectedYears])
 
   useEffect(() => {
     if (histoPieData) {
@@ -423,10 +429,19 @@ const Analytics = props => {
                     />
                   </div>
                    { (yearlyReport && quarterlyReport && monthlyReport) &&
-                     <IntervalSelector
-                      timeInterval={timeInterval}
-                      handleSetTimeInterval={handleSetTimeInterval}
-                     /> 
+                     <>
+                       <IntervalSelector
+                        timeInterval={timeInterval}
+                        handleSetTimeInterval={handleSetTimeInterval}
+                       /> 
+                       <YearSelector 
+                        selectedYears={selectedYears}
+                        handleSetSelectedYears={handleSetSelectedYears}
+                        availableYears={
+                          yearlyReport.map(elem => parseInt(elem.year))
+                        }
+                       />
+                     </>
                    }
                 </div>
                 <div className="analytics-wrapper">
