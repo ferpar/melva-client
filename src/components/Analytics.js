@@ -48,7 +48,7 @@ const Analytics = props => {
   const { franchise } = props.user
   const [isLoading, setIsLoading] = useState(true);
   const [selectedYear, setSelectedYear] = useState(null);
-  const [timeInterval, setTimeInterval] = useState("quarterly");
+  const [timeInterval, setTimeInterval] = useState("yearly");
   const handleSetTimeInterval = e => {
     setTimeInterval(e.target.value)
   }
