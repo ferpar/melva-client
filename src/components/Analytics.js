@@ -284,7 +284,7 @@ const Analytics = props => {
             selectedYears && selectedYears.start, 
             selectedYears && selectedYears.end
           )
-        ).slice(0, dataPointLimit);
+        ).slice(0, dataPointLimit > 0 ? dataPointLimit : 1);
         setSelectedReport(report)
         break;
       case "quarterly":
@@ -293,7 +293,7 @@ const Analytics = props => {
             selectedYears && selectedYears.start, 
             selectedYears && selectedYears.end
           )
-        ).slice(0, dataPointLimit);
+        ).slice(0, dataPointLimit > 0 ? dataPointLimit : 1);
         setSelectedReport(report)
         break;
       case "monthly":
@@ -302,7 +302,7 @@ const Analytics = props => {
             selectedYears && selectedYears.start, 
             selectedYears && selectedYears.end
           )
-        ).slice(0, dataPointLimit);
+        ).slice(0, dataPointLimit > 0 ? dataPointLimit : 1);
         setSelectedReport(report)
         break;
     }

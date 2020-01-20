@@ -111,7 +111,7 @@ const HistoPie = ({data:propData}) => {
     //HistoGram config
     const Hg = {}, HgDim = {pt: 30, pr: 0, pb: 30, pl: 0};
 
-    //creating svg for histogram
+    //selecting svg for histogram
 
     const Hgsvg = 
       select(wrapperRef.current)
