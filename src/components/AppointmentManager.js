@@ -233,6 +233,9 @@ const AppointmentManager = props => {
         <Link onClick={() => closeMenu()} to="/campaigns">
           Gestor de Campañas
         </Link>
+        <Link onClick={() => closeMenu()} to="/analytics">
+          Plataforma de Pacientes
+        </Link>
         <Link onClick={() => closeMenu()} to="/dashboard">
           Panel de Control
         </Link>
