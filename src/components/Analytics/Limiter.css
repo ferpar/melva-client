@@ -1,0 +1,57 @@
+:root {
+ /* color scheme 1 */
+  --silver-sand: #BCD8C1;
+  --yankees-blue: #0B3142;
+  --flax: #E9D985;
+  --zomp: #439A86;
+  --sea-blue: #007991;
+ /* color scheme 2 */
+--wilderness-1: #182E59;
+--wilderness-2: #355B8C;
+--wilderness-3: #6387A6;
+--wilderness-4: #F2E1C2;
+--wilderness-5: #A63B14;
+/* Color Theme Swatches in Hex */
+--dentist-1: #535FA6;
+--dentist-2: #85B4F2;
+--dentist-3: #9BCAF2;
+--dentist-4: #594022;
+--dentist-5: #D9B1A3;
+/* bootstrap */
+--danger: #dc3545;
+--primary :#007bff;
+}
+
+.limiter-select-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.limiter-select-wrapper{
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 1.5rem;
+  border-radius: 6px;
+  box-shadow: 0px 10px 50px #555;
+  background-color: #fff;
+  justify-content: center;
+  width:100%;
+  height: 100%;
+}
+
+.limiter-select-divider:first-child{
+  margin-right: 1rem;
+}
+
+@media(min-width: 500px) {
+  .limiter-select-wrapper{
+    padding: 1rem 3rem;
+  }
+}
+
+#limiter-input{
+  width: 5rem;
+}

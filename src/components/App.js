@@ -17,6 +17,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import LinkRedirect from "./LinkRedirect.js";
 import Dashboard from "./Dashboard.js";
 import AppointmentManager from "./AppointmentManager.js";
+import Analytics from "./Analytics.js";
 
 import Spinner from "./spinners/Ripple.js";
 
@@ -208,6 +209,24 @@ class App extends React.Component {
             redirectURL={"/login"}
             component={ props => 
               <Dashboard 
+                router={props}
+                user={user}
+                handleLogin = {this.handleLogin}
+                handleLogout = {this.handleLogout}
+                authService = {this.authService}
+                franchiseService = {this.franchiseService}
+              />
+            }
+          />
+          <ProtectedRoute 
+            path="/analytics"
+            user={this.state.user ? this.state.user : null}
+            loggedIn={this.state.loggedIn} 
+            allowedRole={['Admin']}
+            accessLevel={[level[2]]}
+            redirectURL={"/login"}
+            component={ props => 
+              <Analytics 
                 router={props}
                 user={user}
                 handleLogin = {this.handleLogin}
