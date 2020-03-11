@@ -1,7 +1,7 @@
 import React from "react"
 import TreeMenu from "react-simple-tree-menu";
 
-const TreeView = ({ data, lookupYear, lookupMonth }) => {
+const TreeView = ({ data, lookupYear, lookupMonth, category }) => {
 
   const treeData = []
 
@@ -37,17 +37,34 @@ const TreeView = ({ data, lookupYear, lookupMonth }) => {
             //  }
             //  billsNodes.push({ key: bill, label: bill, nodes: billDetailNodes})
   
-  const subset = (lookupYear && lookupMonth) &&  data[lookupYear][lookupMonth]
+  const subset = (lookupYear && lookupMonth) && data[lookupYear][lookupMonth]
   
   if (lookupYear && lookupMonth) {
     for (let patient in subset){
-      treeData.unshift({key: patient, label: patient})
+      let patientNodes = []
+      let patientStatus = ""
+      for (let item in subset[patient]) {
+        patientNodes.push({key: item, label: item + " " + subset[patient][item]})
+        if (item === "status") {
+          patientStatus = subset[patient][item]
+        }
+      }
+      treeData.unshift({key: patient, label: patient + " " + subset[patient].fullname, status: patientStatus, nodes: patientNodes})
     }
   }
 
+  console.log(treeData)
+
+  const filteredTreeData = category ? 
+    ( category === "gained" 
+      ? treeData.filter(patient => (patient.status === "new" || patient.status === "regained")) 
+      : treeData.filter(patient => patient.status === category)
+    ) 
+    : treeData
+  console.log(filteredTreeData.length)
 
   return (
-    <TreeMenu data={treeData}/>
+    <TreeMenu data={filteredTreeData}/>
   )
 }
 

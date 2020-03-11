@@ -32,6 +32,7 @@ import Limiter from "./Analytics/Limiter.js";
 import TreeViewer from "./Analytics/TreeView.js";
 import LookupYearSelector from "./Analytics/LookupYearSelector.js";
 import LookupMonthSelector from "./Analytics/LookupMonthSelector.js";
+import CategorySelector from "./Analytics/CategorySelector.js";
 
 import HistoPie from "./Analytics/D3/HistoPie.js";
 import {schemePaired, schemeDark2} from "d3";
@@ -74,6 +75,10 @@ const Analytics = props => {
   const [lookupMonth, setLookupMonth] = useState()
   const handleSetLookupMonth = e => {
     setLookupMonth(e.target.value)
+  }
+  const [category, setCategory] = useState()
+  const handleSetCategory = e => {
+    setCategory(e.target.value)
   }
 
   //detail levels
@@ -508,10 +513,16 @@ const Analytics = props => {
                         handleSetLookupMonth={handleSetLookupMonth}
                         availableMonths={lookupYear ? monthlyReport.filter(elem => { return elem.year===lookupYear.toString()}).map(elem => parseInt(elem.month)) : undefined}
                       />
+                      <CategorySelector 
+                        category={category}
+                        handleSetCategory={handleSetCategory}
+                        availableCategories={["new", "regained", "gained", "retained", "forgotten1Year", "forgottenMultiYear"]}
+                      />
                       <TreeViewer 
                         data={rawMonthly}
                         lookupYear={lookupYear}
                         lookupMonth={lookupMonth}
+                        category={category}
                       /> 
                      </>
                    }
