@@ -44,9 +44,24 @@ const TreeView = ({ data, lookupYear, lookupMonth, category }) => {
       let patientNodes = []
       let patientStatus = ""
       for (let item in subset[patient]) {
-        patientNodes.push({key: item, label: item + " " + subset[patient][item]})
-        if (item === "status") {
-          patientStatus = subset[patient][item]
+        if (typeof subset[patient][item] === "string" || typeof subset[patient][item] === "number") {
+          patientNodes.push({key: item, label: item + " " + subset[patient][item]})
+          if (item === "status") {
+            patientStatus = subset[patient][item]
+          }
+        } else if (item === "bills") {
+          let billNodes = []
+          for (let bill in subset[patient].bills){
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            billNodes.push({
+              key: bill, 
+              label: 
+                subset[patient].bills[bill].date.toLocaleDateString('es-ES', options) + 
+                " concepto: " + subset[patient].bills[bill].treatment + "  " 
+                + "  " + subset[patient].bills[bill].patientId
+            })
+          }
+          patientNodes.push({key: item, label: "facturas", nodes: billNodes})
         }
       }
       treeData.unshift({key: patient, label: patient + " " + subset[patient].fullname, status: patientStatus, nodes: patientNodes})
