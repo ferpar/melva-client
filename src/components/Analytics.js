@@ -503,21 +503,23 @@ const Analytics = props => {
                 <div className="analytics-wrapper">
                    { (yearlyReport && quarterlyReport && monthlyReport) &&
                      <>
-                      <LookupYearSelector 
-                        lookupYear={lookupYear}
-                        handleSetLookupYear={handleSetLookupYear}
-                        availableYears={yearlyReport.map(elem => parseInt(elem.year))}
-                      />
-                      <LookupMonthSelector
-                        lookupMonth={lookupMonth}
-                        handleSetLookupMonth={handleSetLookupMonth}
-                        availableMonths={lookupYear ? monthlyReport.filter(elem => { return elem.year===lookupYear.toString()}).map(elem => parseInt(elem.month)) : undefined}
-                      />
-                      <CategorySelector 
-                        category={category}
-                        handleSetCategory={handleSetCategory}
-                        availableCategories={["new", "regained", "gained", "retained", "forgotten1Year", "forgottenMultiYear"]}
-                      />
+                      <div className="analytics-innercontrols-wrapper">
+                        <LookupYearSelector 
+                          lookupYear={lookupYear}
+                          handleSetLookupYear={handleSetLookupYear}
+                          availableYears={yearlyReport.map(elem => parseInt(elem.year))}
+                        />
+                        <LookupMonthSelector
+                          lookupMonth={lookupMonth}
+                          handleSetLookupMonth={handleSetLookupMonth}
+                          availableMonths={lookupYear ? monthlyReport.filter(elem => { return elem.year===lookupYear.toString()}).map(elem => parseInt(elem.month)) : undefined}
+                        />
+                        <CategorySelector 
+                          category={category}
+                          handleSetCategory={handleSetCategory}
+                          availableCategories={["new", "regained", "gained", "retained", "forgotten1Year", "forgottenMultiYear"]}
+                        />
+                      </div>
                       <TreeViewer 
                         data={rawMonthly}
                         lookupYear={lookupYear}
