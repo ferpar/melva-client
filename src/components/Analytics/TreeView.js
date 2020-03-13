@@ -2,11 +2,22 @@ import React from "react"
 import TreeMenu from "react-simple-tree-menu";
 import "./TreeView.css"
 
+const categoryMapper = {
+  new: "nuevos",
+  regained: "repescados",
+  gained: "ganados",
+  retained: "conservados",
+  forgotten1Year: "olvidados 1 año",
+  forgottenMultiYear: "olvidados multiaño"
+}
+
 const TreeView = ({ data, lookupYear, lookupMonth, category }) => {
 
   const treeData = []
 
   const subset = (lookupYear && lookupMonth) && data[lookupYear][lookupMonth]
+
+  //user properties: patientId, bills, fullname, yearSum, yearSpan, billSum, longevityRank, asiduityRank, status
   
   if (lookupYear && lookupMonth) {
     for (let patient in subset){
@@ -14,8 +25,20 @@ const TreeView = ({ data, lookupYear, lookupMonth, category }) => {
       let patientStatus = ""
       for (let item in subset[patient]) {
         if (typeof subset[patient][item] === "string" || typeof subset[patient][item] === "number") {
-          patientNodes.push({key: item, label: item + " " + subset[patient][item]})
+          if (item === "asiduityRank") {
+            patientNodes.push({key: item, label: "asiduidad: " + subset[patient][item]})
+          }
+          if (item === "billSum") {
+            patientNodes.push({key: item, label: "total de facturas: " + subset[patient][item]})
+          }
+          if (item === "longevityRank") {
+            patientNodes.push({key: item, label: "longevidad: " + subset[patient][item]})
+          }
+          if (item === "yearSpan") {
+            patientNodes.push({key: item, label: "años activo: " + subset[patient][item]})
+          }
           if (item === "status") {
+            patientNodes.push({key: item, label: "categoría: " + categoryMapper[subset[patient][item]]})
             patientStatus = subset[patient][item]
           }
         } else if (item === "bills") {
@@ -27,17 +50,20 @@ const TreeView = ({ data, lookupYear, lookupMonth, category }) => {
               label: 
                 subset[patient].bills[bill].date.toLocaleDateString('es-ES', options) + 
                 " concepto: " + subset[patient].bills[bill].treatment + "  " 
-                + "  " + subset[patient].bills[bill].patientId
+                + "  paciente: " +subset[patient].bills[bill].patientId
             })
           }
           patientNodes.push({key: item, label: "facturas", nodes: billNodes})
         }
       }
-      treeData.unshift({key: patient, label: patient + " " + subset[patient].fullname, status: patientStatus, nodes: patientNodes})
+      treeData.unshift({key: patient, label: patient + " " + 
+        //subset[patient].longevityRank + 
+        //subset[patient].asiduityRank  + " " + 
+        subset[patient].fullname, status: patientStatus, nodes: patientNodes})
     }
   }
 
-  console.log(treeData)
+  //console.log(treeData)
 
   const filteredTreeData = category ? 
     ( category === "gained" 
@@ -45,7 +71,7 @@ const TreeView = ({ data, lookupYear, lookupMonth, category }) => {
       : treeData.filter(patient => patient.status === category)
     ) 
     : treeData
-  console.log(filteredTreeData.length)
+ // console.log(filteredTreeData.length)
 
   return (
     <TreeMenu data={filteredTreeData}/>
@@ -53,3 +79,7 @@ const TreeView = ({ data, lookupYear, lookupMonth, category }) => {
 }
 
 export default TreeView
+
+
+
+
