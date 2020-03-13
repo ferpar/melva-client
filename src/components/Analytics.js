@@ -29,6 +29,11 @@ import IntervalSelector from "./Analytics/IntervalSelector.js";
 import YearSelector from "./Analytics/YearSelector.js";
 import Limiter from "./Analytics/Limiter.js";
 
+import TreeViewer from "./Analytics/TreeView.js";
+import LookupYearSelector from "./Analytics/LookupYearSelector.js";
+import LookupMonthSelector from "./Analytics/LookupMonthSelector.js";
+import CategorySelector from "./Analytics/CategorySelector.js";
+
 import HistoPie from "./Analytics/D3/HistoPie.js";
 import {schemePaired, schemeDark2} from "d3";
 
@@ -62,6 +67,18 @@ const Analytics = props => {
   const [dataPointLimit, setDataPointLimit] = useState(24)
   const handleSetDataPointLimit = (e) => {
     setDataPointLimit(parseInt(e.target.value))
+  }
+  const [lookupYear, setLookupYear] = useState()
+  const handleSetLookupYear = e => {
+    setLookupYear(e.target.value) 
+  }
+  const [lookupMonth, setLookupMonth] = useState()
+  const handleSetLookupMonth = e => {
+    setLookupMonth(e.target.value)
+  }
+  const [category, setCategory] = useState()
+  const handleSetCategory = e => {
+    setCategory(e.target.value)
   }
 
   //detail levels
@@ -482,6 +499,35 @@ const Analytics = props => {
                       ) 
                     : (<p>Porfavor, importe los datos a analizar.</p>) 
                   }
+                </div>
+                <div className="analytics-wrapper">
+                   { (yearlyReport && quarterlyReport && monthlyReport) &&
+                     <>
+                      <div className="analytics-innercontrols-wrapper">
+                        <LookupYearSelector 
+                          lookupYear={lookupYear}
+                          handleSetLookupYear={handleSetLookupYear}
+                          availableYears={yearlyReport.map(elem => parseInt(elem.year))}
+                        />
+                        <LookupMonthSelector
+                          lookupMonth={lookupMonth}
+                          handleSetLookupMonth={handleSetLookupMonth}
+                          availableMonths={lookupYear ? monthlyReport.filter(elem => { return elem.year===lookupYear.toString()}).map(elem => parseInt(elem.month)) : undefined}
+                        />
+                        <CategorySelector 
+                          category={category}
+                          handleSetCategory={handleSetCategory}
+                          availableCategories={["new", "regained", "gained", "retained", "forgotten1Year", "forgottenMultiYear"]}
+                        />
+                      </div>
+                      <TreeViewer 
+                        data={rawMonthly}
+                        lookupYear={lookupYear}
+                        lookupMonth={lookupMonth}
+                        category={category}
+                      /> 
+                     </>
+                   }
                 </div>
             </div>
         )

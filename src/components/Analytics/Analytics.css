@@ -52,6 +52,15 @@
   margin-bottom: 2rem;
 }
 
+.analytics-innercontrols-wrapper{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 3rem;
+  margin-bottom: 2rem;
+}
+
 .analytics-import-container { 
   align-items: center;
   display: flex;
