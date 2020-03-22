@@ -86,7 +86,7 @@ const Analytics = props => {
   }
   const [exportMemo, setExportMemo] = useState("")
   const handleSetExportMemo = value => {
-    setExportMemo(e.target.value)
+    setExportMemo(value)
   }
 
   //detail levels
@@ -539,6 +539,7 @@ const Analytics = props => {
                         lookupMonth={lookupMonth}
                         category={category}
                         handleSetEntrySum={handleSetEntrySum}
+                        handleSetExportMemo={handleSetExportMemo} 
                       /> 
                      </>
                    }

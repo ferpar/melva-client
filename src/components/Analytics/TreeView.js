@@ -16,7 +16,8 @@ const TreeView = ({
   lookupYear, 
   lookupMonth, 
   category,
-  handleSetEntrySum
+  handleSetEntrySum,
+  handleSetExportMemo
 }) => {
 
   const treeData = []
@@ -63,15 +64,12 @@ const TreeView = ({
         }
       }
       treeData.unshift({key: patient, label: patient + " " + 
-        //subset[patient].longevityRank + 
-        //subset[patient].asiduityRank  + " " + 
         subset[patient].surname + "; " + subset[patient].name + "; " + subset[patient].phone,
-        status: patientStatus
-        , nodes: patientNodes})
+        status: patientStatus,
+        stringExport: subset[patient].surname + "; " + subset[patient].name + "; " + subset[patient].phone, 
+        nodes: patientNodes})
     }
   }
-
-  //console.log(treeData)
 
   const filteredTreeData = category ? 
     ( category === "gained" 
@@ -79,8 +77,12 @@ const TreeView = ({
       : treeData.filter(patient => patient.status === category)
     ) 
     : treeData
- // console.log(filteredTreeData.length)
+  
+  //passing the result total one component above
   handleSetEntrySum(filteredTreeData.length)
+
+  const exportArray = filteredTreeData.map( patient => patient.stringExport)
+  handleSetExportMemo("Apellidos;Nombre;Telefono 1\n" + exportArray.join('\n')) 
 
   return (
     <TreeMenu data={filteredTreeData}/>
