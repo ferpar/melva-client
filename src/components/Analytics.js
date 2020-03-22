@@ -80,6 +80,14 @@ const Analytics = props => {
   const handleSetCategory = e => {
     setCategory(e.target.value)
   }
+  const [entrySum, setEntrySum] = useState(0)
+  const handleSetEntrySum = value => {
+    setEntrySum(value)
+  }
+  const [exportMemo, setExportMemo] = useState("")
+  const handleSetExportMemo = value => {
+    setExportMemo(e.target.value)
+  }
 
   //detail levels
   const [expanded, setExpanded] = useState(0)
@@ -168,6 +176,8 @@ const Analytics = props => {
       surname: billable.Apellidos,
       fullname: billable.ApellidosNombre,
       phone: billable.Telf,
+      phone1: billable["Telefono 1"],
+      phone2: billable["Telefono 2"],
       address: billable.Direccion,
       day: billable.Fecha.split("/")[1],
       month: billable.Fecha.split("/")[0],
@@ -519,12 +529,16 @@ const Analytics = props => {
                           handleSetCategory={handleSetCategory}
                           availableCategories={["new", "regained", "gained", "retained", "forgotten1Year", "forgottenMultiYear"]}
                         />
+                        <div>
+                          <p>{entrySum + " resultados"}</p>
+                        </div>
                       </div>
                       <TreeViewer 
                         data={rawMonthly}
                         lookupYear={lookupYear}
                         lookupMonth={lookupMonth}
                         category={category}
+                        handleSetEntrySum={handleSetEntrySum}
                       /> 
                      </>
                    }

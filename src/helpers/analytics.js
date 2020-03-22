@@ -100,7 +100,14 @@
         patientList[bill.patientId]= {
           patientId: bill.patientId,
           bills: [bill], 
+          name: bill.name,
+          surname: bill.surname,
           fullname: bill.fullname,
+          phone: bill.phone.toString()[0] === "6" ? bill.phone : (bill.phone1.toString()[0] !== "6" && bill.phone2.toString()[0] === "6"
+            ? bill.phone2
+            : bill.phone1),
+          phone1: bill.phone1,
+          phone2: bill.phone2,
           years: new Set([bill.year]),
           yearSum: 1,
           yearSpan: 1,
