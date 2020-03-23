@@ -11,13 +11,20 @@ const categoryMapper = {
   forgottenMultiYear: "olvidados multiaño"
 }
 
-const TreeView = ({ data, lookupYear, lookupMonth, category }) => {
+const TreeView = ({ 
+  data, 
+  lookupYear, 
+  lookupMonth, 
+  category,
+  handleSetEntrySum,
+  handleSetExportMemo
+}) => {
 
   const treeData = []
 
   const subset = (lookupYear && lookupMonth) && data[lookupYear][lookupMonth]
 
-  //user properties: patientId, bills, fullname, yearSum, yearSpan, billSum, longevityRank, asiduityRank, status
+  //user properties: patientId, bills, name, surname, fullname, phone, phone1, phone2, yearSum, yearSpan, billSum, longevityRank, asiduityRank, status
   
   if (lookupYear && lookupMonth) {
     for (let patient in subset){
@@ -57,13 +64,12 @@ const TreeView = ({ data, lookupYear, lookupMonth, category }) => {
         }
       }
       treeData.unshift({key: patient, label: patient + " " + 
-        //subset[patient].longevityRank + 
-        //subset[patient].asiduityRank  + " " + 
-        subset[patient].fullname, status: patientStatus, nodes: patientNodes})
+        subset[patient].surname + "; " + subset[patient].name + "; " + subset[patient].phone,
+        status: patientStatus,
+        stringExport: subset[patient].surname + "; " + subset[patient].name + "; " + subset[patient].phone, 
+        nodes: patientNodes})
     }
   }
-
-  //console.log(treeData)
 
   const filteredTreeData = category ? 
     ( category === "gained" 
@@ -71,7 +77,12 @@ const TreeView = ({ data, lookupYear, lookupMonth, category }) => {
       : treeData.filter(patient => patient.status === category)
     ) 
     : treeData
- // console.log(filteredTreeData.length)
+  
+  //passing the result total one component above
+  handleSetEntrySum(filteredTreeData.length)
+
+  const exportArray = filteredTreeData.map( patient => patient.stringExport)
+  handleSetExportMemo("Apellidos;Nombre;Telefono 1\n" + exportArray.join('\n')) 
 
   return (
     <TreeMenu data={filteredTreeData}/>

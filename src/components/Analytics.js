@@ -33,6 +33,7 @@ import TreeViewer from "./Analytics/TreeView.js";
 import LookupYearSelector from "./Analytics/LookupYearSelector.js";
 import LookupMonthSelector from "./Analytics/LookupMonthSelector.js";
 import CategorySelector from "./Analytics/CategorySelector.js";
+import DownloadLink from "react-download-link"
 
 import HistoPie from "./Analytics/D3/HistoPie.js";
 import {schemePaired, schemeDark2} from "d3";
@@ -79,6 +80,14 @@ const Analytics = props => {
   const [category, setCategory] = useState()
   const handleSetCategory = e => {
     setCategory(e.target.value)
+  }
+  const [entrySum, setEntrySum] = useState(0)
+  const handleSetEntrySum = value => {
+    setEntrySum(value)
+  }
+  const [exportMemo, setExportMemo] = useState("")
+  const handleSetExportMemo = value => {
+    setExportMemo(value)
   }
 
   //detail levels
@@ -168,6 +177,8 @@ const Analytics = props => {
       surname: billable.Apellidos,
       fullname: billable.ApellidosNombre,
       phone: billable.Telf,
+      phone1: billable["Telefono 1"],
+      phone2: billable["Telefono 2"],
       address: billable.Direccion,
       day: billable.Fecha.split("/")[1],
       month: billable.Fecha.split("/")[0],
@@ -519,12 +530,23 @@ const Analytics = props => {
                           handleSetCategory={handleSetCategory}
                           availableCategories={["new", "regained", "gained", "retained", "forgotten1Year", "forgottenMultiYear"]}
                         />
+                        <DownloadLink 
+                          label="Exportar Lista"
+                          filename="export.csv"
+                          exportFile={() => exportMemo}
+                          tagName="button"
+                        />
+                        <div>
+                          <p>{entrySum + " resultados"}</p>
+                        </div>
                       </div>
                       <TreeViewer 
                         data={rawMonthly}
                         lookupYear={lookupYear}
                         lookupMonth={lookupMonth}
                         category={category}
+                        handleSetEntrySum={handleSetEntrySum}
+                        handleSetExportMemo={handleSetExportMemo} 
                       /> 
                      </>
                    }
