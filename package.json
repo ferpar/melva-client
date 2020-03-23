@@ -48,6 +48,7 @@
     "react-big-calendar": "^0.22.1",
     "react-burger-menu": "^2.6.11",
     "react-dom": "^16.10.2",
+    "react-download-link": "^2.3.0",
     "react-flatpickr": "^3.9.1",
     "react-hot-loader": "^4.12.15",
     "react-ios-switch": "^0.1.19",

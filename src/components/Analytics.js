@@ -33,6 +33,7 @@ import TreeViewer from "./Analytics/TreeView.js";
 import LookupYearSelector from "./Analytics/LookupYearSelector.js";
 import LookupMonthSelector from "./Analytics/LookupMonthSelector.js";
 import CategorySelector from "./Analytics/CategorySelector.js";
+import DownloadLink from "react-download-link"
 
 import HistoPie from "./Analytics/D3/HistoPie.js";
 import {schemePaired, schemeDark2} from "d3";
@@ -528,6 +529,12 @@ const Analytics = props => {
                           category={category}
                           handleSetCategory={handleSetCategory}
                           availableCategories={["new", "regained", "gained", "retained", "forgotten1Year", "forgottenMultiYear"]}
+                        />
+                        <DownloadLink 
+                          label="Exportar Lista"
+                          filename="export.csv"
+                          exportFile={() => exportMemo}
+                          tagName="button"
                         />
                         <div>
                           <p>{entrySum + " resultados"}</p>
