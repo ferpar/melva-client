@@ -1,17 +1,12 @@
-### React Basic Template
+### Dentt React FrontEnd
 
-This template is meant to be a basic starting point for a new react app with only the most basic features so we can keep track of everything that's been added to the project.
+This was a prototype for the FrontEnd of the Dentt App. Im publishing it so that it may be reviewed. Do take its contents with a grain of salt, since they are no longer representative of my expertise as a React developer.
 
-This also includes:
+The goal with this prototype was to arrive quickly to a working version of the product so that it could be used by our early adopters. Therefore, no time was invested in centralizing state in a single store (no redux or context API) and no optimizations were made in terms of lazy loading or memoization. Cookies are being used in this case since a limited number of users were testing the application at this point. For the same reasons, security was also not a concern.
 
-- @babel/plugin-proposal-class-properties => to avoid having to call the constructor and super when declaring a state object.
+Thank you for taking the time to review this code.
 
-- html-webpack-plugin => to generate the production index.html from a template at our src
+Kind regards,
+Fernando Pérez de Ayala
+ferp@protonmail.ch
 
-It may be improved by: 
-
-- Externalizing dependencies via CDN (react & react-dom)
-- Targeting specific browsers with babel-preset-env & babel-polyfill
-- adding eslint, prettier, & husky
-- Configuring sass @ webpack
-- Adding babel-polyfill if not specifically targeting newer browsers: for async/await support @ webpack
