@@ -1,4 +1,4 @@
-### Dentt React FrontEnd
+### Dentt React Front-End
 
 This was a prototype for the FrontEnd of the Dentt App. Im publishing it so that it may be reviewed. Do take its contents with a grain of salt, since they are no longer representative of my expertise as a React developer.
 
